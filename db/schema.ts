@@ -5,6 +5,7 @@ export const rooms = sqliteTable('rooms', {
   name: text('name').notNull(),
   adminToken: text('admin_token').notNull(),
   status: text('status').notNull().default('waiting'),
+  durationMinutes: integer('duration_minutes').notNull().default(10),
   createdAt: integer('created_at').notNull(),
 });
 

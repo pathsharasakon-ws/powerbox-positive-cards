@@ -1,0 +1,1 @@
+ALTER TABLE `rooms` ADD `duration_minutes` integer DEFAULT 10 NOT NULL;

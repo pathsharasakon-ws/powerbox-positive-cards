@@ -25,25 +25,25 @@ type Screen = 'home' | 'admin' | 'lobby' | 'game' | 'opened';
 
 const palette = ['bg-[#f7c7bc]', 'bg-[#c7d9f5]', 'bg-[#f3d9a8]', 'bg-[#c6e5d5]', 'bg-[#e3d3ee]', 'bg-[#f7d6a8]'];
 const cards = [
-  { id: 1, position: '0% 0%', tone: 'bg-[#fff5d7]', th: 'คุณทำให้บรรยากาศรอบตัวสดใสขึ้นเสมอ', en: 'You always make the room feel a little brighter.' },
-  { id: 2, position: '25% 0%', tone: 'bg-[#e7f3e9]', th: 'ฉันชื่นชมความตั้งใจและการเติบโตของคุณ', en: 'I admire your dedication and the way you keep growing.' },
-  { id: 3, position: '50% 0%', tone: 'bg-[#fde8e4]', th: 'ขอบคุณที่เป็นพื้นที่สบายใจให้คนรอบข้าง', en: 'Thank you for making people around you feel at ease.' },
-  { id: 4, position: '75% 0%', tone: 'bg-[#eee8fa]', th: 'ความเป็นตัวคุณสร้างความแตกต่างที่งดงาม', en: 'Being yourself makes a beautiful difference.' },
-  { id: 5, position: '100% 0%', tone: 'bg-[#fff0bd]', th: 'พลังและรอยยิ้มของคุณส่งต่อถึงคนอื่นเสมอ', en: 'Your energy and smile always reach the people around you.' },
-  { id: 6, position: '0% 100%', tone: 'bg-[#e5f1f5]', th: 'คุณเก่งกว่าที่ตัวเองคิด และฉันเชื่อในตัวคุณ', en: 'You are more capable than you know, and I believe in you.' },
-  { id: 7, position: '25% 100%', tone: 'bg-[#f9e6ef]', th: 'ขอบคุณที่นำมุมมองดี ๆ มาแบ่งปันกับพวกเรา', en: 'Thank you for sharing your thoughtful perspective with us.' },
-  { id: 8, position: '50% 100%', tone: 'bg-[#e8edfa]', th: 'ความพยายามของคุณมีคนมองเห็นและชื่นชม', en: 'Your effort is seen and deeply appreciated.' },
-  { id: 9, position: '75% 100%', tone: 'bg-[#e7f3e9]', th: 'ขอให้ความใจดีที่คุณมอบให้ย้อนกลับไปหาคุณ', en: 'May the kindness you give find its way back to you.' },
-  { id: 10, position: '100% 100%', tone: 'bg-[#fff0d9]', th: 'โลกใบนี้ดีขึ้นเพราะมีคุณอยู่ตรงนี้', en: 'The world is better because you are here.' },
-  { id: 11, position: '0% 0%', tone: 'bg-[#f6e5dc]', th: 'ขอให้วันนี้มีพื้นที่เล็ก ๆ ให้คุณได้พักใจ', en: 'May today give you a small, gentle space to breathe.' },
-  { id: 12, position: '100% 0%', tone: 'bg-[#e5eee8]', th: 'คุณมีความกล้าที่จะก้าวไปในเส้นทางของตัวเอง', en: 'You have the courage to follow your own path.' },
+  { id: 1, position: '0% 0%', tone: 'bg-[#fff5d7]', th: 'ขอให้ทุกความตั้งใจและความพยายาม ส่งผลลัพธ์ที่ดีกลับมาอย่างที่คุณหวัง เป็นกำลังใจให้อยู่เสมอนะ', en: 'May all your dedication and effort bring the good results you hope for. I am always cheering you on.' },
+  { id: 2, position: '25% 0%', tone: 'bg-[#e7f3e9]', th: 'ขอบคุณสำหรับความช่วยเหลือและคำแนะนำดี ๆ ที่คอยแบ่งปันให้กันเสมอนะ', en: 'Thank you for always sharing your help and thoughtful advice with us.' },
+  { id: 3, position: '50% 0%', tone: 'bg-[#fde8e4]', th: 'ขอบคุณที่เป็นเพื่อนร่วมคลาสที่ดีและจริงใจ ดีใจมาก ๆ ที่ได้รู้จักคุณนะ', en: 'Thank you for being such a kind and genuine classmate. I am so glad to know you.' },
+  { id: 4, position: '75% 0%', tone: 'bg-[#eee8fa]', th: 'อย่าเพิ่งท้อกับบทเรียนที่ยากนะ คุณมาไกลจากจุดเริ่มต้นมากแล้ว เชื่อมั่นในตัวเองเข้าไว้นะ', en: 'Do not lose heart over a difficult lesson. You have come so far—keep believing in yourself.' },
+  { id: 5, position: '100% 0%', tone: 'bg-[#fff0bd]', th: 'วันนี้คุณเก่งมากแล้วนะ ขอให้ภูมิใจในทุกก้าวเล็ก ๆ ที่ตัวเองทำได้สำเร็จ', en: 'You did wonderfully today. Be proud of every small step you accomplished.' },
+  { id: 6, position: '0% 100%', tone: 'bg-[#e5f1f5]', th: 'อย่ากดดันตัวเองจนเครียดเกินลิมิตนะ ถ้ารู้สึกไม่ไหวก็ถอยออกมาพักก่อนได้เสมอ', en: 'Do not pressure yourself beyond your limits. You can always step back and rest when things feel too much.' },
+  { id: 7, position: '25% 100%', tone: 'bg-[#f9e6ef]', th: 'รู้ว่าทุ่มเทและตั้งใจเรียนมาก แต่อย่าลืมทานข้าวให้ตรงเวลาและดื่มน้ำเยอะ ๆ ด้วยนะ', en: 'I know how dedicated you are to learning. Please remember to eat on time and drink plenty of water too.' },
+  { id: 8, position: '50% 100%', tone: 'bg-[#e8edfa]', th: 'ดีใจมาก ๆ ที่ได้มาร่วมเรียนคอร์สนี้ด้วยกัน ขอบคุณที่ทำให้บรรยากาศในคลาสอบอุ่นขึ้นเยอะนะ', en: 'I am so glad we took this course together. Thank you for making the class feel so much warmer.' },
+  { id: 9, position: '75% 100%', tone: 'bg-[#e7f3e9]', th: 'เห็นเงียบ ๆ ไป ไม่แน่ใจว่าเหนื่อยหรือเปล่า ถ้ามีอะไรให้ช่วยหรืออยากระบาย ทักมาได้ตลอดนะ', en: 'You have seemed quiet lately—are you tired? If you need help or want to talk, you can always reach out.' },
+  { id: 10, position: '100% 100%', tone: 'bg-[#fff0d9]', th: 'ถ้าเรียนจบแล้วขอให้บั๊กจงหายไป เงินเดือนก้อนใหญ่จงเข้ามา! รักนะเพื่อนร่วมชะตากรรมหน้าคอมฯ', en: 'When this course ends, may every bug disappear and a big salary come your way! Much love, my fellow computer-screen survivor.' },
+  { id: 11, position: '0% 0%', tone: 'bg-[#f6e5dc]', th: 'ไม่อยากให้คอร์สเรียนนี้จบไปเลย ต้องคิดถึงคุณแน่ ๆ', en: 'I do not want this course to end—I am definitely going to miss you.' },
+  { id: 12, position: '100% 0%', tone: 'bg-[#e5eee8]', th: 'วันนี้คุณเก่งมากแล้วนะ ขอให้ภูมิใจในทุกก้าวเล็ก ๆ ที่ตัวเองทำได้สำเร็จ', en: 'You did wonderfully today. Be proud of every small step you accomplished.' },
 ];
 
 const copy = {
   th: {
-    subtitle: 'ส่งต่อคำดี ๆ ให้กัน', joinRoom: 'เข้าร่วมห้อง', roomCode: 'รหัสห้อง', yourName: 'ชื่อของคุณ', join: 'เข้าห้อง', createRoom: 'สร้างห้องสำหรับผู้จัด', createHelp: 'ตั้งชื่อห้อง แล้วแชร์รหัสให้สมาชิกเข้าร่วม', create: 'สร้างห้อง', back: 'กลับหน้าแรก', roomName: 'ชื่อห้อง', participantList: 'แก้ไขรายชื่อผู้เข้าร่วม', onePerLine: 'ผู้จัดเท่านั้นที่แก้ไขได้ ใส่หนึ่งชื่อต่อหนึ่งบรรทัด', continue: 'สร้างห้อง', waiting: 'ห้องพร้อมแล้ว', readyHelp: 'แชร์รหัสนี้ให้ผู้เข้าร่วม รายชื่อจะเพิ่มขึ้นเมื่อสมาชิกเข้าห้อง', participants: 'ผู้เข้าร่วม', start: 'เริ่มเกม 10 นาที', activityRoom: 'ห้องกิจกรรม', time: 'เหลือเวลา', hello: 'สวัสดี,', prompt: 'วันนี้อยากส่งพลังงานบวกให้ใคร?', progress: 'ส่งแล้ว', selectPerson: '1. เลือกผู้รับ', recipient: 'ผู้รับที่เลือก', selectCard: '2. เลือกการ์ด', anonymous: 'ส่งแบบไม่เปิดเผยชื่อ', anonymousHelp: 'ผู้รับจะไม่เห็นชื่อของคุณ', send: 'ส่งการ์ด', sent: 'ส่งพลังบวกแล้ว', inbox: 'กล่องพลังใจของฉัน', locked: 'กล่องจะเปิดอัตโนมัติเมื่อหมดเวลา', testFinal: 'ทดสอบ 15 วินาทีสุดท้าย', openTitle: 'กล่องพลังใจเปิดแล้ว', openHelp: 'นี่คือข้อความดี ๆ ที่ส่งมาถึงคุณ', anonymousFrom: 'ไม่แสดงชื่อ', from: 'จาก', restart: 'กลับสู่หน้าแรก' },
+    subtitle: 'ส่งต่อคำดี ๆ ให้กัน', joinRoom: 'เข้าร่วมห้อง', roomCode: 'รหัสห้อง', yourName: 'ชื่อของคุณ', join: 'เข้าห้อง', createRoom: 'สร้างห้อง', createHelp: 'ตั้งชื่อห้อง แล้วแชร์รหัสให้สมาชิกเข้าร่วม', create: 'สร้างห้อง', back: 'กลับหน้าแรก', roomName: 'ชื่อห้อง', participantList: 'แก้ไขรายชื่อผู้เข้าร่วม', onePerLine: 'ผู้จัดเท่านั้นที่แก้ไขได้ ใส่หนึ่งชื่อต่อหนึ่งบรรทัด', continue: 'สร้างห้อง', waiting: 'ห้องพร้อมแล้ว', readyHelp: 'แชร์รหัสนี้ให้ผู้เข้าร่วม รายชื่อจะเพิ่มขึ้นเมื่อสมาชิกเข้าห้อง', participants: 'ผู้เข้าร่วม', start: 'เริ่มเกม', activityRoom: 'ห้องกิจกรรม', time: 'เหลือเวลา', hello: 'สวัสดี,', prompt: 'วันนี้อยากส่งพลังงานบวกให้ใคร?', progress: 'ส่งแล้ว', selectPerson: '1. เลือกผู้รับ', recipient: 'ผู้รับที่เลือก', selectCard: '2. เลือกการ์ด', anonymous: 'ส่งแบบไม่เปิดเผยชื่อ', anonymousHelp: 'ผู้รับจะไม่เห็นชื่อของคุณ', send: 'ส่งการ์ด', sent: 'ส่งพลังบวกแล้ว', inbox: 'กล่องพลังใจของฉัน', locked: 'กล่องจะเปิดอัตโนมัติเมื่อหมดเวลา', testFinal: 'ทดสอบ 15 วินาทีสุดท้าย', openTitle: 'กล่องพลังใจเปิดแล้ว', openHelp: 'นี่คือข้อความดี ๆ ที่ส่งมาถึงคุณ', anonymousFrom: 'ไม่แสดงชื่อ', from: 'จาก', restart: 'กลับสู่หน้าแรก' },
   en: {
-    subtitle: 'Share kindness. Spread positive energy.', joinRoom: 'Join a room', roomCode: 'Room code', yourName: 'Your name', join: 'Join room', createRoom: 'Create a room for host', createHelp: 'Name your room, add people, and start the activity', create: 'Create room', back: 'Back to home', roomName: 'Room name', participantList: 'Participant list', onePerLine: 'One name per line, up to 100 people', continue: 'Create room and continue', waiting: 'Your room is ready', readyHelp: 'Share this code, then start when everyone is ready', participants: 'Participants', start: 'Start 10-minute game', activityRoom: 'Activity room', time: 'Time left', hello: 'Hello,', prompt: 'Who would you like to uplift today?', progress: 'Sent', selectPerson: '1. Choose a recipient', recipient: 'Selected recipient', selectCard: '2. Choose a card', anonymous: 'Send anonymously', anonymousHelp: 'Your name will be hidden from the recipient', send: 'Send card', sent: 'Positive energy sent', inbox: 'My positivity box', locked: 'Your box opens automatically when time is up', testFinal: 'Test the final 15 seconds', openTitle: 'Your positivity box is open', openHelp: 'Here are the kind messages sent your way', anonymousFrom: 'Anonymous', from: 'From', restart: 'Back to home' },
+    subtitle: 'Share kindness. Spread positive energy.', joinRoom: 'Join a room', roomCode: 'Room code', yourName: 'Your name', join: 'Join room', createRoom: 'Create room', createHelp: 'Name your room, add people, and start the activity', create: 'Create room', back: 'Back to home', roomName: 'Room name', participantList: 'Participant list', onePerLine: 'One name per line, up to 100 people', continue: 'Create room and continue', waiting: 'Your room is ready', readyHelp: 'Share this code, then start when everyone is ready', participants: 'Participants', start: 'Start game', activityRoom: 'Activity room', time: 'Time left', hello: 'Hello,', prompt: 'Who would you like to uplift today?', progress: 'Sent', selectPerson: '1. Choose a recipient', recipient: 'Selected recipient', selectCard: '2. Choose a card', anonymous: 'Send anonymously', anonymousHelp: 'Your name will be hidden from the recipient', send: 'Send card', sent: 'Positive energy sent', inbox: 'My positivity box', locked: 'Your box opens automatically when time is up', testFinal: 'Test the final 15 seconds', openTitle: 'Your positivity box is open', openHelp: 'Here are the kind messages sent your way', anonymousFrom: 'Anonymous', from: 'From', restart: 'Back to home' },
 };
 
 function initials(name: string) {
@@ -71,6 +71,7 @@ export default function Home() {
   const [sent, setSent] = useState(0);
   const [sentRecipients, setSentRecipients] = useState<string[]>([]);
   const [secondsLeft, setSecondsLeft] = useState(600);
+  const [durationMinutes, setDurationMinutes] = useState(10);
   const [justSent, setJustSent] = useState(false);
   const [systemGiftAdded, setSystemGiftAdded] = useState(false);
   const t = copy[language];
@@ -96,10 +97,11 @@ export default function Home() {
       const room = await response.json();
       const names = room.participants.map((item: { name: string }) => item.name);
       setRoomName(room.name);
+      setDurationMinutes(room.durationMinutes ?? 10);
       setPeople(names);
       if (isHost && document.activeElement?.tagName !== 'TEXTAREA') setNameList(names.join('\n'));
       if (!person) setPerson(names.find((name: string) => name !== playerName) ?? '');
-      if (!isHost && room.status === 'started') { resetGame(); setScreen('game'); }
+      if (!isHost && room.status === 'started') { resetGame(room.durationMinutes ?? 10); setScreen('game'); }
     };
     void refreshRoom();
     const poller = window.setInterval(refreshRoom, 2000);
@@ -115,12 +117,12 @@ export default function Home() {
   const participantNames = people;
   const availablePeople = participantNames.filter((name) => name !== playerName && !sentRecipients.includes(name));
 
-  function resetGame() {
+  function resetGame(minutes = durationMinutes) {
     setRemainingCards(cards.map((card) => card.id));
     setSelectedCard(1);
     setSent(0);
     setSentRecipients([]);
-    setSecondsLeft(600);
+    setSecondsLeft(minutes * 60);
     setSystemGiftAdded(false);
   }
 
@@ -146,7 +148,7 @@ export default function Home() {
 
   async function prepareRoom() {
     const nextRoomName = roomName.trim() || 'Bloom Together';
-    const response = await fetch('/api/rooms', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'create', name: nextRoomName, adminName: playerName }) });
+    const response = await fetch('/api/rooms', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'create', name: nextRoomName, adminName: playerName, durationMinutes }) });
     const room = await response.json();
     const names = room.participants.map((item: { name: string }) => item.name);
     setRoomName(room.name); setRoomCode(room.code); setAdminToken(room.adminToken); setPeople(names); setNameList(names.join('\n'));
@@ -228,6 +230,7 @@ export default function Home() {
           <div className="mt-7 space-y-6">
             <label className="block text-sm font-bold">{t.roomName}<Input value={roomName} onChange={(event) => setRoomName(event.target.value)} className="mt-2 h-12 rounded-xl border-2 bg-[#fffaf0] text-base" /></label>
             <label className="block text-sm font-bold">{t.yourName}<Input value={playerName} onChange={(event) => setPlayerName(event.target.value)} className="mt-2 h-12 rounded-xl border-2 bg-[#fffaf0] text-base" /></label>
+            <label className="block text-sm font-bold">{language === 'th' ? 'เวลาเล่น' : 'Game duration'}<span className="ml-2 text-sm font-normal text-muted-foreground">{durationMinutes} {language === 'th' ? 'นาที' : 'minutes'}</span><input type="range" min="5" max="30" step="1" value={durationMinutes} onChange={(event) => setDurationMinutes(Number(event.target.value))} className="mt-3 block w-full accent-[#ef6f52]" /></label>
           </div>
           <Button onClick={prepareRoom} className="mt-6 h-12 w-full rounded-xl border-2 border-[#5d4638] text-base font-bold shadow-[3px_4px_0_#5d4638]"><Check /> {t.continue}</Button>
         </div>
@@ -266,7 +269,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-background text-foreground"><Header />
-      <section className="mx-auto max-w-[1500px] px-4 py-6 sm:px-8 sm:py-9">
+      <section className="mx-auto max-w-[1500px] px-4 pb-28 pt-6 sm:px-8 sm:py-9">
         <div className="mb-6 flex flex-col gap-4 rounded-[24px_20px_26px_18px] border-2 border-[#5d4638] bg-[#fff6df] p-5 shadow-[4px_5px_0_#efb9aa] sm:flex-row sm:items-center sm:justify-between">
           <div><div className="mb-1 text-xs font-bold uppercase tracking-[.14em] text-[#467d68]">{roomName} · {t.activityRoom} · {roomCode}</div><h1 className="text-2xl font-bold">{t.hello} {playerName}</h1><p className="mt-1 text-sm text-muted-foreground">{t.prompt}</p></div>
           <div className="flex items-center gap-4 rounded-2xl border-2 border-[#5d4638] bg-white px-5 py-3 shadow-[3px_4px_0_#5d4638]"><Clock3 className="size-5 text-primary" /><div><span className="block text-xs font-medium text-muted-foreground">{t.time}</span><strong className="text-2xl tabular-nums text-primary">{timeDisplay}</strong></div></div>
@@ -276,7 +279,7 @@ export default function Home() {
             <div className="mb-7 flex items-center gap-4"><Progress value={(sent / 12) * 100} className="flex-1 [&_[data-slot=progress-track]]:h-2 [&_[data-slot=progress-track]]:bg-[#f3e9dc] [&_[data-slot=progress-indicator]]:bg-primary" /><span className="min-w-24 text-right text-sm font-bold">{t.progress} {sent}/12</span></div>
             <section><h2 className="mb-3 text-sm font-bold">{t.selectPerson}</h2><div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-5 xl:grid-cols-10">{availablePeople.map((name, index) => <button key={name} onClick={() => setPerson(name)} className={`relative flex min-w-0 flex-col items-center gap-2 rounded-[18px_14px_20px_13px] border-2 px-2 py-3 text-center transition ${person === name ? 'border-[#5d4638] bg-[#fff3dd] shadow-[3px_3px_0_#efb9aa]' : 'border-[#5d4638]/20 bg-[#fffdf8] hover:border-[#5d4638]/50 hover:bg-muted'}`}><span className={`grid size-11 shrink-0 place-items-center rounded-full border-2 border-[#5d4638] ${palette[index % palette.length]} text-xs font-bold tracking-wide`}>{initials(name)}</span><span className="w-full break-words text-[11px] font-bold leading-tight">{name}</span>{person === name && <span className="absolute right-1.5 top-1.5 grid size-5 place-items-center rounded-full bg-[#467d68] text-white"><Check className="size-3" /></span>}</button>)}</div></section>
             <section className="mt-6"><h2 className="mb-3 text-sm font-bold">{t.selectCard}</h2><div className="grid max-h-[540px] gap-3 overflow-y-auto pr-1 sm:grid-cols-3 xl:grid-cols-4">{cards.filter((card) => remainingCards.includes(card.id)).map((card) => <button key={card.id} onClick={() => setSelectedCard(card.id)} className={`relative min-h-80 overflow-hidden rounded-[24px_19px_27px_18px] border-2 border-[#5d4638] p-3 text-left transition hover:-translate-y-1 ${card.tone} ${selectedCard === card.id ? 'rotate-[-1deg] shadow-[4px_5px_0_#e96b50]' : 'shadow-[2px_3px_0_#decdb7]'}`}>{selectedCard === card.id && <span className="absolute right-3 top-3 z-10 grid size-7 place-items-center rounded-full border-2 border-[#5d4638] bg-primary text-white"><Check className="size-3" /></span>}<div role="img" aria-label={`${card.th} / ${card.en}`} className={`mx-auto w-full bg-no-repeat ${card.id <= 10 ? 'aspect-square max-w-40' : 'aspect-[3/4] max-w-[120px]'}`} style={{ backgroundImage: `url('${card.id <= 10 ? '/card-characters-v4.png' : '/card-characters-extra.png'}')`, backgroundSize: card.id <= 10 ? '500% 200%' : '200% 100%', backgroundPosition: card.position }} /><div className="border-t border-[#5d4638]/20 px-2 pb-2 pt-4"><p className="text-sm font-bold leading-relaxed">{card.th}</p><p className="mt-2 text-xs font-medium leading-relaxed text-[#6d5a4d]">{card.en}</p></div></button>)}</div></section>
-            <div className="mt-6 flex flex-col gap-4 border-t border-[#efe6db] pt-5 sm:flex-row sm:items-center sm:justify-between"><label className="flex cursor-pointer items-center gap-3"><Switch checked={anonymous} onCheckedChange={setAnonymous} /><span><span className="block text-sm font-bold">{t.anonymous}</span><span className="block text-xs text-muted-foreground">{t.anonymousHelp}</span></span></label><Button onClick={sendCard} disabled={sent >= 12 || availablePeople.length === 0} className="h-12 rounded-xl border-2 border-[#5d4638] px-7 text-sm font-bold shadow-[4px_5px_0_#5d4638]">{justSent ? <Check /> : <Send />} {justSent ? t.sent : t.send}</Button></div>
+            <div className="fixed inset-x-0 bottom-0 z-40 flex items-center gap-3 border-t-2 border-[#5d4638] bg-[#fff9ed] p-4 shadow-[0_-4px_18px_rgba(93,70,56,.16)] sm:static sm:mt-6 sm:flex-row sm:justify-between sm:border-t sm:border-[#efe6db] sm:bg-transparent sm:p-0 sm:pt-5 sm:shadow-none"><label className="flex cursor-pointer items-center gap-3"><Switch checked={anonymous} onCheckedChange={setAnonymous} /><span><span className="block text-sm font-bold">{t.anonymous}</span><span className="block text-xs text-muted-foreground">{t.anonymousHelp}</span></span></label><Button onClick={sendCard} disabled={sent >= 12 || availablePeople.length === 0} className="h-12 flex-1 rounded-xl sm:flex-none border-2 border-[#5d4638] px-7 text-sm font-bold shadow-[4px_5px_0_#5d4638]">{justSent ? <Check /> : <Send />} {justSent ? t.sent : t.send}</Button></div>
           </div>
           <aside className="rounded-[26px_32px_24px_29px] border-2 border-[#5d4638] bg-[#88bda7] p-6 text-[#35291f] shadow-[5px_6px_0_#5d4638]"><div className="flex items-start justify-between"><p className="text-xs font-bold uppercase tracking-[.14em] text-[#315f4e]">{t.inbox}</p><Gift className="size-6 text-[#744b2c]" /></div><div className="relative mx-auto my-10 h-44 max-w-56"><div className="absolute left-1/2 top-0 h-32 w-40 -translate-x-1/2 rotate-[-5deg] rounded-2xl border-2 border-[#5d4638] bg-[#f7c7bc] shadow-[3px_4px_0_#5d4638]" /><div className="absolute left-1/2 top-3 h-32 w-40 -translate-x-1/2 rotate-[6deg] rounded-2xl border-2 border-[#5d4638] bg-[#f5d797] shadow-[3px_4px_0_#5d4638]" /><div className="absolute bottom-0 left-1/2 grid h-28 w-52 -translate-x-1/2 place-items-center rounded-2xl border-2 border-[#5d4638] bg-primary text-white shadow-[4px_5px_0_#5d4638]"><LockKeyhole className="size-7" /></div></div><div className="rounded-2xl border-2 border-[#5d4638] bg-[#fff9ed] p-4 text-center shadow-[3px_3px_0_#5d4638]"><p className="text-sm font-bold">{t.locked}</p><p className="mt-1 text-xs font-bold text-[#467d68]">{timeDisplay}</p></div>{isHost && <Button variant="outline" onClick={() => setSecondsLeft(15)} className="mt-4 h-10 w-full rounded-xl border-2 bg-white/70 text-xs font-bold"><Clock3 /> {t.testFinal}</Button>}</aside>
         </div>

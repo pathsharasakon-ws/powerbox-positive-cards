@@ -15,6 +15,13 @@
       "when": 1789029648890,
       "tag": "0001_careful_polaris",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1789053453796,
+      "tag": "0002_safe_captain_midlands",
+      "breakpoints": true
     }
   ]
 }

@@ -4,7 +4,7 @@ const json = (data: unknown, status = 200) => Response.json(data, { status });
 const normalizeCode = (value: unknown) => String(value ?? '').replace(/\D/g, '').slice(0, 6);
 
 async function getRoom(code: string) {
-  const room = await env.DB.prepare('SELECT code, name, status FROM rooms WHERE code = ?').bind(code).first();
+  const room = await env.DB.prepare('SELECT code, name, status, duration_minutes AS durationMinutes FROM rooms WHERE code = ?').bind(code).first();
   if (!room) return null;
   const result = await env.DB.prepare('SELECT id, name FROM participants WHERE room_code = ? ORDER BY joined_at, name').bind(code).all();
   return { ...room, participants: result.results };
@@ -22,6 +22,7 @@ export async function POST(request: Request) {
   if (body.action === 'create') {
     const name = String(body.name ?? '').trim().slice(0, 80);
     const adminName = String(body.adminName ?? '').trim().slice(0, 60);
+    const durationMinutes = Math.min(30, Math.max(5, Number(body.durationMinutes) || 10));
     if (!name || !adminName) return json({ error: 'room_and_admin_name_required' }, 400);
     const adminToken = crypto.randomUUID();
     for (let attempt = 0; attempt < 12; attempt += 1) {
@@ -29,7 +30,7 @@ export async function POST(request: Request) {
       try {
         const participant = { id: crypto.randomUUID(), name: adminName };
         await env.DB.batch([
-          env.DB.prepare('INSERT INTO rooms (code, name, admin_token, status, created_at) VALUES (?, ?, ?, ?, ?)').bind(code, name, adminToken, 'waiting', Date.now()),
+          env.DB.prepare('INSERT INTO rooms (code, name, admin_token, status, duration_minutes, created_at) VALUES (?, ?, ?, ?, ?, ?)').bind(code, name, adminToken, 'waiting', durationMinutes, Date.now()),
           env.DB.prepare('INSERT INTO participants (id, room_code, name, joined_at) VALUES (?, ?, ?, ?)').bind(participant.id, code, participant.name, Date.now()),
         ]);
         return json({ code, name, status: 'waiting', adminToken, participants: [participant] }, 201);
