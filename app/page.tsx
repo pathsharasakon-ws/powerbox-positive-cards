@@ -254,7 +254,7 @@ export default function Home() {
   const [isHost, setIsHost] = useState(false);
   const [roomName, setRoomName] = useState('Bloom Together');
   const [roomCode, setRoomCode] = useState('');
-  const [playerName, setPlayerName] = useState('ปัท');
+  const [playerName, setPlayerName] = useState('');
   const [nameList, setNameList] = useState('');
   const [people, setPeople] = useState<string[]>([]);
   const [person, setPerson] = useState('');
