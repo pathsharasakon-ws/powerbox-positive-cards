@@ -96,9 +96,9 @@ export default function Home() {
             </div>
             <section>
               <h2 className="mb-3 text-sm font-extrabold">{t.selectPerson}</h2>
-              <div className="flex gap-3 overflow-x-auto pb-2">
-                {people.map((item) => <button key={item.name} onClick={() => setPerson(item)} className={`flex min-w-20 flex-col items-center gap-2 rounded-[20px_16px_22px_15px] border-2 p-3 transition ${person.name === item.name ? 'border-[#5d4638] bg-[#fff3dd] shadow-[3px_3px_0_#efb9aa]' : 'border-transparent hover:bg-muted'}`}><span className={`grid size-11 place-items-center rounded-[48%_52%_45%_55%] border-2 border-[#5d4638] ${item.color} text-sm font-black`}>{item.initials}</span><span className="text-xs font-black">{item.name}</span></button>)}
-                <button className="flex min-w-20 flex-col items-center gap-2 rounded-2xl p-3 text-muted-foreground hover:bg-muted"><span className="grid size-11 place-items-center rounded-full border border-dashed border-[#cbbdaf] bg-white"><ChevronDown className="size-4" /></span><span className="text-xs font-bold">+ 43</span></button>
+              <div className="grid w-full gap-3 sm:grid-cols-2">
+                {people.map((item) => <button key={item.name} onClick={() => setPerson(item)} className={`flex min-w-0 items-center gap-3 rounded-[20px_16px_22px_15px] border-2 px-4 py-3 text-left transition ${person.name === item.name ? 'border-[#5d4638] bg-[#fff3dd] shadow-[3px_3px_0_#efb9aa]' : 'border-[#5d4638]/20 bg-[#fffdf8] hover:border-[#5d4638]/50 hover:bg-muted'}`}><span className={`grid size-12 shrink-0 place-items-center rounded-[48%_52%_45%_55%] border-2 border-[#5d4638] ${item.color} text-sm font-black`}>{item.initials}</span><span className="min-w-0 flex-1 break-words text-sm font-bold leading-snug">{item.name}</span>{person.name === item.name && <Check className="size-5 shrink-0 text-[#467d68]" />}</button>)}
+                <button className="col-span-full flex w-full items-center justify-center gap-2 rounded-[18px_15px_20px_14px] border-2 border-dashed border-[#5d4638]/45 bg-[#fffaf0] px-4 py-3 text-sm font-bold text-muted-foreground transition hover:border-[#5d4638] hover:bg-muted"><ChevronDown className="size-4" /><span>+ 43</span></button>
               </div>
             </section>
             <section className="mt-6">
