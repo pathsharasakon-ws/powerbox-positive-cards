@@ -102,7 +102,15 @@ export default function Home() {
               </div>
             </section>
             <section className="mt-6">
-              <div className="mb-3 flex items-center justify-between"><h2 className="text-sm font-extrabold">{t.selectCard}</h2><span className="text-xs text-muted-foreground">{t.recipient}: <strong className="text-foreground">{person.name}</strong></span></div>
+              <h2 className="mb-3 text-sm font-extrabold">{t.selectCard}</h2>
+              <div className="mb-4 flex w-full items-center gap-3 rounded-[18px_15px_20px_14px] border-2 border-[#5d4638] bg-[#fff8e8] px-4 py-3 shadow-[3px_3px_0_#efb9aa]">
+                <span className={`grid size-10 shrink-0 place-items-center rounded-full border-2 border-[#5d4638] ${person.color} text-xs font-bold`}>{person.initials}</span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-xs font-medium text-muted-foreground">{t.recipient}</span>
+                  <strong className="block break-words text-base font-bold leading-snug text-foreground">{person.name}</strong>
+                </span>
+                <Check className="size-5 shrink-0 text-[#467d68]" />
+              </div>
               <div className="grid max-h-[540px] gap-3 overflow-y-auto pr-1 sm:grid-cols-3">
                 {cards.filter((card) => remainingCards.includes(card.id)).map((card) => <button key={card.id} onClick={() => setSelectedCard(card.id)} className={`relative min-h-80 overflow-hidden rounded-[24px_19px_27px_18px] border-2 border-[#5d4638] p-3 text-left transition hover:-translate-y-1 ${card.tone} ${selectedCard === card.id ? 'rotate-[-1deg] shadow-[4px_5px_0_#e96b50]' : 'shadow-[2px_3px_0_#decdb7]'}`}>{selectedCard === card.id && <span className="absolute right-3 top-3 z-10 grid size-7 place-items-center rounded-full border-2 border-[#5d4638] bg-primary text-white"><Check className="size-3" /></span>}<div role="img" aria-label={`${card.th} / ${card.en}`} className="mx-auto h-40 w-full bg-[url('/card-characters-v4.png')] bg-[length:500%_200%] bg-no-repeat" style={{ backgroundPosition: card.position }} /><div className="border-t border-[#5d4638]/20 px-2 pb-2 pt-4"><p className="text-sm font-bold leading-relaxed">{card.th}</p><p className="mt-2 text-xs font-medium leading-relaxed text-[#6d5a4d]">{card.en}</p></div></button>)}
               </div>
