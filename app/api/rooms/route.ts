@@ -110,6 +110,15 @@ export async function PATCH(request: Request) {
     }).filter((card) => card.th && card.en);
     if (deck.length === 0) return json({ error: 'deck_required' }, 400);
     await env.DB.prepare('UPDATE rooms SET deck_json = ? WHERE code = ?').bind(JSON.stringify(deck), code).run();
+  } else if (body.action === 'remove_participant') {
+    const participantName = normalizeName(body.name);
+    if (!participantName) return json({ error: 'participant_required' }, 400);
+    await env.DB.batch([
+      env.DB
+        .prepare('DELETE FROM participants WHERE room_code = ? AND (name_key = ? OR name = ? COLLATE NOCASE)')
+        .bind(code, nameKey(participantName), participantName),
+      env.DB.prepare('DELETE FROM sent_cards WHERE room_code = ? AND (recipient_name = ? OR sender_name = ?)').bind(code, participantName, participantName),
+    ]);
   } else if (body.action === 'update_participants' && Array.isArray(body.participants)) {
     const normalizedNames = body.participants.map(normalizeName).filter(Boolean);
     const names = normalizedNames.filter((name, index) => normalizedNames.findIndex((candidate) => nameKey(candidate) === nameKey(name)) === index).slice(0, 100);
