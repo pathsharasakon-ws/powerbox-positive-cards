@@ -26,7 +26,7 @@ type Language = 'th' | 'en';
 type Screen = 'home' | 'admin' | 'lobby' | 'game' | 'opened';
 
 const palette = ['bg-[#f7c7bc]', 'bg-[#c7d9f5]', 'bg-[#f3d9a8]', 'bg-[#c6e5d5]', 'bg-[#e3d3ee]', 'bg-[#f7d6a8]'];
-const initialPeople = ['Mali Saelim', 'Niran Wongchai', 'Ploy Anan', 'Ton Kittipong'];
+const initialPeople = ['Mali Saelim', 'Niran Wongchai', 'Ploy Anan', 'Ton Kittipong', 'Anya Chai', 'Beam Rattan', 'Chompoo Dee', 'Din Preecha', 'Earn Suda', 'Fah Narin', 'Gift Wimon', 'Hong Arun', 'Ice Kanda', 'Jin Thanat', 'Karn Viroj', 'Lin Mayura', 'Mew Darin', 'Nine Patara', 'Oat Chanin', 'Praew Lalin'];
 const cards = [
   { id: 1, position: '0% 0%', tone: 'bg-[#fff5d7]', th: 'คุณทำให้บรรยากาศรอบตัวสดใสขึ้นเสมอ', en: 'You always make the room feel a little brighter.' },
   { id: 2, position: '25% 0%', tone: 'bg-[#e7f3e9]', th: 'ฉันชื่นชมความตั้งใจและการเติบโตของคุณ', en: 'I admire your dedication and the way you keep growing.' },
@@ -38,6 +38,8 @@ const cards = [
   { id: 8, position: '50% 100%', tone: 'bg-[#e8edfa]', th: 'ความพยายามของคุณมีคนมองเห็นและชื่นชม', en: 'Your effort is seen and deeply appreciated.' },
   { id: 9, position: '75% 100%', tone: 'bg-[#e7f3e9]', th: 'ขอให้ความใจดีที่คุณมอบให้ย้อนกลับไปหาคุณ', en: 'May the kindness you give find its way back to you.' },
   { id: 10, position: '100% 100%', tone: 'bg-[#fff0d9]', th: 'โลกใบนี้ดีขึ้นเพราะมีคุณอยู่ตรงนี้', en: 'The world is better because you are here.' },
+  { id: 11, position: '0% 0%', tone: 'bg-[#f6e5dc]', th: 'ขอให้วันนี้มีพื้นที่เล็ก ๆ ให้คุณได้พักใจ', en: 'May today give you a small, gentle space to breathe.' },
+  { id: 12, position: '100% 0%', tone: 'bg-[#e5eee8]', th: 'คุณมีความกล้าที่จะก้าวไปในเส้นทางของตัวเอง', en: 'You have the courage to follow your own path.' },
 ];
 
 const copy = {
@@ -48,7 +50,9 @@ const copy = {
 };
 
 function initials(name: string) {
-  return name.trim().split(/\s+/).slice(0, 2).map((word) => word[0]).join('').toUpperCase();
+  const words = name.trim().split(/\s+/).filter(Boolean);
+  if (words.length > 1) return `${Array.from(words[0])[0] || ''}${Array.from(words[1])[0] || ''}`.toUpperCase();
+  return Array.from(words[0] || '').slice(0, 2).join('').toUpperCase().padEnd(2, '•');
 }
 
 export default function Home() {
@@ -65,6 +69,7 @@ export default function Home() {
   const [remainingCards, setRemainingCards] = useState(cards.map((card) => card.id));
   const [anonymous, setAnonymous] = useState(false);
   const [sent, setSent] = useState(0);
+  const [sentRecipients, setSentRecipients] = useState<string[]>([]);
   const [secondsLeft, setSecondsLeft] = useState(600);
   const [justSent, setJustSent] = useState(false);
   const [systemGiftAdded, setSystemGiftAdded] = useState(false);
@@ -85,11 +90,13 @@ export default function Home() {
 
   const timeDisplay = `${String(Math.floor(secondsLeft / 60)).padStart(2, '0')}:${String(secondsLeft % 60).padStart(2, '0')}`;
   const participantNames = people.length ? people : initialPeople;
+  const availablePeople = participantNames.filter((name) => !sentRecipients.includes(name));
 
   function resetGame() {
     setRemainingCards(cards.map((card) => card.id));
     setSelectedCard(1);
     setSent(0);
+    setSentRecipients([]);
     setSecondsLeft(600);
     setSystemGiftAdded(false);
   }
@@ -116,10 +123,13 @@ export default function Home() {
   }
 
   function sendCard() {
-    if (sent >= 10 || !activeCard) return;
+    if (sent >= 12 || !activeCard || !person) return;
     const nextCards = remainingCards.filter((id) => id !== selectedCard);
     setRemainingCards(nextCards);
     setSent((value) => value + 1);
+    setSentRecipients((value) => [...value, person]);
+    const nextPerson = participantNames.find((name) => name !== person && !sentRecipients.includes(name));
+    if (nextPerson) setPerson(nextPerson);
     if (nextCards.length) setSelectedCard(nextCards[0]);
     setJustSent(true);
     window.setTimeout(() => setJustSent(false), 1500);
@@ -209,17 +219,17 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground"><Header />
       {systemGiftAdded && secondsLeft > 0 && <div className="fixed left-1/2 top-20 z-50 -translate-x-1/2 rounded-full border-2 border-[#5d4638] bg-[#ffe19a] px-5 py-2 text-sm font-bold shadow-[3px_4px_0_#5d4638]"><Sparkles className="mr-2 inline size-4" />{t.systemSent}</div>}
-      <section className="mx-auto max-w-6xl px-4 py-6 sm:px-8 sm:py-9">
+      <section className="mx-auto max-w-[1500px] px-4 py-6 sm:px-8 sm:py-9">
         <div className="mb-6 flex flex-col gap-4 rounded-[24px_20px_26px_18px] border-2 border-[#5d4638] bg-[#fff6df] p-5 shadow-[4px_5px_0_#efb9aa] sm:flex-row sm:items-center sm:justify-between">
           <div><div className="mb-1 text-xs font-bold uppercase tracking-[.14em] text-[#467d68]">{t.activityRoom} · {roomCode}</div><h1 className="text-2xl font-bold">{t.hello} {playerName}</h1><p className="mt-1 text-sm text-muted-foreground">{t.prompt}</p></div>
           <div className="flex items-center gap-4 rounded-2xl border-2 border-[#5d4638] bg-white px-5 py-3 shadow-[3px_4px_0_#5d4638]"><Clock3 className="size-5 text-primary" /><div><span className="block text-xs font-medium text-muted-foreground">{t.time}</span><strong className="text-2xl tabular-nums text-primary">{timeDisplay}</strong></div></div>
         </div>
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div className="rounded-[30px_24px_28px_22px] border-2 border-[#5d4638] bg-white p-5 shadow-[5px_6px_0_#f1c86f] sm:p-7">
-            <div className="mb-7 flex items-center gap-4"><Progress value={sent * 10} className="flex-1 [&_[data-slot=progress-track]]:h-2 [&_[data-slot=progress-track]]:bg-[#f3e9dc] [&_[data-slot=progress-indicator]]:bg-primary" /><span className="min-w-24 text-right text-sm font-bold">{t.progress} {sent}/10</span></div>
-            <section><h2 className="mb-3 text-sm font-bold">{t.selectPerson}</h2><div className="grid w-full gap-3 sm:grid-cols-2">{participantNames.slice(0, 4).map((name, index) => <button key={`${name}-${index}`} onClick={() => setPerson(name)} className={`flex min-w-0 items-center gap-3 rounded-[20px_16px_22px_15px] border-2 px-4 py-3 text-left transition ${person === name ? 'border-[#5d4638] bg-[#fff3dd] shadow-[3px_3px_0_#efb9aa]' : 'border-[#5d4638]/20 bg-[#fffdf8] hover:border-[#5d4638]/50 hover:bg-muted'}`}><span className={`grid size-12 shrink-0 place-items-center rounded-full border-2 border-[#5d4638] ${palette[index % palette.length]} text-sm font-bold`}>{initials(name)}</span><span className="min-w-0 flex-1 break-words text-sm font-bold leading-snug">{name}</span>{person === name && <Check className="size-5 shrink-0 text-[#467d68]" />}</button>)}<button className="col-span-full flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#5d4638]/45 bg-[#fffaf0] px-4 py-3 text-sm font-bold text-muted-foreground"><ChevronDown className="size-4" /><span>+ {Math.max(0, participantNames.length - 4)}</span></button></div></section>
-            <section className="mt-6"><h2 className="mb-3 text-sm font-bold">{t.selectCard}</h2><div className="mb-4 flex w-full items-center gap-3 rounded-xl border-2 border-[#5d4638] bg-[#fff8e8] px-4 py-3 shadow-[3px_3px_0_#efb9aa]"><span className="grid size-10 shrink-0 place-items-center rounded-full border-2 border-[#5d4638] bg-[#c6e5d5] text-xs font-bold">{initials(person)}</span><span className="min-w-0 flex-1"><span className="block text-xs font-medium text-muted-foreground">{t.recipient}</span><strong className="block break-words text-base leading-snug">{person}</strong></span><Check className="size-5 shrink-0 text-[#467d68]" /></div><div className="grid max-h-[540px] gap-3 overflow-y-auto pr-1 sm:grid-cols-3">{cards.filter((card) => remainingCards.includes(card.id)).map((card) => <button key={card.id} onClick={() => setSelectedCard(card.id)} className={`relative min-h-80 overflow-hidden rounded-[24px_19px_27px_18px] border-2 border-[#5d4638] p-3 text-left transition hover:-translate-y-1 ${card.tone} ${selectedCard === card.id ? 'rotate-[-1deg] shadow-[4px_5px_0_#e96b50]' : 'shadow-[2px_3px_0_#decdb7]'}`}>{selectedCard === card.id && <span className="absolute right-3 top-3 z-10 grid size-7 place-items-center rounded-full border-2 border-[#5d4638] bg-primary text-white"><Check className="size-3" /></span>}<div role="img" aria-label={`${card.th} / ${card.en}`} className="mx-auto h-40 w-full bg-[url('/card-characters-v4.png')] bg-[length:500%_200%] bg-no-repeat" style={{ backgroundPosition: card.position }} /><div className="border-t border-[#5d4638]/20 px-2 pb-2 pt-4"><p className="text-sm font-bold leading-relaxed">{card.th}</p><p className="mt-2 text-xs font-medium leading-relaxed text-[#6d5a4d]">{card.en}</p></div></button>)}</div></section>
-            <div className="mt-6 flex flex-col gap-4 border-t border-[#efe6db] pt-5 sm:flex-row sm:items-center sm:justify-between"><label className="flex cursor-pointer items-center gap-3"><Switch checked={anonymous} onCheckedChange={setAnonymous} /><span><span className="block text-sm font-bold">{t.anonymous}</span><span className="block text-xs text-muted-foreground">{t.anonymousHelp}</span></span></label><Button onClick={sendCard} disabled={sent >= 10} className="h-12 rounded-xl border-2 border-[#5d4638] px-7 text-sm font-bold shadow-[4px_5px_0_#5d4638]">{justSent ? <Check /> : <Send />} {justSent ? t.sent : t.send}</Button></div>
+            <div className="mb-7 flex items-center gap-4"><Progress value={(sent / 12) * 100} className="flex-1 [&_[data-slot=progress-track]]:h-2 [&_[data-slot=progress-track]]:bg-[#f3e9dc] [&_[data-slot=progress-indicator]]:bg-primary" /><span className="min-w-24 text-right text-sm font-bold">{t.progress} {sent}/12</span></div>
+            <section><h2 className="mb-3 text-sm font-bold">{t.selectPerson}</h2><div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-5 xl:grid-cols-10">{availablePeople.map((name, index) => <button key={name} onClick={() => setPerson(name)} className={`relative flex min-w-0 flex-col items-center gap-2 rounded-[18px_14px_20px_13px] border-2 px-2 py-3 text-center transition ${person === name ? 'border-[#5d4638] bg-[#fff3dd] shadow-[3px_3px_0_#efb9aa]' : 'border-[#5d4638]/20 bg-[#fffdf8] hover:border-[#5d4638]/50 hover:bg-muted'}`}><span className={`grid size-11 shrink-0 place-items-center rounded-full border-2 border-[#5d4638] ${palette[index % palette.length]} text-xs font-bold tracking-wide`}>{initials(name)}</span><span className="w-full break-words text-[11px] font-bold leading-tight">{name}</span>{person === name && <span className="absolute right-1.5 top-1.5 grid size-5 place-items-center rounded-full bg-[#467d68] text-white"><Check className="size-3" /></span>}</button>)}</div></section>
+            <section className="mt-6"><h2 className="mb-3 text-sm font-bold">{t.selectCard}</h2><div className="mb-4 flex w-full items-center gap-3 rounded-xl border-2 border-[#5d4638] bg-[#fff8e8] px-4 py-3 shadow-[3px_3px_0_#efb9aa]"><span className="grid size-10 shrink-0 place-items-center rounded-full border-2 border-[#5d4638] bg-[#c6e5d5] text-xs font-bold">{initials(person)}</span><span className="min-w-0 flex-1"><span className="block text-xs font-medium text-muted-foreground">{t.recipient}</span><strong className="block break-words text-base leading-snug">{person}</strong></span><Check className="size-5 shrink-0 text-[#467d68]" /></div><div className="grid max-h-[540px] gap-3 overflow-y-auto pr-1 sm:grid-cols-3 xl:grid-cols-4">{cards.filter((card) => remainingCards.includes(card.id)).map((card) => <button key={card.id} onClick={() => setSelectedCard(card.id)} className={`relative min-h-80 overflow-hidden rounded-[24px_19px_27px_18px] border-2 border-[#5d4638] p-3 text-left transition hover:-translate-y-1 ${card.tone} ${selectedCard === card.id ? 'rotate-[-1deg] shadow-[4px_5px_0_#e96b50]' : 'shadow-[2px_3px_0_#decdb7]'}`}>{selectedCard === card.id && <span className="absolute right-3 top-3 z-10 grid size-7 place-items-center rounded-full border-2 border-[#5d4638] bg-primary text-white"><Check className="size-3" /></span>}<div role="img" aria-label={`${card.th} / ${card.en}`} className="mx-auto h-40 w-full bg-no-repeat" style={{ backgroundImage: `url('${card.id <= 10 ? '/card-characters-v4.png' : '/card-characters-extra.png'}')`, backgroundSize: card.id <= 10 ? '500% 200%' : '200% 100%', backgroundPosition: card.position }} /><div className="border-t border-[#5d4638]/20 px-2 pb-2 pt-4"><p className="text-sm font-bold leading-relaxed">{card.th}</p><p className="mt-2 text-xs font-medium leading-relaxed text-[#6d5a4d]">{card.en}</p></div></button>)}</div></section>
+            <div className="mt-6 flex flex-col gap-4 border-t border-[#efe6db] pt-5 sm:flex-row sm:items-center sm:justify-between"><label className="flex cursor-pointer items-center gap-3"><Switch checked={anonymous} onCheckedChange={setAnonymous} /><span><span className="block text-sm font-bold">{t.anonymous}</span><span className="block text-xs text-muted-foreground">{t.anonymousHelp}</span></span></label><Button onClick={sendCard} disabled={sent >= 12 || availablePeople.length === 0} className="h-12 rounded-xl border-2 border-[#5d4638] px-7 text-sm font-bold shadow-[4px_5px_0_#5d4638]">{justSent ? <Check /> : <Send />} {justSent ? t.sent : t.send}</Button></div>
           </div>
           <aside className="rounded-[26px_32px_24px_29px] border-2 border-[#5d4638] bg-[#88bda7] p-6 text-[#35291f] shadow-[5px_6px_0_#5d4638]"><div className="flex items-start justify-between"><p className="text-xs font-bold uppercase tracking-[.14em] text-[#315f4e]">{t.inbox}</p><Gift className="size-6 text-[#744b2c]" /></div><div className="relative mx-auto my-10 h-44 max-w-56"><div className="absolute left-1/2 top-0 h-32 w-40 -translate-x-1/2 rotate-[-5deg] rounded-2xl border-2 border-[#5d4638] bg-[#f7c7bc] shadow-[3px_4px_0_#5d4638]" /><div className="absolute left-1/2 top-3 h-32 w-40 -translate-x-1/2 rotate-[6deg] rounded-2xl border-2 border-[#5d4638] bg-[#f5d797] shadow-[3px_4px_0_#5d4638]" /><div className="absolute bottom-0 left-1/2 grid h-28 w-52 -translate-x-1/2 place-items-center rounded-2xl border-2 border-[#5d4638] bg-primary text-white shadow-[4px_5px_0_#5d4638]"><LockKeyhole className="size-7" /></div></div><div className="rounded-2xl border-2 border-[#5d4638] bg-[#fff9ed] p-4 text-center shadow-[3px_3px_0_#5d4638]"><p className="text-sm font-bold">{t.locked}</p><p className="mt-1 text-xs font-bold text-[#467d68]">{timeDisplay}</p></div>{isHost && <Button variant="outline" onClick={() => setSecondsLeft(15)} className="mt-4 h-10 w-full rounded-xl border-2 bg-white/70 text-xs font-bold"><Clock3 /> {t.testFinal}</Button>}</aside>
         </div>
