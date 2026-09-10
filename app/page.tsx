@@ -14,16 +14,16 @@ const people = [
   { name: 'Ton', initials: 'ตน', color: 'bg-[#c6e5d5]' },
 ];
 const cards = [
-  { id: 1, emoji: '🌤️', tone: 'bg-[#fff5d7]', th: 'คุณทำให้บรรยากาศรอบตัวสดใสขึ้นเสมอ', en: 'You always make the room feel a little brighter.' },
-  { id: 2, emoji: '🌱', tone: 'bg-[#e7f3e9]', th: 'ฉันชื่นชมความตั้งใจและการเติบโตของคุณ', en: 'I admire your dedication and the way you keep growing.' },
-  { id: 3, emoji: '💛', tone: 'bg-[#fde8e4]', th: 'ขอบคุณที่เป็นพื้นที่สบายใจให้คนรอบข้าง', en: 'Thank you for making people around you feel at ease.' },
-  { id: 4, emoji: '✨', tone: 'bg-[#eee8fa]', th: 'ความเป็นตัวคุณสร้างความแตกต่างที่งดงาม', en: 'Being yourself makes a beautiful difference.' },
-  { id: 5, emoji: '🌻', tone: 'bg-[#fff0bd]', th: 'พลังและรอยยิ้มของคุณส่งต่อถึงคนอื่นเสมอ', en: 'Your energy and smile always reach the people around you.' },
-  { id: 6, emoji: '🫶', tone: 'bg-[#e5f1f5]', th: 'คุณเก่งกว่าที่ตัวเองคิด และฉันเชื่อในตัวคุณ', en: 'You are more capable than you know, and I believe in you.' },
-  { id: 7, emoji: '🌈', tone: 'bg-[#f9e6ef]', th: 'ขอบคุณที่นำมุมมองดี ๆ มาแบ่งปันกับพวกเรา', en: 'Thank you for sharing your thoughtful perspective with us.' },
-  { id: 8, emoji: '⭐', tone: 'bg-[#e8edfa]', th: 'ความพยายามของคุณมีคนมองเห็นและชื่นชม', en: 'Your effort is seen and deeply appreciated.' },
-  { id: 9, emoji: '🍀', tone: 'bg-[#e7f3e9]', th: 'ขอให้ความใจดีที่คุณมอบให้ย้อนกลับไปหาคุณ', en: 'May the kindness you give find its way back to you.' },
-  { id: 10, emoji: '☀️', tone: 'bg-[#fff0d9]', th: 'โลกใบนี้ดีขึ้นเพราะมีคุณอยู่ตรงนี้', en: 'The world is better because you are here.' },
+  { id: 1, emoji: '🌤️', position: '0% 0%', tone: 'bg-[#fff5d7]', th: 'คุณทำให้บรรยากาศรอบตัวสดใสขึ้นเสมอ', en: 'You always make the room feel a little brighter.' },
+  { id: 2, emoji: '🌱', position: '25% 0%', tone: 'bg-[#e7f3e9]', th: 'ฉันชื่นชมความตั้งใจและการเติบโตของคุณ', en: 'I admire your dedication and the way you keep growing.' },
+  { id: 3, emoji: '💛', position: '50% 0%', tone: 'bg-[#fde8e4]', th: 'ขอบคุณที่เป็นพื้นที่สบายใจให้คนรอบข้าง', en: 'Thank you for making people around you feel at ease.' },
+  { id: 4, emoji: '✨', position: '75% 0%', tone: 'bg-[#eee8fa]', th: 'ความเป็นตัวคุณสร้างความแตกต่างที่งดงาม', en: 'Being yourself makes a beautiful difference.' },
+  { id: 5, emoji: '🌻', position: '100% 0%', tone: 'bg-[#fff0bd]', th: 'พลังและรอยยิ้มของคุณส่งต่อถึงคนอื่นเสมอ', en: 'Your energy and smile always reach the people around you.' },
+  { id: 6, emoji: '🫶', position: '0% 100%', tone: 'bg-[#e5f1f5]', th: 'คุณเก่งกว่าที่ตัวเองคิด และฉันเชื่อในตัวคุณ', en: 'You are more capable than you know, and I believe in you.' },
+  { id: 7, emoji: '🌈', position: '25% 100%', tone: 'bg-[#f9e6ef]', th: 'ขอบคุณที่นำมุมมองดี ๆ มาแบ่งปันกับพวกเรา', en: 'Thank you for sharing your thoughtful perspective with us.' },
+  { id: 8, emoji: '⭐', position: '50% 100%', tone: 'bg-[#e8edfa]', th: 'ความพยายามของคุณมีคนมองเห็นและชื่นชม', en: 'Your effort is seen and deeply appreciated.' },
+  { id: 9, emoji: '🍀', position: '75% 100%', tone: 'bg-[#e7f3e9]', th: 'ขอให้ความใจดีที่คุณมอบให้ย้อนกลับไปหาคุณ', en: 'May the kindness you give find its way back to you.' },
+  { id: 10, emoji: '☀️', position: '100% 100%', tone: 'bg-[#fff0d9]', th: 'โลกใบนี้ดีขึ้นเพราะมีคุณอยู่ตรงนี้', en: 'The world is better because you are here.' },
 ];
 const copy = {
   th: { subtitle: 'ส่งต่อคำดี ๆ ให้กัน', room: 'ห้องกิจกรรม', participants: 'เข้าร่วมแล้ว 47 / 100 คน', time: 'เหลือเวลา', hello: 'สวัสดี, ปัท 👋', prompt: 'วันนี้อยากส่งพลังบวกให้ใคร?', progress: 'ส่งแล้ว', selectPerson: '1. เลือกผู้รับ', recipient: 'ผู้รับที่เลือก', selectCard: '2. เลือกการ์ด', anonymous: 'ส่งแบบไม่เปิดเผยชื่อ', anonymousHelp: 'ผู้รับจะไม่เห็นชื่อของคุณ', send: 'ส่งการ์ด', sent: 'ส่งพลังบวกแล้ว!', inbox: 'กล่องพลังใจของฉัน', inboxCount: 'ได้รับแล้ว 4 ใบ', locked: 'กล่องจะเปิดเมื่อหมดเวลา', appGift: 'มีการ์ดพิเศษจาก PowerBox รอคุณอยู่' },
@@ -103,8 +103,8 @@ export default function Home() {
             </section>
             <section className="mt-6">
               <div className="mb-3 flex items-center justify-between"><h2 className="text-sm font-extrabold">{t.selectCard}</h2><span className="text-xs text-muted-foreground">{t.recipient}: <strong className="text-foreground">{person.name}</strong></span></div>
-              <div className="grid max-h-[390px] gap-3 overflow-y-auto pr-1 sm:grid-cols-3">
-                {cards.filter((card) => remainingCards.includes(card.id)).map((card) => <button key={card.id} onClick={() => setSelectedCard(card.id)} className={`relative min-h-40 rounded-[24px_19px_27px_18px] border-2 border-[#5d4638] p-5 text-left transition hover:-translate-y-1 ${card.tone} ${selectedCard === card.id ? 'rotate-[-1deg] shadow-[4px_5px_0_#e96b50]' : 'shadow-[2px_3px_0_#decdb7]'}`}>{selectedCard === card.id && <span className="absolute right-3 top-3 grid size-6 place-items-center rounded-full border-2 border-[#5d4638] bg-primary text-white"><Check className="size-3" /></span>}<span className="text-2xl">{card.emoji}</span><p className="mt-5 text-sm font-black leading-relaxed">{card[language]}</p></button>)}
+              <div className="grid max-h-[540px] gap-3 overflow-y-auto pr-1 sm:grid-cols-3">
+                {cards.filter((card) => remainingCards.includes(card.id)).map((card) => <button key={card.id} onClick={() => setSelectedCard(card.id)} className={`relative min-h-72 overflow-hidden rounded-[24px_19px_27px_18px] border-2 border-[#5d4638] p-3 text-left transition hover:-translate-y-1 ${card.tone} ${selectedCard === card.id ? 'rotate-[-1deg] shadow-[4px_5px_0_#e96b50]' : 'shadow-[2px_3px_0_#decdb7]'}`}>{selectedCard === card.id && <span className="absolute right-3 top-3 z-10 grid size-7 place-items-center rounded-full border-2 border-[#5d4638] bg-primary text-white"><Check className="size-3" /></span>}<div role="img" aria-label={card[language]} className="mx-auto h-40 w-full rounded-[18px_14px_20px_15px] border-2 border-[#5d4638]/70 bg-[url('/card-characters.png')] bg-[length:500%_200%] bg-no-repeat" style={{ backgroundPosition: card.position }} /><div className="px-2 pb-2 pt-4"><span className="text-xl">{card.emoji}</span><p className="mt-2 text-sm font-black leading-relaxed">{card[language]}</p></div></button>)}
               </div>
             </section>
             <div className="mt-6 flex flex-col gap-4 border-t border-[#efe6db] pt-5 sm:flex-row sm:items-center sm:justify-between">
