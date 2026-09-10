@@ -25,7 +25,6 @@ type Language = 'th' | 'en';
 type Screen = 'home' | 'admin' | 'lobby' | 'game' | 'opened';
 
 const palette = ['bg-[#f7c7bc]', 'bg-[#c7d9f5]', 'bg-[#f3d9a8]', 'bg-[#c6e5d5]', 'bg-[#e3d3ee]', 'bg-[#f7d6a8]'];
-const initialPeople = ['Mali Saelim', 'Niran Wongchai', 'Ploy Anan', 'Ton Kittipong', 'Anya Chai', 'Beam Rattan', 'Chompoo Dee', 'Din Preecha', 'Earn Suda', 'Fah Narin', 'Gift Wimon', 'Hong Arun', 'Ice Kanda', 'Jin Thanat', 'Karn Viroj', 'Lin Mayura', 'Mew Darin', 'Nine Patara', 'Oat Chanin', 'Praew Lalin'];
 const cards = [
   { id: 1, position: '0% 0%', tone: 'bg-[#fff5d7]', th: 'คุณทำให้บรรยากาศรอบตัวสดใสขึ้นเสมอ', en: 'You always make the room feel a little brighter.' },
   { id: 2, position: '25% 0%', tone: 'bg-[#e7f3e9]', th: 'ฉันชื่นชมความตั้งใจและการเติบโตของคุณ', en: 'I admire your dedication and the way you keep growing.' },
@@ -43,7 +42,7 @@ const cards = [
 
 const copy = {
   th: {
-    subtitle: 'ส่งต่อคำดี ๆ ให้กัน', joinRoom: 'เข้าร่วมห้อง', roomCode: 'รหัสห้อง', yourName: 'ชื่อของคุณ', join: 'เข้าห้อง', createRoom: 'สร้างห้องสำหรับผู้จัด', createHelp: 'ตั้งชื่อห้อง เพิ่มรายชื่อ และเริ่มกิจกรรม', create: 'สร้างห้อง', back: 'กลับหน้าแรก', roomName: 'ชื่อห้อง', participantList: 'รายชื่อผู้เข้าร่วม', onePerLine: 'ใส่หนึ่งชื่อต่อหนึ่งบรรทัด สูงสุด 100 คน', continue: 'สร้างห้องและดำเนินการต่อ', waiting: 'ห้องพร้อมแล้ว', readyHelp: 'แชร์รหัสนี้ให้ผู้เข้าร่วม แล้วเริ่มเกมเมื่อทุกคนพร้อม', participants: 'ผู้เข้าร่วม', start: 'เริ่มเกม 10 นาที', activityRoom: 'ห้องกิจกรรม', time: 'เหลือเวลา', hello: 'สวัสดี,', prompt: 'วันนี้อยากส่งพลังบวกให้ใคร?', progress: 'ส่งแล้ว', selectPerson: '1. เลือกผู้รับ', recipient: 'ผู้รับที่เลือก', selectCard: '2. เลือกการ์ด', anonymous: 'ส่งแบบไม่เปิดเผยชื่อ', anonymousHelp: 'ผู้รับจะไม่เห็นชื่อของคุณ', send: 'ส่งการ์ด', sent: 'ส่งพลังบวกแล้ว', inbox: 'กล่องพลังใจของฉัน', locked: 'กล่องจะเปิดอัตโนมัติเมื่อหมดเวลา', testFinal: 'ทดสอบ 15 วินาทีสุดท้าย', openTitle: 'กล่องพลังใจเปิดแล้ว', openHelp: 'นี่คือข้อความดี ๆ ที่ส่งมาถึงคุณ', anonymousFrom: 'ไม่แสดงชื่อ', from: 'จาก', restart: 'กลับสู่หน้าแรก' },
+    subtitle: 'ส่งต่อคำดี ๆ ให้กัน', joinRoom: 'เข้าร่วมห้อง', roomCode: 'รหัสห้อง', yourName: 'ชื่อของคุณ', join: 'เข้าห้อง', createRoom: 'สร้างห้องสำหรับผู้จัด', createHelp: 'ตั้งชื่อห้อง แล้วแชร์รหัสให้สมาชิกเข้าร่วม', create: 'สร้างห้อง', back: 'กลับหน้าแรก', roomName: 'ชื่อห้อง', participantList: 'แก้ไขรายชื่อผู้เข้าร่วม', onePerLine: 'ผู้จัดเท่านั้นที่แก้ไขได้ ใส่หนึ่งชื่อต่อหนึ่งบรรทัด', continue: 'สร้างห้อง', waiting: 'ห้องพร้อมแล้ว', readyHelp: 'แชร์รหัสนี้ให้ผู้เข้าร่วม รายชื่อจะเพิ่มขึ้นเมื่อสมาชิกเข้าห้อง', participants: 'ผู้เข้าร่วม', start: 'เริ่มเกม 10 นาที', activityRoom: 'ห้องกิจกรรม', time: 'เหลือเวลา', hello: 'สวัสดี,', prompt: 'วันนี้อยากส่งพลังงานบวกให้ใคร?', progress: 'ส่งแล้ว', selectPerson: '1. เลือกผู้รับ', recipient: 'ผู้รับที่เลือก', selectCard: '2. เลือกการ์ด', anonymous: 'ส่งแบบไม่เปิดเผยชื่อ', anonymousHelp: 'ผู้รับจะไม่เห็นชื่อของคุณ', send: 'ส่งการ์ด', sent: 'ส่งพลังบวกแล้ว', inbox: 'กล่องพลังใจของฉัน', locked: 'กล่องจะเปิดอัตโนมัติเมื่อหมดเวลา', testFinal: 'ทดสอบ 15 วินาทีสุดท้าย', openTitle: 'กล่องพลังใจเปิดแล้ว', openHelp: 'นี่คือข้อความดี ๆ ที่ส่งมาถึงคุณ', anonymousFrom: 'ไม่แสดงชื่อ', from: 'จาก', restart: 'กลับสู่หน้าแรก' },
   en: {
     subtitle: 'Share kindness. Spread positive energy.', joinRoom: 'Join a room', roomCode: 'Room code', yourName: 'Your name', join: 'Join room', createRoom: 'Create a room for host', createHelp: 'Name your room, add people, and start the activity', create: 'Create room', back: 'Back to home', roomName: 'Room name', participantList: 'Participant list', onePerLine: 'One name per line, up to 100 people', continue: 'Create room and continue', waiting: 'Your room is ready', readyHelp: 'Share this code, then start when everyone is ready', participants: 'Participants', start: 'Start 10-minute game', activityRoom: 'Activity room', time: 'Time left', hello: 'Hello,', prompt: 'Who would you like to uplift today?', progress: 'Sent', selectPerson: '1. Choose a recipient', recipient: 'Selected recipient', selectCard: '2. Choose a card', anonymous: 'Send anonymously', anonymousHelp: 'Your name will be hidden from the recipient', send: 'Send card', sent: 'Positive energy sent', inbox: 'My positivity box', locked: 'Your box opens automatically when time is up', testFinal: 'Test the final 15 seconds', openTitle: 'Your positivity box is open', openHelp: 'Here are the kind messages sent your way', anonymousFrom: 'Anonymous', from: 'From', restart: 'Back to home' },
 };
@@ -59,11 +58,13 @@ export default function Home() {
   const [screen, setScreen] = useState<Screen>('home');
   const [isHost, setIsHost] = useState(false);
   const [roomName, setRoomName] = useState('Bloom Together');
-  const [roomCode, setRoomCode] = useState('A7K9Q2');
+  const [roomCode, setRoomCode] = useState('');
   const [playerName, setPlayerName] = useState('ปัท');
-  const [nameList, setNameList] = useState(initialPeople.join('\n'));
-  const [people, setPeople] = useState(initialPeople);
-  const [person, setPerson] = useState(initialPeople[0]);
+  const [nameList, setNameList] = useState('');
+  const [people, setPeople] = useState<string[]>([]);
+  const [person, setPerson] = useState('');
+  const [adminToken, setAdminToken] = useState('');
+  const [roomError, setRoomError] = useState('');
   const [selectedCard, setSelectedCard] = useState(1);
   const [remainingCards, setRemainingCards] = useState(cards.map((card) => card.id));
   const [anonymous, setAnonymous] = useState(false);
@@ -87,22 +88,27 @@ export default function Home() {
     if (secondsLeft === 0) setScreen('opened');
   }, [screen, secondsLeft]);
 
-  const timeDisplay = `${String(Math.floor(secondsLeft / 60)).padStart(2, '0')}:${String(secondsLeft % 60).padStart(2, '0')}`;
-  const participantNames = people.length ? people : initialPeople;
-  const availablePeople = participantNames.filter((name) => !sentRecipients.includes(name));
+  useEffect(() => {
+    if (screen !== 'lobby' || !/^\d{6}$/.test(roomCode)) return;
+    const refreshRoom = async () => {
+      const response = await fetch(`/api/rooms?code=${roomCode}`);
+      if (!response.ok) return;
+      const room = await response.json();
+      const names = room.participants.map((item: { name: string }) => item.name);
+      setRoomName(room.name);
+      setPeople(names);
+      if (isHost && document.activeElement?.tagName !== 'TEXTAREA') setNameList(names.join('\n'));
+      if (!person) setPerson(names.find((name: string) => name !== playerName) ?? '');
+      if (!isHost && room.status === 'started') { resetGame(); setScreen('game'); }
+    };
+    void refreshRoom();
+    const poller = window.setInterval(refreshRoom, 2000);
+    return () => window.clearInterval(poller);
+  }, [screen, roomCode, isHost, person, playerName]);
 
-  function generateRoomCode() {
-    const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-    const digits = '23456789';
-    const all = `${letters}${digits}`;
-    const pick = (source: string) => source[Math.floor(Math.random() * source.length)];
-    const result = [pick(letters), pick(digits), ...Array.from({ length: 4 }, () => pick(all))];
-    for (let index = result.length - 1; index > 0; index -= 1) {
-      const swapWith = Math.floor(Math.random() * (index + 1));
-      [result[index], result[swapWith]] = [result[swapWith], result[index]];
-    }
-    return result.join('');
-  }
+  const timeDisplay = `${String(Math.floor(secondsLeft / 60)).padStart(2, '0')}:${String(secondsLeft % 60).padStart(2, '0')}`;
+  const participantNames = people;
+  const availablePeople = participantNames.filter((name) => name !== playerName && !sentRecipients.includes(name));
 
   function resetGame() {
     setRemainingCards(cards.map((card) => card.id));
@@ -113,31 +119,48 @@ export default function Home() {
     setSystemGiftAdded(false);
   }
 
-  function joinRoom() {
-    if (!/^(?=.*[A-Z])(?=.*\d)[A-Z\d]{6}$/.test(roomCode) || !playerName.trim()) return;
-    const savedRoomName = window.localStorage.getItem(`powerbox-room-${roomCode}`);
-    if (savedRoomName) setRoomName(savedRoomName);
-    setIsHost(false);
-    resetGame();
-    setScreen('game');
+  function goHome() {
+    setRoomCode('');
+    setRoomError('');
+    setScreen('home');
   }
 
-  function prepareRoom() {
-    const parsed = nameList.split('\n').map((name) => name.trim()).filter(Boolean).slice(0, 100);
-    setPeople(parsed.length ? parsed : initialPeople);
-    setPerson(parsed[0] || initialPeople[0]);
-    const nextRoomCode = generateRoomCode();
+  async function joinRoom() {
+    if (!/^\d{6}$/.test(roomCode) || !playerName.trim()) return;
+    setRoomError('');
+    const response = await fetch('/api/rooms', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'join', code: roomCode, name: playerName }) });
+    if (!response.ok) { setRoomError(language === 'th' ? 'ไม่พบห้อง หรือห้องเริ่มไปแล้ว' : 'Room not found or already started'); return; }
+    const room = await response.json();
+    setRoomName(room.name);
+    setPeople(room.participants.map((item: { name: string }) => item.name));
+    setPerson(room.participants.find((item: { name: string }) => item.name !== playerName)?.name ?? '');
+    setIsHost(false);
+    resetGame();
+    setScreen(room.status === 'started' ? 'game' : 'lobby');
+  }
+
+  async function prepareRoom() {
     const nextRoomName = roomName.trim() || 'Bloom Together';
-    setRoomName(nextRoomName);
-    setRoomCode(nextRoomCode);
-    window.localStorage.setItem(`powerbox-room-${nextRoomCode}`, nextRoomName);
+    const response = await fetch('/api/rooms', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'create', name: nextRoomName }) });
+    const room = await response.json();
+    setRoomName(room.name); setRoomCode(room.code); setAdminToken(room.adminToken); setPeople([]); setNameList('');
+    setIsHost(true);
     setScreen('lobby');
   }
 
-  function startGame() {
-    setIsHost(true);
+  async function startGame() {
+    const response = await fetch('/api/rooms', { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'start', code: roomCode, adminToken }) });
+    if (!response.ok) return;
     resetGame();
     setScreen('game');
+  }
+
+  async function saveParticipants() {
+    const names = nameList.split('\n').map((name) => name.trim()).filter(Boolean).slice(0, 100);
+    const response = await fetch('/api/rooms', { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'update_participants', code: roomCode, adminToken, participants: names }) });
+    if (!response.ok) return;
+    const room = await response.json();
+    setPeople(room.participants.map((item: { name: string }) => item.name));
   }
 
   function sendCard() {
@@ -156,7 +179,7 @@ export default function Home() {
   const Header = () => (
     <header className="border-b-2 border-dashed border-[#6b4d3a]/30 bg-[#fff9ed]/90 backdrop-blur">
       <div className={`mx-auto flex max-w-6xl items-center px-4 py-3 sm:px-8 ${screen === 'home' ? 'justify-end' : 'justify-between'}`}>
-        {screen !== 'home' && <button onClick={() => setScreen('home')} className="flex items-center gap-2 rounded-full border-2 border-[#5d4638] bg-white px-4 py-2 text-xs font-bold shadow-[2px_3px_0_#5d4638] transition hover:-translate-y-0.5"><ArrowLeft className="size-4" /> {t.back}</button>}
+        {screen !== 'home' && <button onClick={goHome} className="flex items-center gap-2 rounded-full border-2 border-[#5d4638] bg-white px-4 py-2 text-xs font-bold shadow-[2px_3px_0_#5d4638] transition hover:-translate-y-0.5"><ArrowLeft className="size-4" /> {t.back}</button>}
         <div className="flex items-center gap-2">
           <button className="rounded-full border-2 border-[#5d4638] bg-[#ffe19a] px-4 py-2 text-xs font-bold shadow-[2px_3px_0_#5d4638] transition hover:-translate-y-0.5" onClick={() => setLanguage(language === 'th' ? 'en' : 'th')} aria-label="Switch language">{language === 'th' ? 'English' : 'ไทย'}</button>
         </div>
@@ -177,7 +200,8 @@ export default function Home() {
         <div className="flex flex-col justify-center gap-4">
           <div className="rounded-[28px_22px_30px_20px] border-2 border-[#5d4638] bg-white p-6 shadow-[5px_6px_0_#f1c86f]">
             <h2 className="text-xl font-bold">{t.joinRoom}</h2>
-            <div className="mt-5 space-y-4"><label className="block text-sm font-bold">{t.roomCode}<Input value={roomCode} maxLength={6} onChange={(event) => setRoomCode(event.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6))} className="mt-2 h-12 rounded-xl border-2 bg-[#fffaf0] text-base font-bold uppercase" /></label><label className="block text-sm font-bold">{t.yourName}<Input value={playerName} onChange={(event) => setPlayerName(event.target.value)} className="mt-2 h-12 rounded-xl border-2 bg-[#fffaf0] text-base" /></label></div>
+            <div className="mt-5 space-y-4"><label className="block text-sm font-bold">{t.roomCode}<Input value={roomCode} inputMode="numeric" maxLength={6} placeholder="000000" onChange={(event) => setRoomCode(event.target.value.replace(/\D/g, '').slice(0, 6))} className="mt-2 h-12 rounded-xl border-2 bg-[#fffaf0] text-base font-bold tracking-[.18em]" /></label><label className="block text-sm font-bold">{t.yourName}<Input value={playerName} onChange={(event) => setPlayerName(event.target.value)} className="mt-2 h-12 rounded-xl border-2 bg-[#fffaf0] text-base" /></label></div>
+            {roomError && <p className="mt-3 text-sm font-bold text-destructive">{roomError}</p>}
             <Button onClick={joinRoom} className="mt-5 h-12 w-full rounded-xl border-2 border-[#5d4638] text-base font-bold shadow-[3px_4px_0_#5d4638]"><Play /> {t.join}</Button>
           </div>
           <button onClick={() => setScreen('admin')} className="flex w-full items-center justify-between rounded-[22px_18px_24px_17px] border-2 border-[#5d4638] bg-[#d9eee3] p-5 text-left shadow-[3px_4px_0_#5d4638] transition hover:-translate-y-0.5"><span><strong className="block text-sm">{t.createRoom}</strong><span className="mt-1 block text-xs text-[#5f746a]">{t.createHelp}</span></span><Plus className="size-5" /></button>
@@ -193,7 +217,6 @@ export default function Home() {
           <div className="flex items-center gap-3"><span className="grid size-11 place-items-center rounded-full border-2 border-[#5d4638] bg-[#d9eee3]"><Users className="size-5" /></span><h1 className="text-2xl font-bold">{t.createRoom}</h1></div>
           <div className="mt-7 space-y-6">
             <label className="block text-sm font-bold">{t.roomName}<Input value={roomName} onChange={(event) => setRoomName(event.target.value)} className="mt-2 h-12 rounded-xl border-2 bg-[#fffaf0] text-base" /></label>
-            <label className="block text-sm font-bold">{t.participantList}<span className="ml-2 text-xs font-normal text-muted-foreground">{t.onePerLine}</span><Textarea value={nameList} onChange={(event) => setNameList(event.target.value)} className="mt-2 min-h-56 rounded-xl border-2 bg-[#fffaf0] text-base leading-relaxed" /></label>
           </div>
           <Button onClick={prepareRoom} className="mt-6 h-12 w-full rounded-xl border-2 border-[#5d4638] text-base font-bold shadow-[3px_4px_0_#5d4638]"><Check /> {t.continue}</Button>
         </div>
@@ -207,8 +230,8 @@ export default function Home() {
         <div className="rounded-[30px_24px_32px_22px] border-2 border-[#5d4638] bg-white p-7 shadow-[6px_7px_0_#efb9aa] sm:p-10">
           <Sparkles className="mx-auto size-9 text-primary" /><h1 className="mt-4 text-3xl font-bold">{roomName}</h1><p className="mt-2 text-lg font-bold">{t.waiting}</p><p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">{t.readyHelp}</p>
           <button onClick={() => navigator.clipboard?.writeText(roomCode)} className="mx-auto mt-7 flex items-center gap-3 rounded-2xl border-2 border-dashed border-[#5d4638] bg-[#fff5d7] px-6 py-4 text-3xl font-bold tracking-[.08em]"><span>{roomCode}</span><Copy className="size-5" /></button>
-          <div className="mx-auto mt-7 max-w-lg rounded-2xl bg-[#f5eee5] p-5 text-left"><div className="flex justify-between text-sm font-bold"><span>{t.participants}</span><span>{participantNames.length} / 100</span></div><div className="mt-4 flex flex-wrap gap-2">{participantNames.slice(0, 12).map((name, index) => <span key={`${name}-${index}`} className="rounded-full border border-[#5d4638]/25 bg-white px-3 py-1 text-xs font-medium">{name}</span>)}</div></div>
-          <Button onClick={startGame} className="mt-7 h-12 rounded-xl border-2 border-[#5d4638] px-7 text-base font-bold shadow-[3px_4px_0_#5d4638]"><Play /> {t.start}</Button>
+          <div className="mx-auto mt-7 max-w-lg rounded-2xl bg-[#f5eee5] p-5 text-left"><div className="flex justify-between text-sm font-bold"><span>{t.participants}</span><span>{participantNames.length} / 100</span></div><div className="mt-4 flex flex-wrap gap-2">{participantNames.map((name, index) => <span key={`${name}-${index}`} className="rounded-full border border-[#5d4638]/25 bg-white px-3 py-1 text-xs font-medium">{name}</span>)}</div>{participantNames.length === 0 && <p className="mt-4 text-sm text-muted-foreground">{language === 'th' ? 'กำลังรอสมาชิกเข้าร่วม…' : 'Waiting for people to join…'}</p>}{isHost && <div className="mt-5 border-t border-[#5d4638]/15 pt-4"><label className="text-sm font-bold">{t.participantList}<span className="mt-1 block text-xs font-normal text-muted-foreground">{t.onePerLine}</span><Textarea value={nameList} onChange={(event) => setNameList(event.target.value)} className="mt-2 min-h-32 rounded-xl border-2 bg-white text-sm" /></label><Button variant="outline" onClick={saveParticipants} className="mt-3 w-full rounded-xl border-2 font-bold">{language === 'th' ? 'บันทึกรายชื่อ' : 'Save participant list'}</Button></div>}</div>
+          {isHost ? <Button onClick={startGame} disabled={participantNames.length < 2} className="mt-7 h-12 rounded-xl border-2 border-[#5d4638] px-7 text-base font-bold shadow-[3px_4px_0_#5d4638]"><Play /> {t.start}</Button> : <p className="mt-7 text-sm font-bold text-[#467d68]">{language === 'th' ? 'รอผู้จัดเริ่มกิจกรรม' : 'Waiting for the host to start'}</p>}
         </div>
       </section>
     </main>
@@ -224,7 +247,7 @@ export default function Home() {
             {received.map((card, index) => <article key={card.id} className={`${card.tone} rounded-[26px_20px_29px_18px] border-2 border-[#5d4638] p-5 shadow-[4px_5px_0_#decdb7]`}><p className="text-base font-bold leading-relaxed">{card.th}</p><p className="mt-2 text-sm leading-relaxed text-[#6d5a4d]">{card.en}</p><p className="mt-5 border-t border-[#5d4638]/20 pt-3 text-xs font-bold text-muted-foreground">{index === 1 ? t.anonymousFrom : `${t.from} ${participantNames[index] || 'Friend'}`}</p></article>)}
             {received.length === 0 && systemGiftAdded && <article className="rounded-[26px_20px_29px_18px] border-2 border-[#5d4638] bg-[#d9eee3] p-5 shadow-[4px_5px_0_#88bda7]"><Sparkles className="size-5 text-primary" /><p className="mt-4 text-base font-bold leading-relaxed">คุณมีคุณค่า และการมีคุณอยู่ตรงนี้มีความหมายเสมอ</p><p className="mt-2 text-sm leading-relaxed text-[#536c61]">You matter, and your presence makes a difference.</p><p className="mt-5 border-t border-[#5d4638]/20 pt-3 text-xs font-bold text-muted-foreground">{t.from} {t.anonymousFrom}</p></article>}
           </div>
-          <div className="mt-8 text-center"><Button variant="outline" onClick={() => setScreen('home')} className="h-11 rounded-xl border-2 px-6 font-bold">{t.restart}</Button></div>
+          <div className="mt-8 text-center"><Button variant="outline" onClick={goHome} className="h-11 rounded-xl border-2 px-6 font-bold">{t.restart}</Button></div>
         </section>
       </main>
     );
