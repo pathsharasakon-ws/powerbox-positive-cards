@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   ArrowLeft,
   Check,
@@ -14,8 +14,6 @@ import {
   Send,
   Sparkles,
   Users,
-  Volume2,
-  VolumeX,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -45,9 +43,9 @@ const cards = [
 
 const copy = {
   th: {
-    subtitle: 'ส่งต่อคำดี ๆ ให้กัน', joinRoom: 'เข้าร่วมห้อง', roomCode: 'รหัสห้อง', yourName: 'ชื่อของคุณ', join: 'เข้าห้อง', createRoom: 'สร้างห้องสำหรับผู้จัด', createHelp: 'ตั้งชื่อห้อง เพิ่มรายชื่อ และเริ่มกิจกรรม', create: 'สร้างห้อง', back: 'กลับหน้าแรก', roomName: 'ชื่อห้อง', participantList: 'รายชื่อผู้เข้าร่วม', onePerLine: 'ใส่หนึ่งชื่อต่อหนึ่งบรรทัด สูงสุด 100 คน', continue: 'สร้างห้องและดำเนินการต่อ', waiting: 'ห้องพร้อมแล้ว', readyHelp: 'แชร์รหัสนี้ให้ผู้เข้าร่วม แล้วเริ่มเกมเมื่อทุกคนพร้อม', participants: 'ผู้เข้าร่วม', start: 'เริ่มเกม 10 นาที', activityRoom: 'ห้องกิจกรรม', time: 'เหลือเวลา', hello: 'สวัสดี,', prompt: 'วันนี้อยากส่งพลังบวกให้ใคร?', progress: 'ส่งแล้ว', selectPerson: '1. เลือกผู้รับ', recipient: 'ผู้รับที่เลือก', selectCard: '2. เลือกการ์ด', anonymous: 'ส่งแบบไม่เปิดเผยชื่อ', anonymousHelp: 'ผู้รับจะไม่เห็นชื่อของคุณ', send: 'ส่งการ์ด', sent: 'ส่งพลังบวกแล้ว', inbox: 'กล่องพลังใจของฉัน', locked: 'กล่องจะเปิดอัตโนมัติเมื่อหมดเวลา', testFinal: 'ทดสอบ 15 วินาทีสุดท้าย', openTitle: 'กล่องพลังใจเปิดแล้ว', openHelp: 'นี่คือข้อความดี ๆ ที่ส่งมาถึงคุณ', anonymousFrom: 'ไม่แสดงชื่อ', from: 'จาก', restart: 'กลับสู่หน้าแรก', music: 'เสียงฮาร์ป', musicHelp: 'เล่นเสียงฮาร์ปเบา ๆ ระหว่างกิจกรรม' },
+    subtitle: 'ส่งต่อคำดี ๆ ให้กัน', joinRoom: 'เข้าร่วมห้อง', roomCode: 'รหัสห้อง', yourName: 'ชื่อของคุณ', join: 'เข้าห้อง', createRoom: 'สร้างห้องสำหรับผู้จัด', createHelp: 'ตั้งชื่อห้อง เพิ่มรายชื่อ และเริ่มกิจกรรม', create: 'สร้างห้อง', back: 'กลับหน้าแรก', roomName: 'ชื่อห้อง', participantList: 'รายชื่อผู้เข้าร่วม', onePerLine: 'ใส่หนึ่งชื่อต่อหนึ่งบรรทัด สูงสุด 100 คน', continue: 'สร้างห้องและดำเนินการต่อ', waiting: 'ห้องพร้อมแล้ว', readyHelp: 'แชร์รหัสนี้ให้ผู้เข้าร่วม แล้วเริ่มเกมเมื่อทุกคนพร้อม', participants: 'ผู้เข้าร่วม', start: 'เริ่มเกม 10 นาที', activityRoom: 'ห้องกิจกรรม', time: 'เหลือเวลา', hello: 'สวัสดี,', prompt: 'วันนี้อยากส่งพลังบวกให้ใคร?', progress: 'ส่งแล้ว', selectPerson: '1. เลือกผู้รับ', recipient: 'ผู้รับที่เลือก', selectCard: '2. เลือกการ์ด', anonymous: 'ส่งแบบไม่เปิดเผยชื่อ', anonymousHelp: 'ผู้รับจะไม่เห็นชื่อของคุณ', send: 'ส่งการ์ด', sent: 'ส่งพลังบวกแล้ว', inbox: 'กล่องพลังใจของฉัน', locked: 'กล่องจะเปิดอัตโนมัติเมื่อหมดเวลา', testFinal: 'ทดสอบ 15 วินาทีสุดท้าย', openTitle: 'กล่องพลังใจเปิดแล้ว', openHelp: 'นี่คือข้อความดี ๆ ที่ส่งมาถึงคุณ', anonymousFrom: 'ไม่แสดงชื่อ', from: 'จาก', restart: 'กลับสู่หน้าแรก' },
   en: {
-    subtitle: 'Share kindness. Spread positive energy.', joinRoom: 'Join a room', roomCode: 'Room code', yourName: 'Your name', join: 'Join room', createRoom: 'Create a room for host', createHelp: 'Name your room, add people, and start the activity', create: 'Create room', back: 'Back to home', roomName: 'Room name', participantList: 'Participant list', onePerLine: 'One name per line, up to 100 people', continue: 'Create room and continue', waiting: 'Your room is ready', readyHelp: 'Share this code, then start when everyone is ready', participants: 'Participants', start: 'Start 10-minute game', activityRoom: 'Activity room', time: 'Time left', hello: 'Hello,', prompt: 'Who would you like to uplift today?', progress: 'Sent', selectPerson: '1. Choose a recipient', recipient: 'Selected recipient', selectCard: '2. Choose a card', anonymous: 'Send anonymously', anonymousHelp: 'Your name will be hidden from the recipient', send: 'Send card', sent: 'Positive energy sent', inbox: 'My positivity box', locked: 'Your box opens automatically when time is up', testFinal: 'Test the final 15 seconds', openTitle: 'Your positivity box is open', openHelp: 'Here are the kind messages sent your way', anonymousFrom: 'Anonymous', from: 'From', restart: 'Back to home', music: 'Harp music', musicHelp: 'Play gentle harp music during the activity' },
+    subtitle: 'Share kindness. Spread positive energy.', joinRoom: 'Join a room', roomCode: 'Room code', yourName: 'Your name', join: 'Join room', createRoom: 'Create a room for host', createHelp: 'Name your room, add people, and start the activity', create: 'Create room', back: 'Back to home', roomName: 'Room name', participantList: 'Participant list', onePerLine: 'One name per line, up to 100 people', continue: 'Create room and continue', waiting: 'Your room is ready', readyHelp: 'Share this code, then start when everyone is ready', participants: 'Participants', start: 'Start 10-minute game', activityRoom: 'Activity room', time: 'Time left', hello: 'Hello,', prompt: 'Who would you like to uplift today?', progress: 'Sent', selectPerson: '1. Choose a recipient', recipient: 'Selected recipient', selectCard: '2. Choose a card', anonymous: 'Send anonymously', anonymousHelp: 'Your name will be hidden from the recipient', send: 'Send card', sent: 'Positive energy sent', inbox: 'My positivity box', locked: 'Your box opens automatically when time is up', testFinal: 'Test the final 15 seconds', openTitle: 'Your positivity box is open', openHelp: 'Here are the kind messages sent your way', anonymousFrom: 'Anonymous', from: 'From', restart: 'Back to home' },
 };
 
 function initials(name: string) {
@@ -74,9 +72,6 @@ export default function Home() {
   const [secondsLeft, setSecondsLeft] = useState(600);
   const [justSent, setJustSent] = useState(false);
   const [systemGiftAdded, setSystemGiftAdded] = useState(false);
-  const [musicEnabled, setMusicEnabled] = useState(true);
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const musicIntervalRef = useRef<number | null>(null);
   const t = copy[language];
   const activeCard = useMemo(() => cards.find((card) => card.id === selectedCard) ?? cards[0], [selectedCard]);
 
@@ -91,13 +86,6 @@ export default function Home() {
     if (secondsLeft <= 15) setSystemGiftAdded(true);
     if (secondsLeft === 0) setScreen('opened');
   }, [screen, secondsLeft]);
-
-  useEffect(() => {
-    if (screen !== 'game') stopAmbientMusic();
-    return () => {
-      if (screen === 'game') stopAmbientMusic();
-    };
-  }, [screen]);
 
   const timeDisplay = `${String(Math.floor(secondsLeft / 60)).padStart(2, '0')}:${String(secondsLeft % 60).padStart(2, '0')}`;
   const participantNames = people.length ? people : initialPeople;
@@ -116,58 +104,6 @@ export default function Home() {
     return result.join('');
   }
 
-  function stopAmbientMusic() {
-    if (musicIntervalRef.current !== null) window.clearInterval(musicIntervalRef.current);
-    musicIntervalRef.current = null;
-    if (audioContextRef.current) void audioContextRef.current.close();
-    audioContextRef.current = null;
-  }
-
-  function startAmbientMusic(force = false) {
-    if ((!musicEnabled && !force) || audioContextRef.current) return;
-    const AudioContextClass = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-    if (!AudioContextClass) return;
-    const context = new AudioContextClass();
-    const master = context.createGain();
-    master.gain.value = 0.1;
-    master.connect(context.destination);
-    audioContextRef.current = context;
-    const phrases = [
-      [261.63, 329.63, 392, 523.25, 392, 329.63, 293.66, 329.63],
-      [349.23, 440, 523.25, 698.46, 523.25, 440, 392, 440],
-      [392, 493.88, 587.33, 783.99, 587.33, 493.88, 440, 493.88],
-      [261.63, 392, 523.25, 659.25, 523.25, 392, 329.63, 392],
-    ];
-    let phraseIndex = 0;
-    const playHarpNote = (frequency: number, startAt: number) => {
-      [1, 2, 3, 4].forEach((harmonic) => {
-        const oscillator = context.createOscillator();
-        const gain = context.createGain();
-        oscillator.type = harmonic === 1 ? 'triangle' : 'sine';
-        oscillator.frequency.value = frequency * harmonic;
-        gain.gain.setValueAtTime(0.0001, startAt);
-        gain.gain.exponentialRampToValueAtTime(0.14 / (harmonic * harmonic), startAt + 0.008);
-        gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 3.2);
-        oscillator.connect(gain).connect(master);
-        oscillator.start(startAt);
-        oscillator.stop(startAt + 3.3);
-      });
-    };
-    const playPhrase = () => {
-      const now = context.currentTime;
-      phrases[phraseIndex % phrases.length].forEach((frequency, noteIndex) => playHarpNote(frequency, now + noteIndex * 0.55));
-      phraseIndex += 1;
-    };
-    playPhrase();
-    musicIntervalRef.current = window.setInterval(playPhrase, 5200);
-  }
-
-  function toggleMusic(enabled: boolean) {
-    setMusicEnabled(enabled);
-    if (!enabled) stopAmbientMusic();
-    else if (screen === 'game') window.setTimeout(() => startAmbientMusic(true), 0);
-  }
-
   function resetGame() {
     setRemainingCards(cards.map((card) => card.id));
     setSelectedCard(1);
@@ -184,7 +120,6 @@ export default function Home() {
     setIsHost(false);
     resetGame();
     setScreen('game');
-    window.setTimeout(startAmbientMusic, 0);
   }
 
   function prepareRoom() {
@@ -203,7 +138,6 @@ export default function Home() {
     setIsHost(true);
     resetGame();
     setScreen('game');
-    window.setTimeout(startAmbientMusic, 0);
   }
 
   function sendCard() {
@@ -224,7 +158,6 @@ export default function Home() {
       <div className={`mx-auto flex max-w-6xl items-center px-4 py-3 sm:px-8 ${screen === 'home' ? 'justify-end' : 'justify-between'}`}>
         {screen !== 'home' && <button onClick={() => setScreen('home')} className="flex items-center gap-2 rounded-full border-2 border-[#5d4638] bg-white px-4 py-2 text-xs font-bold shadow-[2px_3px_0_#5d4638] transition hover:-translate-y-0.5"><ArrowLeft className="size-4" /> {t.back}</button>}
         <div className="flex items-center gap-2">
-          {screen === 'game' && <button onClick={() => toggleMusic(!musicEnabled)} className="flex items-center gap-2 rounded-full border-2 border-[#5d4638] bg-[#d9eee3] px-4 py-2 text-xs font-bold shadow-[2px_3px_0_#5d4638] transition hover:-translate-y-0.5" aria-label={musicEnabled ? 'Mute' : 'Unmute'}>{musicEnabled ? <Volume2 className="size-4" /> : <VolumeX className="size-4" />}{musicEnabled ? (language === 'th' ? 'ปิดเสียง' : 'Mute') : (language === 'th' ? 'เปิดเสียง' : 'Unmute')}</button>}
           <button className="rounded-full border-2 border-[#5d4638] bg-[#ffe19a] px-4 py-2 text-xs font-bold shadow-[2px_3px_0_#5d4638] transition hover:-translate-y-0.5" onClick={() => setLanguage(language === 'th' ? 'en' : 'th')} aria-label="Switch language">{language === 'th' ? 'English' : 'ไทย'}</button>
         </div>
       </div>
@@ -261,7 +194,6 @@ export default function Home() {
           <div className="mt-7 space-y-6">
             <label className="block text-sm font-bold">{t.roomName}<Input value={roomName} onChange={(event) => setRoomName(event.target.value)} className="mt-2 h-12 rounded-xl border-2 bg-[#fffaf0] text-base" /></label>
             <label className="block text-sm font-bold">{t.participantList}<span className="ml-2 text-xs font-normal text-muted-foreground">{t.onePerLine}</span><Textarea value={nameList} onChange={(event) => setNameList(event.target.value)} className="mt-2 min-h-56 rounded-xl border-2 bg-[#fffaf0] text-base leading-relaxed" /></label>
-            <label className="flex cursor-pointer items-center justify-between rounded-2xl border-2 border-[#5d4638]/25 bg-[#fffaf0] p-4"><span><span className="block text-sm font-bold">{t.music}</span><span className="block text-xs text-muted-foreground">{t.musicHelp}</span></span><Switch checked={musicEnabled} onCheckedChange={toggleMusic} /></label>
           </div>
           <Button onClick={prepareRoom} className="mt-6 h-12 w-full rounded-xl border-2 border-[#5d4638] text-base font-bold shadow-[3px_4px_0_#5d4638]"><Check /> {t.continue}</Button>
         </div>
@@ -309,7 +241,7 @@ export default function Home() {
           <div className="rounded-[30px_24px_28px_22px] border-2 border-[#5d4638] bg-white p-5 shadow-[5px_6px_0_#f1c86f] sm:p-7">
             <div className="mb-7 flex items-center gap-4"><Progress value={(sent / 12) * 100} className="flex-1 [&_[data-slot=progress-track]]:h-2 [&_[data-slot=progress-track]]:bg-[#f3e9dc] [&_[data-slot=progress-indicator]]:bg-primary" /><span className="min-w-24 text-right text-sm font-bold">{t.progress} {sent}/12</span></div>
             <section><h2 className="mb-3 text-sm font-bold">{t.selectPerson}</h2><div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-5 xl:grid-cols-10">{availablePeople.map((name, index) => <button key={name} onClick={() => setPerson(name)} className={`relative flex min-w-0 flex-col items-center gap-2 rounded-[18px_14px_20px_13px] border-2 px-2 py-3 text-center transition ${person === name ? 'border-[#5d4638] bg-[#fff3dd] shadow-[3px_3px_0_#efb9aa]' : 'border-[#5d4638]/20 bg-[#fffdf8] hover:border-[#5d4638]/50 hover:bg-muted'}`}><span className={`grid size-11 shrink-0 place-items-center rounded-full border-2 border-[#5d4638] ${palette[index % palette.length]} text-xs font-bold tracking-wide`}>{initials(name)}</span><span className="w-full break-words text-[11px] font-bold leading-tight">{name}</span>{person === name && <span className="absolute right-1.5 top-1.5 grid size-5 place-items-center rounded-full bg-[#467d68] text-white"><Check className="size-3" /></span>}</button>)}</div></section>
-            <section className="mt-6"><h2 className="mb-3 text-sm font-bold">{t.selectCard}</h2><div className="grid max-h-[540px] gap-3 overflow-y-auto pr-1 sm:grid-cols-3 xl:grid-cols-4">{cards.filter((card) => remainingCards.includes(card.id)).map((card) => <button key={card.id} onClick={() => setSelectedCard(card.id)} className={`relative min-h-80 overflow-hidden rounded-[24px_19px_27px_18px] border-2 border-[#5d4638] p-3 text-left transition hover:-translate-y-1 ${card.tone} ${selectedCard === card.id ? 'rotate-[-1deg] shadow-[4px_5px_0_#e96b50]' : 'shadow-[2px_3px_0_#decdb7]'}`}>{selectedCard === card.id && <span className="absolute right-3 top-3 z-10 grid size-7 place-items-center rounded-full border-2 border-[#5d4638] bg-primary text-white"><Check className="size-3" /></span>}<div role="img" aria-label={`${card.th} / ${card.en}`} className="mx-auto h-40 w-full bg-no-repeat" style={{ backgroundImage: `url('${card.id <= 10 ? '/card-characters-v4.png' : '/card-characters-extra.png'}')`, backgroundSize: card.id <= 10 ? '500% 200%' : '200% 100%', backgroundPosition: card.position }} /><div className="border-t border-[#5d4638]/20 px-2 pb-2 pt-4"><p className="text-sm font-bold leading-relaxed">{card.th}</p><p className="mt-2 text-xs font-medium leading-relaxed text-[#6d5a4d]">{card.en}</p></div></button>)}</div></section>
+            <section className="mt-6"><h2 className="mb-3 text-sm font-bold">{t.selectCard}</h2><div className="grid max-h-[540px] gap-3 overflow-y-auto pr-1 sm:grid-cols-3 xl:grid-cols-4">{cards.filter((card) => remainingCards.includes(card.id)).map((card) => <button key={card.id} onClick={() => setSelectedCard(card.id)} className={`relative min-h-80 overflow-hidden rounded-[24px_19px_27px_18px] border-2 border-[#5d4638] p-3 text-left transition hover:-translate-y-1 ${card.tone} ${selectedCard === card.id ? 'rotate-[-1deg] shadow-[4px_5px_0_#e96b50]' : 'shadow-[2px_3px_0_#decdb7]'}`}>{selectedCard === card.id && <span className="absolute right-3 top-3 z-10 grid size-7 place-items-center rounded-full border-2 border-[#5d4638] bg-primary text-white"><Check className="size-3" /></span>}<div role="img" aria-label={`${card.th} / ${card.en}`} className={`mx-auto w-full bg-no-repeat ${card.id <= 10 ? 'aspect-square max-w-40' : 'aspect-[3/4] max-w-[120px]'}`} style={{ backgroundImage: `url('${card.id <= 10 ? '/card-characters-v4.png' : '/card-characters-extra.png'}')`, backgroundSize: card.id <= 10 ? '500% 200%' : '200% 100%', backgroundPosition: card.position }} /><div className="border-t border-[#5d4638]/20 px-2 pb-2 pt-4"><p className="text-sm font-bold leading-relaxed">{card.th}</p><p className="mt-2 text-xs font-medium leading-relaxed text-[#6d5a4d]">{card.en}</p></div></button>)}</div></section>
             <div className="mt-6 flex flex-col gap-4 border-t border-[#efe6db] pt-5 sm:flex-row sm:items-center sm:justify-between"><label className="flex cursor-pointer items-center gap-3"><Switch checked={anonymous} onCheckedChange={setAnonymous} /><span><span className="block text-sm font-bold">{t.anonymous}</span><span className="block text-xs text-muted-foreground">{t.anonymousHelp}</span></span></label><Button onClick={sendCard} disabled={sent >= 12 || availablePeople.length === 0} className="h-12 rounded-xl border-2 border-[#5d4638] px-7 text-sm font-bold shadow-[4px_5px_0_#5d4638]">{justSent ? <Check /> : <Send />} {justSent ? t.sent : t.send}</Button></div>
           </div>
           <aside className="rounded-[26px_32px_24px_29px] border-2 border-[#5d4638] bg-[#88bda7] p-6 text-[#35291f] shadow-[5px_6px_0_#5d4638]"><div className="flex items-start justify-between"><p className="text-xs font-bold uppercase tracking-[.14em] text-[#315f4e]">{t.inbox}</p><Gift className="size-6 text-[#744b2c]" /></div><div className="relative mx-auto my-10 h-44 max-w-56"><div className="absolute left-1/2 top-0 h-32 w-40 -translate-x-1/2 rotate-[-5deg] rounded-2xl border-2 border-[#5d4638] bg-[#f7c7bc] shadow-[3px_4px_0_#5d4638]" /><div className="absolute left-1/2 top-3 h-32 w-40 -translate-x-1/2 rotate-[6deg] rounded-2xl border-2 border-[#5d4638] bg-[#f5d797] shadow-[3px_4px_0_#5d4638]" /><div className="absolute bottom-0 left-1/2 grid h-28 w-52 -translate-x-1/2 place-items-center rounded-2xl border-2 border-[#5d4638] bg-primary text-white shadow-[4px_5px_0_#5d4638]"><LockKeyhole className="size-7" /></div></div><div className="rounded-2xl border-2 border-[#5d4638] bg-[#fff9ed] p-4 text-center shadow-[3px_3px_0_#5d4638]"><p className="text-sm font-bold">{t.locked}</p><p className="mt-1 text-xs font-bold text-[#467d68]">{timeDisplay}</p></div>{isHost && <Button variant="outline" onClick={() => setSecondsLeft(15)} className="mt-4 h-10 w-full rounded-xl border-2 bg-white/70 text-xs font-bold"><Clock3 /> {t.testFinal}</Button>}</aside>
