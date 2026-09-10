@@ -45,9 +45,9 @@ const cards = [
 
 const copy = {
   th: {
-    subtitle: 'ส่งต่อคำดี ๆ ให้กัน', joinRoom: 'เข้าร่วมห้อง', roomCode: 'รหัสห้อง', yourName: 'ชื่อของคุณ', join: 'เข้าห้อง', createRoom: 'สร้างห้องสำหรับผู้จัด', createHelp: 'ตั้งชื่อห้อง เพิ่มรายชื่อ และเริ่มกิจกรรม', create: 'สร้างห้อง', back: 'กลับหน้าแรก', roomName: 'ชื่อห้อง', participantList: 'รายชื่อผู้เข้าร่วม', onePerLine: 'ใส่หนึ่งชื่อต่อหนึ่งบรรทัด สูงสุด 100 คน', continue: 'สร้างห้องและดำเนินการต่อ', waiting: 'ห้องพร้อมแล้ว', readyHelp: 'แชร์รหัสนี้ให้ผู้เข้าร่วม แล้วเริ่มเกมเมื่อทุกคนพร้อม', participants: 'ผู้เข้าร่วม', start: 'เริ่มเกม 10 นาที', activityRoom: 'ห้องกิจกรรม', time: 'เหลือเวลา', hello: 'สวัสดี,', prompt: 'วันนี้อยากส่งพลังบวกให้ใคร?', progress: 'ส่งแล้ว', selectPerson: '1. เลือกผู้รับ', recipient: 'ผู้รับที่เลือก', selectCard: '2. เลือกการ์ด', anonymous: 'ส่งแบบไม่เปิดเผยชื่อ', anonymousHelp: 'ผู้รับจะไม่เห็นชื่อของคุณ', send: 'ส่งการ์ด', sent: 'ส่งพลังบวกแล้ว', inbox: 'กล่องพลังใจของฉัน', locked: 'กล่องจะเปิดอัตโนมัติเมื่อหมดเวลา', testFinal: 'ทดสอบ 15 วินาทีสุดท้าย', openTitle: 'กล่องพลังใจเปิดแล้ว', openHelp: 'นี่คือข้อความดี ๆ ที่ส่งมาถึงคุณ', anonymousFrom: 'ไม่แสดงชื่อ', from: 'จาก', restart: 'กลับสู่หน้าแรก', music: 'เพลงบรรเลง', musicHelp: 'เล่นเพลงผ่อนคลายระหว่างกิจกรรม' },
+    subtitle: 'ส่งต่อคำดี ๆ ให้กัน', joinRoom: 'เข้าร่วมห้อง', roomCode: 'รหัสห้อง', yourName: 'ชื่อของคุณ', join: 'เข้าห้อง', createRoom: 'สร้างห้องสำหรับผู้จัด', createHelp: 'ตั้งชื่อห้อง เพิ่มรายชื่อ และเริ่มกิจกรรม', create: 'สร้างห้อง', back: 'กลับหน้าแรก', roomName: 'ชื่อห้อง', participantList: 'รายชื่อผู้เข้าร่วม', onePerLine: 'ใส่หนึ่งชื่อต่อหนึ่งบรรทัด สูงสุด 100 คน', continue: 'สร้างห้องและดำเนินการต่อ', waiting: 'ห้องพร้อมแล้ว', readyHelp: 'แชร์รหัสนี้ให้ผู้เข้าร่วม แล้วเริ่มเกมเมื่อทุกคนพร้อม', participants: 'ผู้เข้าร่วม', start: 'เริ่มเกม 10 นาที', activityRoom: 'ห้องกิจกรรม', time: 'เหลือเวลา', hello: 'สวัสดี,', prompt: 'วันนี้อยากส่งพลังบวกให้ใคร?', progress: 'ส่งแล้ว', selectPerson: '1. เลือกผู้รับ', recipient: 'ผู้รับที่เลือก', selectCard: '2. เลือกการ์ด', anonymous: 'ส่งแบบไม่เปิดเผยชื่อ', anonymousHelp: 'ผู้รับจะไม่เห็นชื่อของคุณ', send: 'ส่งการ์ด', sent: 'ส่งพลังบวกแล้ว', inbox: 'กล่องพลังใจของฉัน', locked: 'กล่องจะเปิดอัตโนมัติเมื่อหมดเวลา', testFinal: 'ทดสอบ 15 วินาทีสุดท้าย', openTitle: 'กล่องพลังใจเปิดแล้ว', openHelp: 'นี่คือข้อความดี ๆ ที่ส่งมาถึงคุณ', anonymousFrom: 'ไม่แสดงชื่อ', from: 'จาก', restart: 'กลับสู่หน้าแรก', music: 'เสียงฮาร์ป', musicHelp: 'เล่นเสียงฮาร์ปเบา ๆ ระหว่างกิจกรรม' },
   en: {
-    subtitle: 'Share kindness. Spread positive energy.', joinRoom: 'Join a room', roomCode: 'Room code', yourName: 'Your name', join: 'Join room', createRoom: 'Create a room for host', createHelp: 'Name your room, add people, and start the activity', create: 'Create room', back: 'Back to home', roomName: 'Room name', participantList: 'Participant list', onePerLine: 'One name per line, up to 100 people', continue: 'Create room and continue', waiting: 'Your room is ready', readyHelp: 'Share this code, then start when everyone is ready', participants: 'Participants', start: 'Start 10-minute game', activityRoom: 'Activity room', time: 'Time left', hello: 'Hello,', prompt: 'Who would you like to uplift today?', progress: 'Sent', selectPerson: '1. Choose a recipient', recipient: 'Selected recipient', selectCard: '2. Choose a card', anonymous: 'Send anonymously', anonymousHelp: 'Your name will be hidden from the recipient', send: 'Send card', sent: 'Positive energy sent', inbox: 'My positivity box', locked: 'Your box opens automatically when time is up', testFinal: 'Test the final 15 seconds', openTitle: 'Your positivity box is open', openHelp: 'Here are the kind messages sent your way', anonymousFrom: 'Anonymous', from: 'From', restart: 'Back to home', music: 'Instrumental music', musicHelp: 'Play calming music during the activity' },
+    subtitle: 'Share kindness. Spread positive energy.', joinRoom: 'Join a room', roomCode: 'Room code', yourName: 'Your name', join: 'Join room', createRoom: 'Create a room for host', createHelp: 'Name your room, add people, and start the activity', create: 'Create room', back: 'Back to home', roomName: 'Room name', participantList: 'Participant list', onePerLine: 'One name per line, up to 100 people', continue: 'Create room and continue', waiting: 'Your room is ready', readyHelp: 'Share this code, then start when everyone is ready', participants: 'Participants', start: 'Start 10-minute game', activityRoom: 'Activity room', time: 'Time left', hello: 'Hello,', prompt: 'Who would you like to uplift today?', progress: 'Sent', selectPerson: '1. Choose a recipient', recipient: 'Selected recipient', selectCard: '2. Choose a card', anonymous: 'Send anonymously', anonymousHelp: 'Your name will be hidden from the recipient', send: 'Send card', sent: 'Positive energy sent', inbox: 'My positivity box', locked: 'Your box opens automatically when time is up', testFinal: 'Test the final 15 seconds', openTitle: 'Your positivity box is open', openHelp: 'Here are the kind messages sent your way', anonymousFrom: 'Anonymous', from: 'From', restart: 'Back to home', music: 'Harp music', musicHelp: 'Play gentle harp music during the activity' },
 };
 
 function initials(name: string) {
@@ -129,7 +129,7 @@ export default function Home() {
     if (!AudioContextClass) return;
     const context = new AudioContextClass();
     const master = context.createGain();
-    master.gain.value = 0.12;
+    master.gain.value = 0.1;
     master.connect(context.destination);
     audioContextRef.current = context;
     const phrases = [
@@ -139,27 +139,27 @@ export default function Home() {
       [261.63, 392, 523.25, 659.25, 523.25, 392, 329.63, 392],
     ];
     let phraseIndex = 0;
-    const playPianoNote = (frequency: number, startAt: number) => {
-      [1, 2, 3].forEach((harmonic) => {
+    const playHarpNote = (frequency: number, startAt: number) => {
+      [1, 2, 3, 4].forEach((harmonic) => {
         const oscillator = context.createOscillator();
         const gain = context.createGain();
         oscillator.type = harmonic === 1 ? 'triangle' : 'sine';
         oscillator.frequency.value = frequency * harmonic;
         gain.gain.setValueAtTime(0.0001, startAt);
-        gain.gain.exponentialRampToValueAtTime(0.1 / (harmonic * harmonic), startAt + 0.025);
-        gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 2.4);
+        gain.gain.exponentialRampToValueAtTime(0.14 / (harmonic * harmonic), startAt + 0.008);
+        gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 3.2);
         oscillator.connect(gain).connect(master);
         oscillator.start(startAt);
-        oscillator.stop(startAt + 2.5);
+        oscillator.stop(startAt + 3.3);
       });
     };
     const playPhrase = () => {
       const now = context.currentTime;
-      phrases[phraseIndex % phrases.length].forEach((frequency, noteIndex) => playPianoNote(frequency, now + noteIndex * 0.72));
+      phrases[phraseIndex % phrases.length].forEach((frequency, noteIndex) => playHarpNote(frequency, now + noteIndex * 0.55));
       phraseIndex += 1;
     };
     playPhrase();
-    musicIntervalRef.current = window.setInterval(playPhrase, 6000);
+    musicIntervalRef.current = window.setInterval(playPhrase, 5200);
   }
 
   function toggleMusic(enabled: boolean) {
