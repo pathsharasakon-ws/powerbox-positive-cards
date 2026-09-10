@@ -17,7 +17,7 @@ export async function POST(request: Request) {
   const recipientName = String(body.recipientName ?? '').trim().slice(0, 60);
   const senderName = String(body.senderName ?? '').trim().slice(0, 60);
   const cardId = Number(body.cardId);
-  if (code.length !== 6 || !recipientName || !senderName || !Number.isInteger(cardId) || cardId < 1 || cardId > 12) return json({ error: 'invalid_card' }, 400);
+  if (code.length !== 6 || !recipientName || !senderName || !Number.isInteger(cardId) || cardId < 1) return json({ error: 'invalid_card' }, 400);
   const members = await env.DB.prepare('SELECT name FROM participants WHERE room_code = ? AND name IN (?, ?)').bind(code, recipientName, senderName).all();
   if (members.results.length !== 2) return json({ error: 'participant_not_found' }, 404);
   await env.DB.prepare('INSERT INTO sent_cards (id, room_code, card_id, recipient_name, sender_name, anonymous, sent_at) VALUES (?, ?, ?, ?, ?, ?, ?)').bind(crypto.randomUUID(), code, cardId, recipientName, senderName, body.anonymous ? 1 : 0, Date.now()).run();

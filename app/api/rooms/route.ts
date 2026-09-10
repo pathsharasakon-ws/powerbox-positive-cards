@@ -4,10 +4,11 @@ const json = (data: unknown, status = 200) => Response.json(data, { status });
 const normalizeCode = (value: unknown) => String(value ?? '').replace(/\D/g, '').slice(0, 6);
 
 async function getRoom(code: string) {
-  const room = await env.DB.prepare('SELECT code, name, status, duration_minutes AS durationMinutes, ends_at AS endsAt FROM rooms WHERE code = ?').bind(code).first();
+  const room = await env.DB.prepare('SELECT code, name, status, duration_minutes AS durationMinutes, ends_at AS endsAt, deck_json AS deckJson FROM rooms WHERE code = ?').bind(code).first<{ code: string; name: string; status: string; durationMinutes: number; endsAt: number | null; deckJson: string | null }>();
   if (!room) return null;
   const result = await env.DB.prepare('SELECT id, name FROM participants WHERE room_code = ? ORDER BY joined_at, name').bind(code).all();
-  return { ...room, participants: result.results };
+  const { deckJson, ...roomFields } = room;
+  return { ...roomFields, deck: deckJson ? JSON.parse(deckJson) : null, participants: result.results };
 }
 
 export async function GET(request: Request) {
@@ -68,6 +69,21 @@ export async function PATCH(request: Request) {
   } else if (body.action === 'test_final') {
     if (room.status !== 'started') return json({ error: 'room_not_started' }, 409);
     await env.DB.prepare('UPDATE rooms SET ends_at = ? WHERE code = ?').bind(Date.now() + 15_000, code).run();
+  } else if (body.action === 'update_deck' && Array.isArray(body.deck)) {
+    if (room.status !== 'waiting') return json({ error: 'game_already_started' }, 409);
+    const allowedTones = new Set(['bg-[#fff5d7]', 'bg-[#e7f3e9]', 'bg-[#fde8e4]', 'bg-[#eee8fa]', 'bg-[#fff0bd]', 'bg-[#e5f1f5]', 'bg-[#f9e6ef]', 'bg-[#e8edfa]', 'bg-[#fff0d9]', 'bg-[#f6e5dc]', 'bg-[#e5eee8]']);
+    const deck = body.deck.slice(0, 24).map((raw, index) => {
+      const card = raw as Record<string, unknown>;
+      return {
+        id: Number.isInteger(Number(card.id)) ? Number(card.id) : index + 1,
+        th: String(card.th ?? '').trim().slice(0, 400),
+        en: String(card.en ?? '').trim().slice(0, 400),
+        imageIndex: Math.min(12, Math.max(1, Number(card.imageIndex) || 1)),
+        tone: allowedTones.has(String(card.tone)) ? String(card.tone) : 'bg-[#fff5d7]',
+      };
+    }).filter((card) => card.th && card.en);
+    if (deck.length === 0) return json({ error: 'deck_required' }, 400);
+    await env.DB.prepare('UPDATE rooms SET deck_json = ? WHERE code = ?').bind(JSON.stringify(deck), code).run();
   } else if (body.action === 'update_participants' && Array.isArray(body.participants)) {
     const names = [...new Set(body.participants.map((value) => String(value).trim().slice(0, 60)).filter(Boolean))].slice(0, 100);
     const existing = await env.DB.prepare('SELECT id, name FROM participants WHERE room_code = ?').bind(code).all<{ id: string; name: string }>();

@@ -7,6 +7,7 @@ export const rooms = sqliteTable('rooms', {
   status: text('status').notNull().default('waiting'),
   durationMinutes: integer('duration_minutes').notNull().default(10),
   endsAt: integer('ends_at'),
+  deckJson: text('deck_json'),
   createdAt: integer('created_at').notNull(),
 });
 

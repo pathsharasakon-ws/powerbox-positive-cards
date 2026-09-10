@@ -9,35 +9,49 @@ import {
   Copy,
   Gift,
   LockKeyhole,
+  Pencil,
   Play,
   Plus,
+  Save,
   Send,
   Sparkles,
+  Trash2,
   Users,
+  X,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
 
 type Language = 'th' | 'en';
 type Screen = 'home' | 'admin' | 'lobby' | 'game' | 'opened';
+type Card = { id: number; th: string; en: string; imageIndex: number; tone: string };
 
 const palette = ['bg-[#f7c7bc]', 'bg-[#c7d9f5]', 'bg-[#f3d9a8]', 'bg-[#c6e5d5]', 'bg-[#e3d3ee]', 'bg-[#f7d6a8]'];
-const cards = [
-  { id: 1, position: '0% 0%', tone: 'bg-[#fff5d7]', th: 'ขอให้ทุกความตั้งใจและความพยายาม ส่งผลลัพธ์ที่ดีกลับมาอย่างที่คุณหวัง เป็นกำลังใจให้อยู่เสมอนะ', en: 'May all your dedication and effort bring the good results you hope for. I am always cheering you on.' },
-  { id: 2, position: '25% 0%', tone: 'bg-[#e7f3e9]', th: 'ขอบคุณสำหรับความช่วยเหลือและคำแนะนำดี ๆ ที่คอยแบ่งปันให้กันเสมอนะ', en: 'Thank you for always sharing your help and thoughtful advice with us.' },
-  { id: 3, position: '50% 0%', tone: 'bg-[#fde8e4]', th: 'ขอบคุณที่เป็นเพื่อนร่วมคลาสที่ดีและจริงใจ ดีใจมาก ๆ ที่ได้รู้จักคุณนะ', en: 'Thank you for being such a kind and genuine classmate. I am so glad to know you.' },
-  { id: 4, position: '75% 0%', tone: 'bg-[#eee8fa]', th: 'อย่าเพิ่งท้อกับบทเรียนที่ยากนะ คุณมาไกลจากจุดเริ่มต้นมากแล้ว เชื่อมั่นในตัวเองเข้าไว้นะ', en: 'Do not lose heart over a difficult lesson. You have come so far—keep believing in yourself.' },
-  { id: 5, position: '100% 0%', tone: 'bg-[#fff0bd]', th: 'วันนี้คุณเก่งมากแล้วนะ ขอให้ภูมิใจในทุกก้าวเล็ก ๆ ที่ตัวเองทำได้สำเร็จ', en: 'You did wonderfully today. Be proud of every small step you accomplished.' },
-  { id: 6, position: '0% 100%', tone: 'bg-[#e5f1f5]', th: 'อย่ากดดันตัวเองจนเครียดเกินลิมิตนะ ถ้ารู้สึกไม่ไหวก็ถอยออกมาพักก่อนได้เสมอ', en: 'Do not pressure yourself beyond your limits. You can always step back and rest when things feel too much.' },
-  { id: 7, position: '25% 100%', tone: 'bg-[#f9e6ef]', th: 'รู้ว่าทุ่มเทและตั้งใจเรียนมาก แต่อย่าลืมทานข้าวให้ตรงเวลาและดื่มน้ำเยอะ ๆ ด้วยนะ', en: 'I know how dedicated you are to learning. Please remember to eat on time and drink plenty of water too.' },
-  { id: 8, position: '50% 100%', tone: 'bg-[#e8edfa]', th: 'ดีใจมาก ๆ ที่ได้มาร่วมเรียนคอร์สนี้ด้วยกัน ขอบคุณที่ทำให้บรรยากาศในคลาสอบอุ่นขึ้นเยอะนะ', en: 'I am so glad we took this course together. Thank you for making the class feel so much warmer.' },
-  { id: 9, position: '75% 100%', tone: 'bg-[#e7f3e9]', th: 'เห็นเงียบ ๆ ไป ไม่แน่ใจว่าเหนื่อยหรือเปล่า ถ้ามีอะไรให้ช่วยหรืออยากระบาย ทักมาได้ตลอดนะ', en: 'You have seemed quiet lately—are you tired? If you need help or want to talk, you can always reach out.' },
-  { id: 10, position: '100% 100%', tone: 'bg-[#fff0d9]', th: 'ถ้าเรียนจบแล้วขอให้บั๊กจงหายไป เงินเดือนก้อนใหญ่จงเข้ามา! รักนะเพื่อนร่วมชะตากรรมหน้าคอมฯ', en: 'When this course ends, may every bug disappear and a big salary come your way! Much love, my fellow computer-screen survivor.' },
-  { id: 11, position: '0% 0%', tone: 'bg-[#f6e5dc]', th: 'ไม่อยากให้คอร์สเรียนนี้จบไปเลย ต้องคิดถึงคุณแน่ ๆ', en: 'I do not want this course to end—I am definitely going to miss you.' },
-  { id: 12, position: '100% 0%', tone: 'bg-[#e5eee8]', th: 'วันนี้คุณเก่งมากแล้วนะ ขอให้ภูมิใจในทุกก้าวเล็ก ๆ ที่ตัวเองทำได้สำเร็จ', en: 'You did wonderfully today. Be proud of every small step you accomplished.' },
+const defaultCards: Card[] = [
+  { id: 1, imageIndex: 1, tone: 'bg-[#fff5d7]', th: 'ขอให้ทุกความตั้งใจและความพยายาม ส่งผลลัพธ์ที่ดีกลับมาอย่างที่คุณหวัง เป็นกำลังใจให้อยู่เสมอนะ', en: 'May all your dedication and effort bring the good results you hope for. I am always cheering you on.' },
+  { id: 2, imageIndex: 2, tone: 'bg-[#e7f3e9]', th: 'ขอบคุณสำหรับความช่วยเหลือและคำแนะนำดี ๆ ที่คอยแบ่งปันให้กันเสมอนะ', en: 'Thank you for always sharing your help and thoughtful advice with us.' },
+  { id: 3, imageIndex: 3, tone: 'bg-[#fde8e4]', th: 'ขอบคุณที่เป็นเพื่อนร่วมคลาสที่ดีและจริงใจ ดีใจมาก ๆ ที่ได้รู้จักคุณนะ', en: 'Thank you for being such a kind and genuine classmate. I am so glad to know you.' },
+  { id: 4, imageIndex: 4, tone: 'bg-[#eee8fa]', th: 'อย่าเพิ่งท้อกับบทเรียนที่ยากนะ คุณมาไกลจากจุดเริ่มต้นมากแล้ว เชื่อมั่นในตัวเองเข้าไว้นะ', en: 'Do not lose heart over a difficult lesson. You have come so far—keep believing in yourself.' },
+  { id: 5, imageIndex: 5, tone: 'bg-[#fff0bd]', th: 'วันนี้คุณเก่งมากแล้วนะ ขอให้ภูมิใจในทุกก้าวเล็ก ๆ ที่ตัวเองทำได้สำเร็จ', en: 'You did wonderfully today. Be proud of every small step you accomplished.' },
+  { id: 6, imageIndex: 6, tone: 'bg-[#e5f1f5]', th: 'อย่ากดดันตัวเองจนเครียดเกินลิมิตนะ ถ้ารู้สึกไม่ไหวก็ถอยออกมาพักก่อนได้เสมอ', en: 'Do not pressure yourself beyond your limits. You can always step back and rest when things feel too much.' },
+  { id: 7, imageIndex: 7, tone: 'bg-[#f9e6ef]', th: 'รู้ว่าทุ่มเทและตั้งใจเรียนมาก แต่อย่าลืมทานข้าวให้ตรงเวลาและดื่มน้ำเยอะ ๆ ด้วยนะ', en: 'I know how dedicated you are to learning. Please remember to eat on time and drink plenty of water too.' },
+  { id: 8, imageIndex: 8, tone: 'bg-[#e8edfa]', th: 'ดีใจมาก ๆ ที่ได้มาร่วมเรียนคอร์สนี้ด้วยกัน ขอบคุณที่ทำให้บรรยากาศในคลาสอบอุ่นขึ้นเยอะนะ', en: 'I am so glad we took this course together. Thank you for making the class feel so much warmer.' },
+  { id: 9, imageIndex: 9, tone: 'bg-[#e7f3e9]', th: 'เห็นเงียบ ๆ ไป ไม่แน่ใจว่าเหนื่อยหรือเปล่า ถ้ามีอะไรให้ช่วยหรืออยากระบาย ทักมาได้ตลอดนะ', en: 'You have seemed quiet lately—are you tired? If you need help or want to talk, you can always reach out.' },
+  { id: 10, imageIndex: 10, tone: 'bg-[#fff0d9]', th: 'ถ้าเรียนจบแล้วขอให้บั๊กจงหายไป เงินเดือนก้อนใหญ่จงเข้ามา! รักนะเพื่อนร่วมชะตากรรมหน้าคอมฯ', en: 'When this course ends, may every bug disappear and a big salary come your way! Much love, my fellow computer-screen survivor.' },
+  { id: 11, imageIndex: 11, tone: 'bg-[#f6e5dc]', th: 'ไม่อยากให้คอร์สเรียนนี้จบไปเลย ต้องคิดถึงคุณแน่ ๆ', en: 'I do not want this course to end—I am definitely going to miss you.' },
+  { id: 12, imageIndex: 12, tone: 'bg-[#e5eee8]', th: 'วันนี้คุณเก่งมากแล้วนะ ขอให้ภูมิใจในทุกก้าวเล็ก ๆ ที่ตัวเองทำได้สำเร็จ', en: 'You did wonderfully today. Be proud of every small step you accomplished.' },
 ];
+
+const cardTones = ['bg-[#fff5d7]', 'bg-[#e7f3e9]', 'bg-[#fde8e4]', 'bg-[#eee8fa]', 'bg-[#fff0bd]', 'bg-[#e5f1f5]', 'bg-[#f9e6ef]', 'bg-[#e8edfa]'];
+
+function cardImageStyle(imageIndex: number) {
+  const index = Math.min(12, Math.max(1, imageIndex));
+  if (index <= 10) return { backgroundImage: "url('/card-characters-v4.png')", backgroundSize: '500% 200%', backgroundPosition: `${((index - 1) % 5) * 25}% ${index <= 5 ? 0 : 100}%` };
+  return { backgroundImage: "url('/card-characters-extra.png')", backgroundSize: '200% 100%', backgroundPosition: `${index === 11 ? 0 : 100}% 0%` };
+}
 
 const copy = {
   th: {
@@ -65,8 +79,12 @@ export default function Home() {
   const [adminToken, setAdminToken] = useState('');
   const [roomError, setRoomError] = useState('');
   const [receivedCards, setReceivedCards] = useState<Array<{ id: string; cardId: number; senderName: string; anonymous: number }>>([]);
+  const [cards, setCards] = useState<Card[]>(defaultCards);
   const [selectedCard, setSelectedCard] = useState(1);
-  const [remainingCards, setRemainingCards] = useState(cards.map((card) => card.id));
+  const [remainingCards, setRemainingCards] = useState(defaultCards.map((card) => card.id));
+  const [showCardManager, setShowCardManager] = useState(false);
+  const [editingCardId, setEditingCardId] = useState<number | null>(null);
+  const [cardDraft, setCardDraft] = useState<Omit<Card, 'id'>>({ th: '', en: '', imageIndex: 1, tone: cardTones[0] });
   const [anonymous, setAnonymous] = useState(false);
   const [sent, setSent] = useState(0);
   const [sentRecipients, setSentRecipients] = useState<string[]>([]);
@@ -75,7 +93,7 @@ export default function Home() {
   const [justSent, setJustSent] = useState(false);
   const [systemGiftAdded, setSystemGiftAdded] = useState(false);
   const t = copy[language];
-  const activeCard = useMemo(() => cards.find((card) => card.id === selectedCard) ?? cards[0], [selectedCard]);
+  const activeCard = useMemo(() => cards.find((card) => card.id === selectedCard) ?? cards[0], [selectedCard, cards]);
 
   useEffect(() => {
     if (screen !== 'game') return;
@@ -113,6 +131,7 @@ export default function Home() {
       const names = room.participants.map((item: { name: string }) => item.name);
       setRoomName(room.name);
       setDurationMinutes(room.durationMinutes ?? 10);
+      if (Array.isArray(room.deck) && room.deck.length) setCards(room.deck);
       setPeople(names);
       if (isHost && document.activeElement?.tagName !== 'TEXTAREA') setNameList(names.join('\n'));
       if (!person) setPerson(names.find((name: string) => name !== playerName) ?? '');
@@ -134,11 +153,48 @@ export default function Home() {
 
   function resetGame(minutes = durationMinutes, endsAt?: number | null) {
     setRemainingCards(cards.map((card) => card.id));
-    setSelectedCard(1);
+    setSelectedCard(cards[0]?.id ?? 1);
     setSent(0);
     setSentRecipients([]);
     setSecondsLeft(typeof endsAt === 'number' ? Math.max(0, Math.ceil((endsAt - Date.now()) / 1000)) : minutes * 60);
     setSystemGiftAdded(false);
+  }
+
+  async function persistDeck(nextDeck: Card[]) {
+    const response = await fetch('/api/rooms', { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'update_deck', code: roomCode, adminToken, deck: nextDeck }) });
+    if (!response.ok) return false;
+    const room = await response.json();
+    setCards(room.deck ?? nextDeck);
+    return true;
+  }
+
+  function beginAddCard() {
+    setEditingCardId(null);
+    setCardDraft({ th: '', en: '', imageIndex: (cards.length % 12) + 1, tone: cardTones[cards.length % cardTones.length] });
+    setShowCardManager(true);
+  }
+
+  function beginEditCard(card: Card) {
+    setEditingCardId(card.id);
+    setCardDraft({ th: card.th, en: card.en, imageIndex: card.imageIndex, tone: card.tone });
+    setShowCardManager(true);
+  }
+
+  async function saveCardDraft() {
+    if (!cardDraft.th.trim() || !cardDraft.en.trim()) return;
+    const nextId = editingCardId ?? Math.max(0, ...cards.map((card) => card.id)) + 1;
+    const nextCard = { id: nextId, ...cardDraft, th: cardDraft.th.trim(), en: cardDraft.en.trim() };
+    const nextDeck = editingCardId === null ? [...cards, nextCard] : cards.map((card) => card.id === editingCardId ? nextCard : card);
+    if (await persistDeck(nextDeck)) {
+      setEditingCardId(null);
+      setCardDraft({ th: '', en: '', imageIndex: 1, tone: cardTones[0] });
+    }
+  }
+
+  async function deleteCard(cardId: number) {
+    if (cards.length <= 1) return;
+    if (!window.confirm(language === 'th' ? 'ลบการ์ดใบนี้ใช่ไหม?' : 'Delete this card?')) return;
+    await persistDeck(cards.filter((card) => card.id !== cardId));
   }
 
   function goHome() {
@@ -154,6 +210,7 @@ export default function Home() {
     if (!response.ok) { setRoomError(language === 'th' ? 'ไม่พบห้อง หรือห้องเริ่มไปแล้ว' : 'Room not found or already started'); return; }
     const room = await response.json();
     setRoomName(room.name);
+    if (Array.isArray(room.deck) && room.deck.length) setCards(room.deck);
     setPeople(room.participants.map((item: { name: string }) => item.name));
     setPerson(room.participants.find((item: { name: string }) => item.name !== playerName)?.name ?? '');
     setIsHost(false);
@@ -199,7 +256,7 @@ export default function Home() {
   }
 
   async function sendCard() {
-    if (sent >= 12 || !activeCard || !person) return;
+    if (sent >= cards.length || !activeCard || !person) return;
     const response = await fetch('/api/cards', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ code: roomCode, cardId: activeCard.id, recipientName: person, senderName: playerName, anonymous }) });
     if (!response.ok) return;
     const nextCards = remainingCards.filter((id) => id !== selectedCard);
@@ -270,6 +327,17 @@ export default function Home() {
           <Sparkles className="mx-auto size-9 text-primary" /><h1 className="mt-4 text-3xl font-bold">{roomName}</h1><p className="mt-2 text-lg font-bold">{t.waiting}</p><p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">{t.readyHelp}</p>
           <button onClick={() => navigator.clipboard?.writeText(roomCode)} className="mx-auto mt-7 flex items-center gap-3 rounded-2xl border-2 border-dashed border-[#5d4638] bg-[#fff5d7] px-6 py-4 text-3xl font-bold tracking-[.08em]"><span>{roomCode}</span><Copy className="size-5" /></button>
           <div className="mx-auto mt-7 max-w-lg rounded-2xl bg-[#f5eee5] p-5 text-left"><div className="flex justify-between text-sm font-bold"><span>{t.participants}</span><span>{participantNames.length} / 100</span></div><div className="mt-4 flex flex-wrap gap-2">{participantNames.map((name, index) => isHost ? <button key={`${name}-${index}`} onClick={() => editParticipant(name)} className="rounded-full border border-[#5d4638]/25 bg-white px-3 py-1 text-xs font-bold transition hover:border-[#5d4638] hover:bg-[#fff5d7]" title={language === 'th' ? 'คลิกเพื่อแก้ชื่อ' : 'Click to edit name'}>{name}</button> : <span key={`${name}-${index}`} className="rounded-full border border-[#5d4638]/25 bg-white px-3 py-1 text-xs font-medium">{name}</span>)}</div>{participantNames.length === 0 && <p className="mt-4 text-sm text-muted-foreground">{language === 'th' ? 'กำลังรอสมาชิกเข้าร่วม…' : 'Waiting for people to join…'}</p>}</div>
+          {isHost && <section className="mx-auto mt-6 max-w-2xl rounded-[24px_20px_26px_18px] border-2 border-[#5d4638] bg-[#fffaf0] p-5 text-left shadow-[3px_4px_0_#f1c86f]">
+            <div className="flex flex-wrap items-center justify-between gap-3"><div><h2 className="font-bold">{language === 'th' ? 'จัดการการ์ด' : 'Manage cards'}</h2><p className="text-xs text-muted-foreground">{cards.length} {language === 'th' ? 'ใบ · เฉพาะ Admin เท่านั้น' : 'cards · Admin only'}</p></div><div className="flex gap-2"><Button variant="outline" onClick={() => setShowCardManager((value) => !value)} className="h-9 rounded-xl border-2 px-3 text-xs font-bold">{showCardManager ? <X /> : <Pencil />}{showCardManager ? (language === 'th' ? 'ปิด' : 'Close') : (language === 'th' ? 'เปิดจัดการ' : 'Open manager')}</Button>{cards.length < 24 && <Button onClick={beginAddCard} className="h-9 rounded-xl border-2 border-[#5d4638] px-3 text-xs font-bold"><Plus />{language === 'th' ? 'เพิ่มการ์ด' : 'Add card'}</Button>}</div></div>
+            {showCardManager && <div className="mt-5 space-y-5">
+              <div className="grid max-h-72 gap-2 overflow-y-auto pr-1 sm:grid-cols-2">{cards.map((card) => <article key={card.id} className={`positive-card relative overflow-hidden rounded-2xl border-2 border-[#5d4638]/40 p-3 ${card.tone}`}><div className="relative z-10 flex gap-3"><div className="size-16 shrink-0 bg-no-repeat" style={cardImageStyle(card.imageIndex)} /><div className="min-w-0 flex-1"><p className="line-clamp-2 text-xs font-bold">{card.th}</p><p className="mt-1 line-clamp-1 text-[10px] text-muted-foreground">{card.en}</p><div className="mt-2 flex gap-1"><button onClick={() => beginEditCard(card)} className="rounded-lg border bg-white px-2 py-1 text-[10px] font-bold"><Pencil className="mr-1 inline size-3" />{language === 'th' ? 'แก้ไข' : 'Edit'}</button><button onClick={() => deleteCard(card.id)} disabled={cards.length <= 1} className="rounded-lg border bg-white px-2 py-1 text-[10px] font-bold text-destructive disabled:opacity-40"><Trash2 className="mr-1 inline size-3" />{language === 'th' ? 'ลบ' : 'Delete'}</button></div></div></div></article>)}</div>
+              <div className="rounded-2xl border-2 border-dashed border-[#5d4638]/35 bg-white p-4"><h3 className="text-sm font-bold">{editingCardId === null ? (language === 'th' ? 'สร้างการ์ดใหม่' : 'Create a card') : (language === 'th' ? 'แก้ไขการ์ด' : 'Edit card')}</h3><div className="mt-3 grid gap-3"><label className="text-xs font-bold">{language === 'th' ? 'ข้อความภาษาไทย' : 'Thai message'}<Textarea value={cardDraft.th} maxLength={400} onChange={(event) => setCardDraft({ ...cardDraft, th: event.target.value })} className="mt-1 min-h-20 rounded-xl bg-[#fffaf0]" /></label><label className="text-xs font-bold">{language === 'th' ? 'ข้อความภาษาอังกฤษ' : 'English message'}<Textarea value={cardDraft.en} maxLength={400} onChange={(event) => setCardDraft({ ...cardDraft, en: event.target.value })} className="mt-1 min-h-20 rounded-xl bg-[#fffaf0]" /></label></div>
+                <div className="mt-4"><p className="text-xs font-bold">{language === 'th' ? 'เลือกรูปบนการ์ด' : 'Choose card image'}</p><div className="mt-2 grid grid-cols-6 gap-2 sm:grid-cols-12">{Array.from({ length: 12 }, (_, index) => index + 1).map((imageIndex) => <button key={imageIndex} onClick={() => setCardDraft({ ...cardDraft, imageIndex })} aria-pressed={cardDraft.imageIndex === imageIndex} className={`aspect-square rounded-xl border-2 bg-[#fffaf0] bg-no-repeat p-1 ${cardDraft.imageIndex === imageIndex ? 'border-primary shadow-[2px_2px_0_#5d4638]' : 'border-[#5d4638]/20'}`} style={cardImageStyle(imageIndex)} />)}</div></div>
+                <div className="mt-4"><p className="text-xs font-bold">{language === 'th' ? 'เลือกสีการ์ด' : 'Choose card color'}</p><div className="mt-2 flex flex-wrap gap-2">{cardTones.map((tone) => <button key={tone} onClick={() => setCardDraft({ ...cardDraft, tone })} aria-pressed={cardDraft.tone === tone} className={`size-8 rounded-full border-2 ${tone} ${cardDraft.tone === tone ? 'border-primary shadow-[2px_2px_0_#5d4638]' : 'border-[#5d4638]/25'}`} />)}</div></div>
+                <div className="mt-4 flex justify-end gap-2"><Button variant="outline" onClick={beginAddCard} className="h-10 rounded-xl border-2 text-xs font-bold"><X />{language === 'th' ? 'ล้างข้อมูล' : 'Clear'}</Button><Button onClick={saveCardDraft} disabled={!cardDraft.th.trim() || !cardDraft.en.trim()} className="h-10 rounded-xl border-2 border-[#5d4638] text-xs font-bold"><Save />{language === 'th' ? 'บันทึกการ์ด' : 'Save card'}</Button></div>
+              </div>
+            </div>}
+          </section>}
           {isHost ? <Button onClick={startGame} disabled={participantNames.length < 2} className="mt-7 h-12 rounded-xl border-2 border-[#5d4638] px-7 text-base font-bold shadow-[3px_4px_0_#5d4638]"><Play /> {t.start}</Button> : <p className="mt-7 text-sm font-bold text-[#467d68]">{language === 'th' ? 'รอผู้จัดเริ่มกิจกรรม' : 'Waiting for the host to start'}</p>}
         </div>
       </section>
@@ -300,10 +368,10 @@ export default function Home() {
         </div>
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div className="rounded-[30px_24px_28px_22px] border-2 border-[#5d4638] bg-white p-5 shadow-[5px_6px_0_#f1c86f] sm:p-7">
-            <div className="mb-7 flex items-center gap-4"><Progress value={(sent / 12) * 100} className="flex-1 [&_[data-slot=progress-track]]:h-2 [&_[data-slot=progress-track]]:bg-[#f3e9dc] [&_[data-slot=progress-indicator]]:bg-primary" /><span className="min-w-24 text-right text-sm font-bold">{t.progress} {sent}/12</span></div>
+            <div className="mb-7 flex items-center gap-4"><Progress value={(sent / cards.length) * 100} className="flex-1 [&_[data-slot=progress-track]]:h-2 [&_[data-slot=progress-track]]:bg-[#f3e9dc] [&_[data-slot=progress-indicator]]:bg-primary" /><span className="min-w-24 text-right text-sm font-bold">{t.progress} {sent}/{cards.length}</span></div>
             <section><h2 className="mb-3 text-sm font-bold">{t.selectPerson}</h2><div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-5 xl:grid-cols-10">{availablePeople.map((name, index) => <button key={name} onClick={() => setPerson((current) => current === name ? '' : name)} aria-pressed={person === name} className={`relative flex min-w-0 flex-col items-center gap-2 rounded-[18px_14px_20px_13px] border-2 px-2 py-3 text-center transition ${person === name ? 'border-[#5d4638] bg-[#fff3dd] shadow-[3px_3px_0_#efb9aa]' : 'border-[#5d4638]/20 bg-[#fffdf8] hover:border-[#5d4638]/50 hover:bg-muted'}`}><span className={`grid size-11 shrink-0 place-items-center rounded-full border-2 border-[#5d4638] ${palette[index % palette.length]} text-xs font-bold tracking-wide`}>{initials(name)}</span><span className="w-full break-words text-[11px] font-bold leading-tight">{name}</span>{person === name && <span className="absolute right-1.5 top-1.5 grid size-5 place-items-center rounded-full bg-[#467d68] text-white"><Check className="size-3" /></span>}</button>)}</div></section>
-            <section className="mt-6"><h2 className="mb-3 text-sm font-bold">{t.selectCard}</h2><div className="grid max-h-[540px] gap-3 overflow-y-auto pr-1 sm:grid-cols-3 xl:grid-cols-4">{cards.filter((card) => remainingCards.includes(card.id)).map((card) => <button key={card.id} onClick={() => setSelectedCard(card.id)} className={`positive-card relative min-h-80 overflow-hidden rounded-[24px_19px_27px_18px] border-2 border-[#5d4638] p-3 text-left transition hover:-translate-y-1 ${card.tone} ${selectedCard === card.id ? 'rotate-[-1deg] shadow-[4px_5px_0_#e96b50]' : 'shadow-[2px_3px_0_#decdb7]'}`}>{selectedCard === card.id && <span className="absolute right-3 top-3 z-20 grid size-7 place-items-center rounded-full border-2 border-[#5d4638] bg-primary text-white"><Check className="size-3" /></span>}<div role="img" aria-label={`${card.th} / ${card.en}`} className={`relative z-10 mx-auto w-full bg-no-repeat ${card.id <= 10 ? 'aspect-square max-w-40' : 'aspect-[3/4] max-w-[120px]'}`} style={{ backgroundImage: `url('${card.id <= 10 ? '/card-characters-v4.png' : '/card-characters-extra.png'}')`, backgroundSize: card.id <= 10 ? '500% 200%' : '200% 100%', backgroundPosition: card.position }} /><div className="relative z-10 mx-1 rounded-xl border border-[#5d4638]/15 bg-[#fffdf8]/80 px-3 pb-3 pt-4 backdrop-blur-[1px]"><p className="text-sm font-bold leading-relaxed">{card.th}</p><p className="mt-2 border-t border-[#5d4638]/15 pt-2 text-xs font-medium leading-relaxed text-[#6d5a4d]">{card.en}</p></div></button>)}</div></section>
-            <div className="fixed inset-x-0 bottom-0 z-40 flex items-center gap-3 border-t-2 border-[#5d4638] bg-[#fff9ed] p-4 shadow-[0_-4px_18px_rgba(93,70,56,.16)] sm:static sm:mt-6 sm:flex-row sm:justify-between sm:border-t sm:border-[#efe6db] sm:bg-transparent sm:p-0 sm:pt-5 sm:shadow-none"><label className="flex cursor-pointer items-center gap-3"><Switch checked={anonymous} onCheckedChange={setAnonymous} /><span><span className="block text-sm font-bold">{t.anonymous}</span><span className="block text-xs text-muted-foreground">{t.anonymousHelp}</span></span></label><Button onClick={sendCard} disabled={sent >= 12 || availablePeople.length === 0} className="h-12 flex-1 rounded-xl sm:flex-none border-2 border-[#5d4638] px-7 text-sm font-bold shadow-[4px_5px_0_#5d4638]">{justSent ? <Check /> : <Send />} {justSent ? t.sent : t.send}</Button></div>
+            <section className="mt-6"><h2 className="mb-3 text-sm font-bold">{t.selectCard}</h2><div className="grid max-h-[540px] gap-3 overflow-y-auto pr-1 sm:grid-cols-3 xl:grid-cols-4">{cards.filter((card) => remainingCards.includes(card.id)).map((card) => <button key={card.id} onClick={() => setSelectedCard(card.id)} className={`positive-card relative min-h-80 overflow-hidden rounded-[24px_19px_27px_18px] border-2 border-[#5d4638] p-3 text-left transition hover:-translate-y-1 ${card.tone} ${selectedCard === card.id ? 'rotate-[-1deg] shadow-[4px_5px_0_#e96b50]' : 'shadow-[2px_3px_0_#decdb7]'}`}>{selectedCard === card.id && <span className="absolute right-3 top-3 z-20 grid size-7 place-items-center rounded-full border-2 border-[#5d4638] bg-primary text-white"><Check className="size-3" /></span>}<div role="img" aria-label={`${card.th} / ${card.en}`} className="relative z-10 mx-auto aspect-square w-full max-w-40 bg-no-repeat" style={cardImageStyle(card.imageIndex)} /><div className="relative z-10 mx-1 rounded-xl border border-[#5d4638]/15 bg-[#fffdf8]/80 px-3 pb-3 pt-4 backdrop-blur-[1px]"><p className="text-sm font-bold leading-relaxed">{card.th}</p><p className="mt-2 border-t border-[#5d4638]/15 pt-2 text-xs font-medium leading-relaxed text-[#6d5a4d]">{card.en}</p></div></button>)}</div></section>
+            <div className="fixed inset-x-0 bottom-0 z-40 flex items-center gap-3 border-t-2 border-[#5d4638] bg-[#fff9ed] p-4 shadow-[0_-4px_18px_rgba(93,70,56,.16)] sm:static sm:mt-6 sm:flex-row sm:justify-between sm:border-t sm:border-[#efe6db] sm:bg-transparent sm:p-0 sm:pt-5 sm:shadow-none"><label className="flex cursor-pointer items-center gap-3"><Switch checked={anonymous} onCheckedChange={setAnonymous} /><span><span className="block text-sm font-bold">{t.anonymous}</span><span className="block text-xs text-muted-foreground">{t.anonymousHelp}</span></span></label><Button onClick={sendCard} disabled={sent >= cards.length || availablePeople.length === 0 || !person} className="h-12 flex-1 rounded-xl border-2 border-[#5d4638] px-7 text-sm font-bold shadow-[4px_5px_0_#5d4638] sm:flex-none">{justSent ? <Check /> : <Send />} {justSent ? t.sent : t.send}</Button></div>
           </div>
           <aside className="rounded-[26px_32px_24px_29px] border-2 border-[#5d4638] bg-[#88bda7] p-6 text-[#35291f] shadow-[5px_6px_0_#5d4638]"><div className="flex items-start justify-between"><p className="text-xs font-bold uppercase tracking-[.14em] text-[#315f4e]">{t.inbox}</p><Gift className="size-6 text-[#744b2c]" /></div><div className="relative mx-auto my-10 h-44 max-w-56"><div className="absolute left-1/2 top-0 h-32 w-40 -translate-x-1/2 rotate-[-5deg] rounded-2xl border-2 border-[#5d4638] bg-[#f7c7bc] shadow-[3px_4px_0_#5d4638]" /><div className="absolute left-1/2 top-3 h-32 w-40 -translate-x-1/2 rotate-[6deg] rounded-2xl border-2 border-[#5d4638] bg-[#f5d797] shadow-[3px_4px_0_#5d4638]" /><div className="absolute bottom-0 left-1/2 grid h-28 w-52 -translate-x-1/2 place-items-center rounded-2xl border-2 border-[#5d4638] bg-primary text-white shadow-[4px_5px_0_#5d4638]"><LockKeyhole className="size-7" /></div></div><div className="rounded-2xl border-2 border-[#5d4638] bg-[#fff9ed] p-4 text-center shadow-[3px_3px_0_#5d4638]"><p className="text-sm font-bold">{t.locked}</p><p className="mt-1 text-xs font-bold text-[#467d68]">{timeDisplay}</p></div>{isHost && <Button variant="outline" onClick={testFinalSeconds} className="mt-4 h-10 w-full rounded-xl border-2 bg-white/70 text-xs font-bold"><Clock3 /> {t.testFinal}</Button>}</aside>
         </div>
