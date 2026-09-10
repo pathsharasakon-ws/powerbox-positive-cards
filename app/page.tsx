@@ -158,7 +158,7 @@ function cardImageStyle(imageIndex: number) {
 
 const copy = {
   th: {
-    subtitle: 'ส่งต่อคำดี ๆ ให้กัน',
+    subtitle: 'ส่งต่อพลังงานดีๆให้กัน',
     joinRoom: 'เข้าร่วมห้อง',
     roomCode: 'รหัสห้อง',
     yourName: 'ชื่อของคุณ',
