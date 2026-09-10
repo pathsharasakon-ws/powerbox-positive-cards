@@ -226,10 +226,12 @@ export default function Home() {
       return;
     }
     const room = await response.json();
+    const joinedName = room.participantName ?? playerName.trim().replace(/\s+/g, ' ');
+    setPlayerName(joinedName);
     setRoomName(room.name);
     if (Array.isArray(room.deck) && room.deck.length) setCards(room.deck);
     setPeople(room.participants.map((item: { name: string }) => item.name));
-    setPerson(room.participants.find((item: { name: string }) => item.name !== playerName)?.name ?? '');
+    setPerson(room.participants.find((item: { name: string }) => item.name !== joinedName)?.name ?? '');
     setParticipantToken(room.participantToken ?? '');
     setIsHost(false);
     resetGame();
@@ -241,6 +243,7 @@ export default function Home() {
     const response = await fetch('/api/rooms', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'create', name: nextRoomName, adminName: playerName, durationMinutes }) });
     const room = await response.json();
     const names = room.participants.map((item: { name: string }) => item.name);
+    setPlayerName(room.participantName ?? playerName.trim().replace(/\s+/g, ' '));
     setRoomName(room.name); setRoomCode(room.code); setAdminToken(room.adminToken); setParticipantToken(room.participantToken ?? ''); setPeople(names); setNameList(names.join('\n'));
     setIsHost(true);
     setScreen('lobby');

@@ -15,9 +15,13 @@ export const participants = sqliteTable('participants', {
   id: text('id').primaryKey(),
   roomCode: text('room_code').notNull().references(() => rooms.code, { onDelete: 'cascade' }),
   name: text('name').notNull(),
+  nameKey: text('name_key'),
   sessionToken: text('session_token'),
   joinedAt: integer('joined_at').notNull(),
-}, (table) => [uniqueIndex('idx_participants_room_name').on(table.roomCode, table.name)]);
+}, (table) => [
+  uniqueIndex('idx_participants_room_name').on(table.roomCode, table.name),
+  uniqueIndex('idx_participants_room_name_key').on(table.roomCode, table.nameKey),
+]);
 
 export const sentCards = sqliteTable('sent_cards', {
   id: text('id').primaryKey(),

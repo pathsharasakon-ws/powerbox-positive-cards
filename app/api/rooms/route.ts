@@ -2,6 +2,8 @@ import { env } from 'cloudflare:workers';
 
 const json = (data: unknown, status = 200) => Response.json(data, { status });
 const normalizeCode = (value: unknown) => String(value ?? '').replace(/\D/g, '').slice(0, 6);
+const normalizeName = (value: unknown) => String(value ?? '').trim().replace(/\s+/g, ' ').slice(0, 60);
+const nameKey = (value: unknown) => normalizeName(value).toLocaleLowerCase('en-US');
 
 async function getRoom(code: string) {
   const room = await env.DB.prepare('SELECT code, name, status, duration_minutes AS durationMinutes, ends_at AS endsAt, deck_json AS deckJson FROM rooms WHERE code = ?').bind(code).first<{ code: string; name: string; status: string; durationMinutes: number; endsAt: number | null; deckJson: string | null }>();
@@ -22,7 +24,7 @@ export async function POST(request: Request) {
   const body = await request.json() as Record<string, unknown>;
   if (body.action === 'create') {
     const name = String(body.name ?? '').trim().slice(0, 80);
-    const adminName = String(body.adminName ?? '').trim().slice(0, 60);
+    const adminName = normalizeName(body.adminName);
     const durationMinutes = Math.min(30, Math.max(5, Number(body.durationMinutes) || 10));
     if (!name || !adminName) return json({ error: 'room_and_admin_name_required' }, 400);
     const adminToken = crypto.randomUUID();
@@ -33,9 +35,9 @@ export async function POST(request: Request) {
         const participant = { id: crypto.randomUUID(), name: adminName };
         await env.DB.batch([
           env.DB.prepare('INSERT INTO rooms (code, name, admin_token, status, duration_minutes, created_at) VALUES (?, ?, ?, ?, ?, ?)').bind(code, name, adminToken, 'waiting', durationMinutes, Date.now()),
-          env.DB.prepare('INSERT INTO participants (id, room_code, name, session_token, joined_at) VALUES (?, ?, ?, ?, ?)').bind(participant.id, code, participant.name, participantToken, Date.now()),
+          env.DB.prepare('INSERT INTO participants (id, room_code, name, name_key, session_token, joined_at) VALUES (?, ?, ?, ?, ?, ?)').bind(participant.id, code, participant.name, nameKey(participant.name), participantToken, Date.now()),
         ]);
-        return json({ code, name, status: 'waiting', adminToken, participantToken, participants: [participant] }, 201);
+        return json({ code, name, status: 'waiting', adminToken, participantToken, participantName: adminName, participants: [participant] }, 201);
       } catch (error) {
         if (attempt === 11) throw error;
       }
@@ -43,22 +45,26 @@ export async function POST(request: Request) {
   }
   if (body.action === 'join') {
     const code = normalizeCode(body.code);
-    const name = String(body.name ?? '').trim().slice(0, 60);
+    const name = normalizeName(body.name);
     if (code.length !== 6 || !name) return json({ error: 'invalid_join' }, 400);
     const room = await env.DB.prepare('SELECT status FROM rooms WHERE code = ?').bind(code).first<{ status: string }>();
     if (!room) return json({ error: 'room_not_found' }, 404);
     if (room.status !== 'waiting') return json({ error: 'room_started' }, 409);
     const count = await env.DB.prepare('SELECT COUNT(*) AS count FROM participants WHERE room_code = ?').bind(code).first<{ count: number }>();
     if (count && count.count >= 100) return json({ error: 'room_full' }, 409);
-    const duplicate = await env.DB.prepare('SELECT id FROM participants WHERE room_code = ? AND name = ? COLLATE NOCASE').bind(code, name).first();
+    const duplicate = await env.DB.prepare('SELECT id FROM participants WHERE room_code = ? AND (name_key = ? OR name = ? COLLATE NOCASE)').bind(code, nameKey(name), name).first();
     if (duplicate) return json({ error: 'duplicate_name' }, 409);
     const participantToken = crypto.randomUUID();
-    await env.DB.prepare('INSERT INTO participants (id, room_code, name, session_token, joined_at) VALUES (?, ?, ?, ?, ?)').bind(crypto.randomUUID(), code, name, participantToken, Date.now()).run();
-    return json({ ...(await getRoom(code)), participantToken });
+    try {
+      await env.DB.prepare('INSERT INTO participants (id, room_code, name, name_key, session_token, joined_at) VALUES (?, ?, ?, ?, ?, ?)').bind(crypto.randomUUID(), code, name, nameKey(name), participantToken, Date.now()).run();
+    } catch {
+      return json({ error: 'duplicate_name' }, 409);
+    }
+    return json({ ...(await getRoom(code)), participantToken, participantName: name });
   }
   if (body.action === 'leave') {
     const code = normalizeCode(body.code);
-    const name = String(body.name ?? '').trim().slice(0, 60);
+    const name = normalizeName(body.name);
     const participantToken = String(body.participantToken ?? '');
     const adminToken = String(body.adminToken ?? '');
     if (code.length !== 6 || !name) return json({ error: 'invalid_leave' }, 400);
@@ -105,11 +111,12 @@ export async function PATCH(request: Request) {
     if (deck.length === 0) return json({ error: 'deck_required' }, 400);
     await env.DB.prepare('UPDATE rooms SET deck_json = ? WHERE code = ?').bind(JSON.stringify(deck), code).run();
   } else if (body.action === 'update_participants' && Array.isArray(body.participants)) {
-    const names = [...new Set(body.participants.map((value) => String(value).trim().slice(0, 60)).filter(Boolean))].slice(0, 100);
+    const normalizedNames = body.participants.map(normalizeName).filter(Boolean);
+    const names = normalizedNames.filter((name, index) => normalizedNames.findIndex((candidate) => nameKey(candidate) === nameKey(name)) === index).slice(0, 100);
     const existing = await env.DB.prepare('SELECT id, name FROM participants WHERE room_code = ?').bind(code).all<{ id: string; name: string }>();
     await env.DB.batch([
       ...existing.results.filter((person) => !names.includes(person.name)).map((person) => env.DB.prepare('DELETE FROM participants WHERE id = ?').bind(person.id)),
-      ...names.filter((name) => !existing.results.some((person) => person.name === name)).map((name) => env.DB.prepare('INSERT INTO participants (id, room_code, name, joined_at) VALUES (?, ?, ?, ?)').bind(crypto.randomUUID(), code, name, Date.now())),
+      ...names.filter((name) => !existing.results.some((person) => person.name === name)).map((name) => env.DB.prepare('INSERT INTO participants (id, room_code, name, name_key, joined_at) VALUES (?, ?, ?, ?, ?)').bind(crypto.randomUUID(), code, name, nameKey(name), Date.now())),
     ]);
   } else {
     return json({ error: 'invalid_action' }, 400);
