@@ -261,7 +261,6 @@ export default function Home() {
             {received.map((entry) => <article key={entry.id} className={`${entry.card.tone} rounded-[26px_20px_29px_18px] border-2 border-[#5d4638] p-5 shadow-[4px_5px_0_#decdb7]`}><p className="text-base font-bold leading-relaxed">{entry.card.th}</p><p className="mt-2 text-sm leading-relaxed text-[#6d5a4d]">{entry.card.en}</p><p className="mt-5 border-t border-[#5d4638]/20 pt-3 text-xs font-bold text-muted-foreground">{entry.anonymous ? `${t.from} ${t.anonymousFrom}` : `${t.from} ${entry.senderName}`}</p></article>)}
             {received.length === 0 && systemGiftAdded && <article className="rounded-[26px_20px_29px_18px] border-2 border-[#5d4638] bg-[#d9eee3] p-5 shadow-[4px_5px_0_#88bda7]"><Sparkles className="size-5 text-primary" /><p className="mt-4 text-base font-bold leading-relaxed">คุณมีคุณค่า และการมีคุณอยู่ตรงนี้มีความหมายเสมอ</p><p className="mt-2 text-sm leading-relaxed text-[#536c61]">You matter, and your presence makes a difference.</p><p className="mt-5 border-t border-[#5d4638]/20 pt-3 text-xs font-bold text-muted-foreground">{t.from} {t.anonymousFrom}</p></article>}
           </div>
-          <div className="mt-8 text-center"><Button variant="outline" onClick={goHome} className="h-11 rounded-xl border-2 px-6 font-bold">{t.restart}</Button></div>
         </section>
       </main>
     );
