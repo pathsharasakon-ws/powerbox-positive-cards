@@ -9,4 +9,5 @@
 @layer base { * { @apply border-border outline-ring/50; } html { @apply font-sans; } body { @apply bg-background text-foreground; background-image: radial-gradient(#e9b9aa55 1px, transparent 1px), radial-gradient(#7bb89b33 1px, transparent 1px); background-position: 0 0, 12px 12px; background-size: 24px 24px; } button { cursor: pointer; } }
 .font-heading { font-family: "Google Sans", sans-serif; }
 .hero-paper::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(255,249,237,.98) 0%, rgba(255,249,237,.82) 34%, rgba(255,249,237,.05) 67%); }
+.hero-home-overlay { background: linear-gradient(90deg, rgba(255,249,237,.98) 0%, rgba(255,249,237,.88) 40%, rgba(255,249,237,.08) 75%); }
 @media (max-width: 640px) { .hero-paper::after { background: linear-gradient(90deg, rgba(255,249,237,.98) 0%, rgba(255,249,237,.76) 50%, rgba(255,249,237,.14) 78%); } }
