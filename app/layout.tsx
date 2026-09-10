@@ -1,17 +1,12 @@
 import type { Metadata } from 'next';
-import { Mali, Noto_Sans_Thai } from 'next/font/google';
+import { Google_Sans } from 'next/font/google';
 import './globals.css';
 
-const notoSansThai = Noto_Sans_Thai({
-  variable: '--font-noto-sans-thai',
+const googleSans = Google_Sans({
+  variable: '--font-google-sans',
   subsets: ['thai', 'latin'],
-  weight: ['400', '500', '600', '700', '800', '900'],
-});
-
-const mali = Mali({
-  variable: '--font-mali',
-  subsets: ['thai', 'latin'],
-  weight: ['500', '600', '700'],
+  weight: 'variable',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -27,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="th">
       <body
-        className={`${notoSansThai.variable} ${mali.variable} antialiased`}
+        className={`${googleSans.variable} antialiased`}
       >
         {children}
       </body>
