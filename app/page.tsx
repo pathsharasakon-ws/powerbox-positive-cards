@@ -213,7 +213,8 @@ export default function Home() {
 
   const Header = () => (
     <header className="border-b-2 border-dashed border-[#6b4d3a]/30 bg-[#fff9ed]/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl justify-end px-4 py-3 sm:px-8">
+      <div className={`mx-auto flex max-w-6xl items-center px-4 py-3 sm:px-8 ${screen === 'home' ? 'justify-end' : 'justify-between'}`}>
+        {screen !== 'home' && <button onClick={() => setScreen('home')} className="flex items-center gap-2 rounded-full border-2 border-[#5d4638] bg-white px-4 py-2 text-xs font-bold shadow-[2px_3px_0_#5d4638] transition hover:-translate-y-0.5"><ArrowLeft className="size-4" /> {t.back}</button>}
         <button className="rounded-full border-2 border-[#5d4638] bg-[#ffe19a] px-4 py-2 text-xs font-bold shadow-[2px_3px_0_#5d4638] transition hover:-translate-y-0.5" onClick={() => setLanguage(language === 'th' ? 'en' : 'th')} aria-label="Switch language">{language === 'th' ? 'English' : 'ไทย'}</button>
       </div>
     </header>
@@ -244,7 +245,6 @@ export default function Home() {
   if (screen === 'admin') return (
     <main className="min-h-screen bg-background text-foreground"><Header />
       <section className="mx-auto max-w-3xl px-4 py-8 sm:px-8 sm:py-12">
-        <button onClick={() => setScreen('home')} className="mb-5 flex items-center gap-2 text-sm font-bold text-muted-foreground"><ArrowLeft className="size-4" /> {t.back}</button>
         <div className="rounded-[30px_24px_32px_22px] border-2 border-[#5d4638] bg-white p-6 shadow-[6px_7px_0_#f1c86f] sm:p-8">
           <div className="flex items-center gap-3"><span className="grid size-11 place-items-center rounded-full border-2 border-[#5d4638] bg-[#d9eee3]"><Users className="size-5" /></span><h1 className="text-2xl font-bold">{t.createRoom}</h1></div>
           <div className="mt-7 space-y-6">
