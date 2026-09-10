@@ -36,6 +36,13 @@
       "when": 1789062078803,
       "tag": "0004_silent_colonel_america",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1789062273999,
+      "tag": "0005_burly_anthem",
+      "breakpoints": true
     }
   ]
 }

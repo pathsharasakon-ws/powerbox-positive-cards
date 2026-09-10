@@ -1,0 +1,1 @@
+ALTER TABLE `participants` ADD `session_token` text;

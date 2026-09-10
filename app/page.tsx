@@ -77,6 +77,7 @@ export default function Home() {
   const [people, setPeople] = useState<string[]>([]);
   const [person, setPerson] = useState('');
   const [adminToken, setAdminToken] = useState('');
+  const [participantToken, setParticipantToken] = useState('');
   const [roomError, setRoomError] = useState('');
   const [receivedCards, setReceivedCards] = useState<Array<{ id: string; cardId: number; senderName: string; anonymous: number }>>([]);
   const [cards, setCards] = useState<Card[]>(defaultCards);
@@ -197,9 +198,21 @@ export default function Home() {
     await persistDeck(cards.filter((card) => card.id !== cardId));
   }
 
-  function goHome() {
+  async function goHome() {
+    if (roomCode && playerName && (participantToken || adminToken) && screen !== 'admin') {
+      try {
+        await fetch('/api/rooms', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'leave', code: roomCode, name: playerName, participantToken, adminToken: isHost ? adminToken : '' }) });
+      } catch {
+        // Navigation should still work when the connection drops.
+      }
+    }
     setRoomCode('');
     setRoomError('');
+    setPeople([]);
+    setPerson('');
+    setAdminToken('');
+    setParticipantToken('');
+    setIsHost(false);
     setScreen('home');
   }
 
@@ -207,12 +220,17 @@ export default function Home() {
     if (!/^\d{6}$/.test(roomCode) || !playerName.trim()) return;
     setRoomError('');
     const response = await fetch('/api/rooms', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'join', code: roomCode, name: playerName }) });
-    if (!response.ok) { setRoomError(language === 'th' ? 'ไม่พบห้อง หรือห้องเริ่มไปแล้ว' : 'Room not found or already started'); return; }
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      setRoomError(error.error === 'duplicate_name' ? (language === 'th' ? 'ชื่อนี้มีผู้ใช้ในห้องแล้ว กรุณาใช้ชื่ออื่น' : 'This name is already in use. Please choose another.') : (language === 'th' ? 'ไม่พบห้อง หรือห้องเริ่มไปแล้ว' : 'Room not found or already started'));
+      return;
+    }
     const room = await response.json();
     setRoomName(room.name);
     if (Array.isArray(room.deck) && room.deck.length) setCards(room.deck);
     setPeople(room.participants.map((item: { name: string }) => item.name));
     setPerson(room.participants.find((item: { name: string }) => item.name !== playerName)?.name ?? '');
+    setParticipantToken(room.participantToken ?? '');
     setIsHost(false);
     resetGame();
     setScreen(room.status === 'started' ? 'game' : 'lobby');
@@ -223,7 +241,7 @@ export default function Home() {
     const response = await fetch('/api/rooms', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'create', name: nextRoomName, adminName: playerName, durationMinutes }) });
     const room = await response.json();
     const names = room.participants.map((item: { name: string }) => item.name);
-    setRoomName(room.name); setRoomCode(room.code); setAdminToken(room.adminToken); setPeople(names); setNameList(names.join('\n'));
+    setRoomName(room.name); setRoomCode(room.code); setAdminToken(room.adminToken); setParticipantToken(room.participantToken ?? ''); setPeople(names); setNameList(names.join('\n'));
     setIsHost(true);
     setScreen('lobby');
   }
@@ -273,7 +291,7 @@ export default function Home() {
   const Header = () => (
     <header className="border-b-2 border-dashed border-[#6b4d3a]/30 bg-[#fff9ed]/90 backdrop-blur">
       <div className={`mx-auto flex max-w-6xl items-center px-4 py-3 sm:px-8 ${screen === 'home' ? 'justify-end' : 'justify-between'}`}>
-        {screen !== 'home' && <button onClick={goHome} className="flex items-center gap-2 rounded-full border-2 border-[#5d4638] bg-white px-4 py-2 text-xs font-bold shadow-[2px_3px_0_#5d4638] transition hover:-translate-y-0.5"><ArrowLeft className="size-4" /> {t.back}</button>}
+        {screen !== 'home' && <button onClick={() => void goHome()} className="flex items-center gap-2 rounded-full border-2 border-[#5d4638] bg-white px-4 py-2 text-xs font-bold shadow-[2px_3px_0_#5d4638] transition hover:-translate-y-0.5"><ArrowLeft className="size-4" /> {t.back}</button>}
         <div className="flex items-center gap-2">
           <button className="rounded-full border-2 border-[#5d4638] bg-[#ffe19a] px-4 py-2 text-xs font-bold shadow-[2px_3px_0_#5d4638] transition hover:-translate-y-0.5" onClick={() => setLanguage(language === 'th' ? 'en' : 'th')} aria-label="Switch language">{language === 'th' ? 'English' : 'ไทย'}</button>
         </div>

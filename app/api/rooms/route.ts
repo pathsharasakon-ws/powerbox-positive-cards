@@ -29,12 +29,13 @@ export async function POST(request: Request) {
     for (let attempt = 0; attempt < 12; attempt += 1) {
       const code = String(Math.floor(100000 + Math.random() * 900000));
       try {
+        const participantToken = crypto.randomUUID();
         const participant = { id: crypto.randomUUID(), name: adminName };
         await env.DB.batch([
           env.DB.prepare('INSERT INTO rooms (code, name, admin_token, status, duration_minutes, created_at) VALUES (?, ?, ?, ?, ?, ?)').bind(code, name, adminToken, 'waiting', durationMinutes, Date.now()),
-          env.DB.prepare('INSERT INTO participants (id, room_code, name, joined_at) VALUES (?, ?, ?, ?)').bind(participant.id, code, participant.name, Date.now()),
+          env.DB.prepare('INSERT INTO participants (id, room_code, name, session_token, joined_at) VALUES (?, ?, ?, ?, ?)').bind(participant.id, code, participant.name, participantToken, Date.now()),
         ]);
-        return json({ code, name, status: 'waiting', adminToken, participants: [participant] }, 201);
+        return json({ code, name, status: 'waiting', adminToken, participantToken, participants: [participant] }, 201);
       } catch (error) {
         if (attempt === 11) throw error;
       }
@@ -49,8 +50,27 @@ export async function POST(request: Request) {
     if (room.status !== 'waiting') return json({ error: 'room_started' }, 409);
     const count = await env.DB.prepare('SELECT COUNT(*) AS count FROM participants WHERE room_code = ?').bind(code).first<{ count: number }>();
     if (count && count.count >= 100) return json({ error: 'room_full' }, 409);
-    await env.DB.prepare('INSERT OR IGNORE INTO participants (id, room_code, name, joined_at) VALUES (?, ?, ?, ?)').bind(crypto.randomUUID(), code, name, Date.now()).run();
-    return json(await getRoom(code));
+    const duplicate = await env.DB.prepare('SELECT id FROM participants WHERE room_code = ? AND name = ? COLLATE NOCASE').bind(code, name).first();
+    if (duplicate) return json({ error: 'duplicate_name' }, 409);
+    const participantToken = crypto.randomUUID();
+    await env.DB.prepare('INSERT INTO participants (id, room_code, name, session_token, joined_at) VALUES (?, ?, ?, ?, ?)').bind(crypto.randomUUID(), code, name, participantToken, Date.now()).run();
+    return json({ ...(await getRoom(code)), participantToken });
+  }
+  if (body.action === 'leave') {
+    const code = normalizeCode(body.code);
+    const name = String(body.name ?? '').trim().slice(0, 60);
+    const participantToken = String(body.participantToken ?? '');
+    const adminToken = String(body.adminToken ?? '');
+    if (code.length !== 6 || !name) return json({ error: 'invalid_leave' }, 400);
+    const room = await env.DB.prepare('SELECT admin_token FROM rooms WHERE code = ?').bind(code).first<{ admin_token: string }>();
+    if (!room) return json({ ok: true });
+    if (adminToken && adminToken === room.admin_token) {
+      await env.DB.prepare('DELETE FROM participants WHERE room_code = ? AND name = ?').bind(code, name).run();
+      return json({ ok: true });
+    }
+    if (!participantToken) return json({ error: 'forbidden' }, 403);
+    await env.DB.prepare('DELETE FROM participants WHERE room_code = ? AND name = ? AND session_token = ?').bind(code, name, participantToken).run();
+    return json({ ok: true });
   }
   return json({ error: 'invalid_action' }, 400);
 }
