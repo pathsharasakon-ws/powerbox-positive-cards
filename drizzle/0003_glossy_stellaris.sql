@@ -1,0 +1,1 @@
+ALTER TABLE `rooms` ADD `ends_at` integer;

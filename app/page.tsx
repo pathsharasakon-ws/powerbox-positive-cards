@@ -84,6 +84,21 @@ export default function Home() {
   }, [screen]);
 
   useEffect(() => {
+    if (screen !== 'game' || !/^\d{6}$/.test(roomCode)) return;
+    const syncTimer = async () => {
+      const response = await fetch(`/api/rooms?code=${roomCode}`);
+      if (!response.ok) return;
+      const room = await response.json();
+      if (typeof room.endsAt === 'number') {
+        setSecondsLeft(Math.max(0, Math.ceil((room.endsAt - Date.now()) / 1000)));
+      }
+    };
+    void syncTimer();
+    const poller = window.setInterval(syncTimer, 2000);
+    return () => window.clearInterval(poller);
+  }, [screen, roomCode]);
+
+  useEffect(() => {
     if (screen !== 'game') return;
     if (secondsLeft <= 15) setSystemGiftAdded(true);
     if (secondsLeft === 0) setScreen('opened');
@@ -101,7 +116,7 @@ export default function Home() {
       setPeople(names);
       if (isHost && document.activeElement?.tagName !== 'TEXTAREA') setNameList(names.join('\n'));
       if (!person) setPerson(names.find((name: string) => name !== playerName) ?? '');
-      if (!isHost && room.status === 'started') { resetGame(room.durationMinutes ?? 10); setScreen('game'); }
+      if (!isHost && room.status === 'started') { resetGame(room.durationMinutes ?? 10, room.endsAt); setScreen('game'); }
     };
     void refreshRoom();
     const poller = window.setInterval(refreshRoom, 2000);
@@ -117,12 +132,12 @@ export default function Home() {
   const participantNames = people;
   const availablePeople = participantNames.filter((name) => name !== playerName && !sentRecipients.includes(name));
 
-  function resetGame(minutes = durationMinutes) {
+  function resetGame(minutes = durationMinutes, endsAt?: number | null) {
     setRemainingCards(cards.map((card) => card.id));
     setSelectedCard(1);
     setSent(0);
     setSentRecipients([]);
-    setSecondsLeft(minutes * 60);
+    setSecondsLeft(typeof endsAt === 'number' ? Math.max(0, Math.ceil((endsAt - Date.now()) / 1000)) : minutes * 60);
     setSystemGiftAdded(false);
   }
 
@@ -159,8 +174,18 @@ export default function Home() {
   async function startGame() {
     const response = await fetch('/api/rooms', { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'start', code: roomCode, adminToken }) });
     if (!response.ok) return;
-    resetGame();
+    const room = await response.json();
+    resetGame(durationMinutes, room.endsAt);
     setScreen('game');
+  }
+
+  async function testFinalSeconds() {
+    const response = await fetch('/api/rooms', { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'test_final', code: roomCode, adminToken }) });
+    if (!response.ok) return;
+    const room = await response.json();
+    if (typeof room.endsAt === 'number') {
+      setSecondsLeft(Math.max(0, Math.ceil((room.endsAt - Date.now()) / 1000)));
+    }
   }
 
   async function editParticipant(oldName: string) {
@@ -258,8 +283,8 @@ export default function Home() {
         <section className="mx-auto max-w-5xl px-4 py-8 sm:px-8 sm:py-12">
           <div className="text-center"><span className="mx-auto grid size-16 place-items-center rounded-full border-2 border-[#5d4638] bg-[#ffe19a] shadow-[4px_5px_0_#5d4638]"><Gift className="size-7" /></span><h1 className="mt-5 text-3xl font-bold sm:text-4xl">{t.openTitle}</h1><p className="mt-2 text-muted-foreground">{t.openHelp}</p></div>
           <div className="mt-8 grid gap-5 sm:grid-cols-2">
-            {received.map((entry) => <article key={entry.id} className={`${entry.card.tone} rounded-[26px_20px_29px_18px] border-2 border-[#5d4638] p-5 shadow-[4px_5px_0_#decdb7]`}><p className="text-base font-bold leading-relaxed">{entry.card.th}</p><p className="mt-2 text-sm leading-relaxed text-[#6d5a4d]">{entry.card.en}</p><p className="mt-5 border-t border-[#5d4638]/20 pt-3 text-xs font-bold text-muted-foreground">{entry.anonymous ? `${t.from} ${t.anonymousFrom}` : `${t.from} ${entry.senderName}`}</p></article>)}
-            {received.length === 0 && systemGiftAdded && <article className="rounded-[26px_20px_29px_18px] border-2 border-[#5d4638] bg-[#d9eee3] p-5 shadow-[4px_5px_0_#88bda7]"><Sparkles className="size-5 text-primary" /><p className="mt-4 text-base font-bold leading-relaxed">คุณมีคุณค่า และการมีคุณอยู่ตรงนี้มีความหมายเสมอ</p><p className="mt-2 text-sm leading-relaxed text-[#536c61]">You matter, and your presence makes a difference.</p><p className="mt-5 border-t border-[#5d4638]/20 pt-3 text-xs font-bold text-muted-foreground">{t.from} {t.anonymousFrom}</p></article>}
+            {received.map((entry) => <article key={entry.id} className={`positive-card relative overflow-hidden ${entry.card.tone} rounded-[26px_20px_29px_18px] border-2 border-[#5d4638] p-7 shadow-[4px_5px_0_#decdb7]`}><p className="relative z-10 text-base font-bold leading-relaxed">{entry.card.th}</p><p className="relative z-10 mt-2 text-sm leading-relaxed text-[#6d5a4d]">{entry.card.en}</p><p className="relative z-10 mt-5 border-t border-[#5d4638]/20 pt-3 text-xs font-bold text-muted-foreground">{entry.anonymous ? `${t.from} ${t.anonymousFrom}` : `${t.from} ${entry.senderName}`}</p></article>)}
+            {received.length === 0 && systemGiftAdded && <article className="positive-card relative overflow-hidden rounded-[26px_20px_29px_18px] border-2 border-[#5d4638] bg-[#d9eee3] p-7 shadow-[4px_5px_0_#88bda7]"><Sparkles className="relative z-10 size-5 text-primary" /><p className="relative z-10 mt-4 text-base font-bold leading-relaxed">คุณมีคุณค่า และการมีคุณอยู่ตรงนี้มีความหมายเสมอ</p><p className="relative z-10 mt-2 text-sm leading-relaxed text-[#536c61]">You matter, and your presence makes a difference.</p><p className="relative z-10 mt-5 border-t border-[#5d4638]/20 pt-3 text-xs font-bold text-muted-foreground">{t.from} {t.anonymousFrom}</p></article>}
           </div>
         </section>
       </main>
@@ -276,11 +301,11 @@ export default function Home() {
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div className="rounded-[30px_24px_28px_22px] border-2 border-[#5d4638] bg-white p-5 shadow-[5px_6px_0_#f1c86f] sm:p-7">
             <div className="mb-7 flex items-center gap-4"><Progress value={(sent / 12) * 100} className="flex-1 [&_[data-slot=progress-track]]:h-2 [&_[data-slot=progress-track]]:bg-[#f3e9dc] [&_[data-slot=progress-indicator]]:bg-primary" /><span className="min-w-24 text-right text-sm font-bold">{t.progress} {sent}/12</span></div>
-            <section><h2 className="mb-3 text-sm font-bold">{t.selectPerson}</h2><div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-5 xl:grid-cols-10">{availablePeople.map((name, index) => <button key={name} onClick={() => setPerson(name)} className={`relative flex min-w-0 flex-col items-center gap-2 rounded-[18px_14px_20px_13px] border-2 px-2 py-3 text-center transition ${person === name ? 'border-[#5d4638] bg-[#fff3dd] shadow-[3px_3px_0_#efb9aa]' : 'border-[#5d4638]/20 bg-[#fffdf8] hover:border-[#5d4638]/50 hover:bg-muted'}`}><span className={`grid size-11 shrink-0 place-items-center rounded-full border-2 border-[#5d4638] ${palette[index % palette.length]} text-xs font-bold tracking-wide`}>{initials(name)}</span><span className="w-full break-words text-[11px] font-bold leading-tight">{name}</span>{person === name && <span className="absolute right-1.5 top-1.5 grid size-5 place-items-center rounded-full bg-[#467d68] text-white"><Check className="size-3" /></span>}</button>)}</div></section>
-            <section className="mt-6"><h2 className="mb-3 text-sm font-bold">{t.selectCard}</h2><div className="grid max-h-[540px] gap-3 overflow-y-auto pr-1 sm:grid-cols-3 xl:grid-cols-4">{cards.filter((card) => remainingCards.includes(card.id)).map((card) => <button key={card.id} onClick={() => setSelectedCard(card.id)} className={`relative min-h-80 overflow-hidden rounded-[24px_19px_27px_18px] border-2 border-[#5d4638] p-3 text-left transition hover:-translate-y-1 ${card.tone} ${selectedCard === card.id ? 'rotate-[-1deg] shadow-[4px_5px_0_#e96b50]' : 'shadow-[2px_3px_0_#decdb7]'}`}>{selectedCard === card.id && <span className="absolute right-3 top-3 z-10 grid size-7 place-items-center rounded-full border-2 border-[#5d4638] bg-primary text-white"><Check className="size-3" /></span>}<div role="img" aria-label={`${card.th} / ${card.en}`} className={`mx-auto w-full bg-no-repeat ${card.id <= 10 ? 'aspect-square max-w-40' : 'aspect-[3/4] max-w-[120px]'}`} style={{ backgroundImage: `url('${card.id <= 10 ? '/card-characters-v4.png' : '/card-characters-extra.png'}')`, backgroundSize: card.id <= 10 ? '500% 200%' : '200% 100%', backgroundPosition: card.position }} /><div className="border-t border-[#5d4638]/20 px-2 pb-2 pt-4"><p className="text-sm font-bold leading-relaxed">{card.th}</p><p className="mt-2 text-xs font-medium leading-relaxed text-[#6d5a4d]">{card.en}</p></div></button>)}</div></section>
+            <section><h2 className="mb-3 text-sm font-bold">{t.selectPerson}</h2><div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-5 xl:grid-cols-10">{availablePeople.map((name, index) => <button key={name} onClick={() => setPerson((current) => current === name ? '' : name)} aria-pressed={person === name} className={`relative flex min-w-0 flex-col items-center gap-2 rounded-[18px_14px_20px_13px] border-2 px-2 py-3 text-center transition ${person === name ? 'border-[#5d4638] bg-[#fff3dd] shadow-[3px_3px_0_#efb9aa]' : 'border-[#5d4638]/20 bg-[#fffdf8] hover:border-[#5d4638]/50 hover:bg-muted'}`}><span className={`grid size-11 shrink-0 place-items-center rounded-full border-2 border-[#5d4638] ${palette[index % palette.length]} text-xs font-bold tracking-wide`}>{initials(name)}</span><span className="w-full break-words text-[11px] font-bold leading-tight">{name}</span>{person === name && <span className="absolute right-1.5 top-1.5 grid size-5 place-items-center rounded-full bg-[#467d68] text-white"><Check className="size-3" /></span>}</button>)}</div></section>
+            <section className="mt-6"><h2 className="mb-3 text-sm font-bold">{t.selectCard}</h2><div className="grid max-h-[540px] gap-3 overflow-y-auto pr-1 sm:grid-cols-3 xl:grid-cols-4">{cards.filter((card) => remainingCards.includes(card.id)).map((card) => <button key={card.id} onClick={() => setSelectedCard(card.id)} className={`positive-card relative min-h-80 overflow-hidden rounded-[24px_19px_27px_18px] border-2 border-[#5d4638] p-3 text-left transition hover:-translate-y-1 ${card.tone} ${selectedCard === card.id ? 'rotate-[-1deg] shadow-[4px_5px_0_#e96b50]' : 'shadow-[2px_3px_0_#decdb7]'}`}>{selectedCard === card.id && <span className="absolute right-3 top-3 z-20 grid size-7 place-items-center rounded-full border-2 border-[#5d4638] bg-primary text-white"><Check className="size-3" /></span>}<div role="img" aria-label={`${card.th} / ${card.en}`} className={`relative z-10 mx-auto w-full bg-no-repeat ${card.id <= 10 ? 'aspect-square max-w-40' : 'aspect-[3/4] max-w-[120px]'}`} style={{ backgroundImage: `url('${card.id <= 10 ? '/card-characters-v4.png' : '/card-characters-extra.png'}')`, backgroundSize: card.id <= 10 ? '500% 200%' : '200% 100%', backgroundPosition: card.position }} /><div className="relative z-10 mx-1 rounded-xl border border-[#5d4638]/15 bg-[#fffdf8]/80 px-3 pb-3 pt-4 backdrop-blur-[1px]"><p className="text-sm font-bold leading-relaxed">{card.th}</p><p className="mt-2 border-t border-[#5d4638]/15 pt-2 text-xs font-medium leading-relaxed text-[#6d5a4d]">{card.en}</p></div></button>)}</div></section>
             <div className="fixed inset-x-0 bottom-0 z-40 flex items-center gap-3 border-t-2 border-[#5d4638] bg-[#fff9ed] p-4 shadow-[0_-4px_18px_rgba(93,70,56,.16)] sm:static sm:mt-6 sm:flex-row sm:justify-between sm:border-t sm:border-[#efe6db] sm:bg-transparent sm:p-0 sm:pt-5 sm:shadow-none"><label className="flex cursor-pointer items-center gap-3"><Switch checked={anonymous} onCheckedChange={setAnonymous} /><span><span className="block text-sm font-bold">{t.anonymous}</span><span className="block text-xs text-muted-foreground">{t.anonymousHelp}</span></span></label><Button onClick={sendCard} disabled={sent >= 12 || availablePeople.length === 0} className="h-12 flex-1 rounded-xl sm:flex-none border-2 border-[#5d4638] px-7 text-sm font-bold shadow-[4px_5px_0_#5d4638]">{justSent ? <Check /> : <Send />} {justSent ? t.sent : t.send}</Button></div>
           </div>
-          <aside className="rounded-[26px_32px_24px_29px] border-2 border-[#5d4638] bg-[#88bda7] p-6 text-[#35291f] shadow-[5px_6px_0_#5d4638]"><div className="flex items-start justify-between"><p className="text-xs font-bold uppercase tracking-[.14em] text-[#315f4e]">{t.inbox}</p><Gift className="size-6 text-[#744b2c]" /></div><div className="relative mx-auto my-10 h-44 max-w-56"><div className="absolute left-1/2 top-0 h-32 w-40 -translate-x-1/2 rotate-[-5deg] rounded-2xl border-2 border-[#5d4638] bg-[#f7c7bc] shadow-[3px_4px_0_#5d4638]" /><div className="absolute left-1/2 top-3 h-32 w-40 -translate-x-1/2 rotate-[6deg] rounded-2xl border-2 border-[#5d4638] bg-[#f5d797] shadow-[3px_4px_0_#5d4638]" /><div className="absolute bottom-0 left-1/2 grid h-28 w-52 -translate-x-1/2 place-items-center rounded-2xl border-2 border-[#5d4638] bg-primary text-white shadow-[4px_5px_0_#5d4638]"><LockKeyhole className="size-7" /></div></div><div className="rounded-2xl border-2 border-[#5d4638] bg-[#fff9ed] p-4 text-center shadow-[3px_3px_0_#5d4638]"><p className="text-sm font-bold">{t.locked}</p><p className="mt-1 text-xs font-bold text-[#467d68]">{timeDisplay}</p></div>{isHost && <Button variant="outline" onClick={() => setSecondsLeft(15)} className="mt-4 h-10 w-full rounded-xl border-2 bg-white/70 text-xs font-bold"><Clock3 /> {t.testFinal}</Button>}</aside>
+          <aside className="rounded-[26px_32px_24px_29px] border-2 border-[#5d4638] bg-[#88bda7] p-6 text-[#35291f] shadow-[5px_6px_0_#5d4638]"><div className="flex items-start justify-between"><p className="text-xs font-bold uppercase tracking-[.14em] text-[#315f4e]">{t.inbox}</p><Gift className="size-6 text-[#744b2c]" /></div><div className="relative mx-auto my-10 h-44 max-w-56"><div className="absolute left-1/2 top-0 h-32 w-40 -translate-x-1/2 rotate-[-5deg] rounded-2xl border-2 border-[#5d4638] bg-[#f7c7bc] shadow-[3px_4px_0_#5d4638]" /><div className="absolute left-1/2 top-3 h-32 w-40 -translate-x-1/2 rotate-[6deg] rounded-2xl border-2 border-[#5d4638] bg-[#f5d797] shadow-[3px_4px_0_#5d4638]" /><div className="absolute bottom-0 left-1/2 grid h-28 w-52 -translate-x-1/2 place-items-center rounded-2xl border-2 border-[#5d4638] bg-primary text-white shadow-[4px_5px_0_#5d4638]"><LockKeyhole className="size-7" /></div></div><div className="rounded-2xl border-2 border-[#5d4638] bg-[#fff9ed] p-4 text-center shadow-[3px_3px_0_#5d4638]"><p className="text-sm font-bold">{t.locked}</p><p className="mt-1 text-xs font-bold text-[#467d68]">{timeDisplay}</p></div>{isHost && <Button variant="outline" onClick={testFinalSeconds} className="mt-4 h-10 w-full rounded-xl border-2 bg-white/70 text-xs font-bold"><Clock3 /> {t.testFinal}</Button>}</aside>
         </div>
       </section>
     </main>

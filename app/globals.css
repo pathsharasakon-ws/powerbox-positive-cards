@@ -10,4 +10,7 @@
 .font-heading { font-family: "Google Sans", sans-serif; }
 .hero-paper::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(255,249,237,.98) 0%, rgba(255,249,237,.82) 34%, rgba(255,249,237,.05) 67%); }
 .hero-home-overlay { background: linear-gradient(90deg, rgba(255,249,237,.98) 0%, rgba(255,249,237,.88) 40%, rgba(255,249,237,.08) 75%); }
+.positive-card { background-image: radial-gradient(circle at 12px 12px, rgba(93,70,56,.18) 0 2px, transparent 2.5px), radial-gradient(circle at calc(100% - 12px) calc(100% - 12px), rgba(93,70,56,.18) 0 2px, transparent 2.5px), repeating-linear-gradient(135deg, transparent 0 18px, rgba(255,255,255,.25) 19px 21px, transparent 22px 40px); }
+.positive-card::before { content: ''; position: absolute; inset: 7px; z-index: 1; pointer-events: none; border: 1px solid rgba(93,70,56,.28); border-radius: 17px 13px 20px 12px; box-shadow: inset 0 0 0 3px rgba(255,255,255,.38); }
+.positive-card::after { content: ''; position: absolute; left: 15px; top: 13px; z-index: 2; width: 8px; height: 8px; pointer-events: none; border: 1px solid rgba(93,70,56,.38); transform: rotate(45deg); }
 @media (max-width: 640px) { .hero-paper::after { background: linear-gradient(90deg, rgba(255,249,237,.98) 0%, rgba(255,249,237,.76) 50%, rgba(255,249,237,.14) 78%); } }

@@ -4,7 +4,7 @@ const json = (data: unknown, status = 200) => Response.json(data, { status });
 const normalizeCode = (value: unknown) => String(value ?? '').replace(/\D/g, '').slice(0, 6);
 
 async function getRoom(code: string) {
-  const room = await env.DB.prepare('SELECT code, name, status, duration_minutes AS durationMinutes FROM rooms WHERE code = ?').bind(code).first();
+  const room = await env.DB.prepare('SELECT code, name, status, duration_minutes AS durationMinutes, ends_at AS endsAt FROM rooms WHERE code = ?').bind(code).first();
   if (!room) return null;
   const result = await env.DB.prepare('SELECT id, name FROM participants WHERE room_code = ? ORDER BY joined_at, name').bind(code).all();
   return { ...room, participants: result.results };
@@ -58,12 +58,16 @@ export async function PATCH(request: Request) {
   const body = await request.json() as Record<string, unknown>;
   const code = normalizeCode(body.code);
   const adminToken = String(body.adminToken ?? '');
-  const room = await env.DB.prepare('SELECT admin_token FROM rooms WHERE code = ?').bind(code).first<{ admin_token: string }>();
+  const room = await env.DB.prepare('SELECT admin_token, status, duration_minutes FROM rooms WHERE code = ?').bind(code).first<{ admin_token: string; status: string; duration_minutes: number }>();
   if (!room || room.admin_token !== adminToken) return json({ error: 'forbidden' }, 403);
   if (body.action === 'start') {
     const count = await env.DB.prepare('SELECT COUNT(*) AS count FROM participants WHERE room_code = ?').bind(code).first<{ count: number }>();
     if (!count || count.count < 2) return json({ error: 'need_more_participants' }, 409);
-    await env.DB.prepare("UPDATE rooms SET status = 'started' WHERE code = ?").bind(code).run();
+    const endsAt = Date.now() + room.duration_minutes * 60 * 1000;
+    await env.DB.prepare("UPDATE rooms SET status = 'started', ends_at = ? WHERE code = ?").bind(endsAt, code).run();
+  } else if (body.action === 'test_final') {
+    if (room.status !== 'started') return json({ error: 'room_not_started' }, 409);
+    await env.DB.prepare('UPDATE rooms SET ends_at = ? WHERE code = ?').bind(Date.now() + 15_000, code).run();
   } else if (body.action === 'update_participants' && Array.isArray(body.participants)) {
     const names = [...new Set(body.participants.map((value) => String(value).trim().slice(0, 60)).filter(Boolean))].slice(0, 100);
     const existing = await env.DB.prepare('SELECT id, name FROM participants WHERE room_code = ?').bind(code).all<{ id: string; name: string }>();
