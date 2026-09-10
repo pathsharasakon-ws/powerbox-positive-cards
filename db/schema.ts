@@ -14,3 +14,13 @@ export const participants = sqliteTable('participants', {
   name: text('name').notNull(),
   joinedAt: integer('joined_at').notNull(),
 }, (table) => [uniqueIndex('idx_participants_room_name').on(table.roomCode, table.name)]);
+
+export const sentCards = sqliteTable('sent_cards', {
+  id: text('id').primaryKey(),
+  roomCode: text('room_code').notNull().references(() => rooms.code, { onDelete: 'cascade' }),
+  cardId: integer('card_id').notNull(),
+  recipientName: text('recipient_name').notNull(),
+  senderName: text('sender_name').notNull(),
+  anonymous: integer('anonymous', { mode: 'boolean' }).notNull().default(false),
+  sentAt: integer('sent_at').notNull(),
+});

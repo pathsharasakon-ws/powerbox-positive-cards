@@ -19,7 +19,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
-import { Textarea } from '@/components/ui/textarea';
 
 type Language = 'th' | 'en';
 type Screen = 'home' | 'admin' | 'lobby' | 'game' | 'opened';
@@ -65,6 +64,7 @@ export default function Home() {
   const [person, setPerson] = useState('');
   const [adminToken, setAdminToken] = useState('');
   const [roomError, setRoomError] = useState('');
+  const [receivedCards, setReceivedCards] = useState<Array<{ id: string; cardId: number; senderName: string; anonymous: number }>>([]);
   const [selectedCard, setSelectedCard] = useState(1);
   const [remainingCards, setRemainingCards] = useState(cards.map((card) => card.id));
   const [anonymous, setAnonymous] = useState(false);
@@ -106,6 +106,11 @@ export default function Home() {
     return () => window.clearInterval(poller);
   }, [screen, roomCode, isHost, person, playerName]);
 
+  useEffect(() => {
+    if (screen !== 'opened' || !roomCode || !playerName) return;
+    void fetch(`/api/cards?code=${roomCode}&recipient=${encodeURIComponent(playerName)}`).then((response) => response.json()).then((data) => setReceivedCards(data.cards ?? []));
+  }, [screen, roomCode, playerName]);
+
   const timeDisplay = `${String(Math.floor(secondsLeft / 60)).padStart(2, '0')}:${String(secondsLeft % 60).padStart(2, '0')}`;
   const participantNames = people;
   const availablePeople = participantNames.filter((name) => name !== playerName && !sentRecipients.includes(name));
@@ -141,9 +146,10 @@ export default function Home() {
 
   async function prepareRoom() {
     const nextRoomName = roomName.trim() || 'Bloom Together';
-    const response = await fetch('/api/rooms', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'create', name: nextRoomName }) });
+    const response = await fetch('/api/rooms', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'create', name: nextRoomName, adminName: playerName }) });
     const room = await response.json();
-    setRoomName(room.name); setRoomCode(room.code); setAdminToken(room.adminToken); setPeople([]); setNameList('');
+    const names = room.participants.map((item: { name: string }) => item.name);
+    setRoomName(room.name); setRoomCode(room.code); setAdminToken(room.adminToken); setPeople(names); setNameList(names.join('\n'));
     setIsHost(true);
     setScreen('lobby');
   }
@@ -155,16 +161,20 @@ export default function Home() {
     setScreen('game');
   }
 
-  async function saveParticipants() {
-    const names = nameList.split('\n').map((name) => name.trim()).filter(Boolean).slice(0, 100);
+  async function editParticipant(oldName: string) {
+    const nextName = window.prompt(language === 'th' ? 'แก้ไขชื่อผู้เข้าร่วม' : 'Edit participant name', oldName)?.trim();
+    if (!nextName || nextName === oldName) return;
+    const names = participantNames.map((name) => name === oldName ? nextName : name);
+    setNameList(names.join('\n'));
+    if (oldName === playerName) setPlayerName(nextName);
     const response = await fetch('/api/rooms', { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'update_participants', code: roomCode, adminToken, participants: names }) });
-    if (!response.ok) return;
-    const room = await response.json();
-    setPeople(room.participants.map((item: { name: string }) => item.name));
+    if (response.ok) setPeople(names);
   }
 
-  function sendCard() {
+  async function sendCard() {
     if (sent >= 12 || !activeCard || !person) return;
+    const response = await fetch('/api/cards', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ code: roomCode, cardId: activeCard.id, recipientName: person, senderName: playerName, anonymous }) });
+    if (!response.ok) return;
     const nextCards = remainingCards.filter((id) => id !== selectedCard);
     setRemainingCards(nextCards);
     setSent((value) => value + 1);
@@ -217,6 +227,7 @@ export default function Home() {
           <div className="flex items-center gap-3"><span className="grid size-11 place-items-center rounded-full border-2 border-[#5d4638] bg-[#d9eee3]"><Users className="size-5" /></span><h1 className="text-2xl font-bold">{t.createRoom}</h1></div>
           <div className="mt-7 space-y-6">
             <label className="block text-sm font-bold">{t.roomName}<Input value={roomName} onChange={(event) => setRoomName(event.target.value)} className="mt-2 h-12 rounded-xl border-2 bg-[#fffaf0] text-base" /></label>
+            <label className="block text-sm font-bold">{t.yourName}<Input value={playerName} onChange={(event) => setPlayerName(event.target.value)} className="mt-2 h-12 rounded-xl border-2 bg-[#fffaf0] text-base" /></label>
           </div>
           <Button onClick={prepareRoom} className="mt-6 h-12 w-full rounded-xl border-2 border-[#5d4638] text-base font-bold shadow-[3px_4px_0_#5d4638]"><Check /> {t.continue}</Button>
         </div>
@@ -230,7 +241,7 @@ export default function Home() {
         <div className="rounded-[30px_24px_32px_22px] border-2 border-[#5d4638] bg-white p-7 shadow-[6px_7px_0_#efb9aa] sm:p-10">
           <Sparkles className="mx-auto size-9 text-primary" /><h1 className="mt-4 text-3xl font-bold">{roomName}</h1><p className="mt-2 text-lg font-bold">{t.waiting}</p><p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">{t.readyHelp}</p>
           <button onClick={() => navigator.clipboard?.writeText(roomCode)} className="mx-auto mt-7 flex items-center gap-3 rounded-2xl border-2 border-dashed border-[#5d4638] bg-[#fff5d7] px-6 py-4 text-3xl font-bold tracking-[.08em]"><span>{roomCode}</span><Copy className="size-5" /></button>
-          <div className="mx-auto mt-7 max-w-lg rounded-2xl bg-[#f5eee5] p-5 text-left"><div className="flex justify-between text-sm font-bold"><span>{t.participants}</span><span>{participantNames.length} / 100</span></div><div className="mt-4 flex flex-wrap gap-2">{participantNames.map((name, index) => <span key={`${name}-${index}`} className="rounded-full border border-[#5d4638]/25 bg-white px-3 py-1 text-xs font-medium">{name}</span>)}</div>{participantNames.length === 0 && <p className="mt-4 text-sm text-muted-foreground">{language === 'th' ? 'กำลังรอสมาชิกเข้าร่วม…' : 'Waiting for people to join…'}</p>}{isHost && <div className="mt-5 border-t border-[#5d4638]/15 pt-4"><label className="text-sm font-bold">{t.participantList}<span className="mt-1 block text-xs font-normal text-muted-foreground">{t.onePerLine}</span><Textarea value={nameList} onChange={(event) => setNameList(event.target.value)} className="mt-2 min-h-32 rounded-xl border-2 bg-white text-sm" /></label><Button variant="outline" onClick={saveParticipants} className="mt-3 w-full rounded-xl border-2 font-bold">{language === 'th' ? 'บันทึกรายชื่อ' : 'Save participant list'}</Button></div>}</div>
+          <div className="mx-auto mt-7 max-w-lg rounded-2xl bg-[#f5eee5] p-5 text-left"><div className="flex justify-between text-sm font-bold"><span>{t.participants}</span><span>{participantNames.length} / 100</span></div><div className="mt-4 flex flex-wrap gap-2">{participantNames.map((name, index) => isHost ? <button key={`${name}-${index}`} onClick={() => editParticipant(name)} className="rounded-full border border-[#5d4638]/25 bg-white px-3 py-1 text-xs font-bold transition hover:border-[#5d4638] hover:bg-[#fff5d7]" title={language === 'th' ? 'คลิกเพื่อแก้ชื่อ' : 'Click to edit name'}>{name}</button> : <span key={`${name}-${index}`} className="rounded-full border border-[#5d4638]/25 bg-white px-3 py-1 text-xs font-medium">{name}</span>)}</div>{participantNames.length === 0 && <p className="mt-4 text-sm text-muted-foreground">{language === 'th' ? 'กำลังรอสมาชิกเข้าร่วม…' : 'Waiting for people to join…'}</p>}</div>
           {isHost ? <Button onClick={startGame} disabled={participantNames.length < 2} className="mt-7 h-12 rounded-xl border-2 border-[#5d4638] px-7 text-base font-bold shadow-[3px_4px_0_#5d4638]"><Play /> {t.start}</Button> : <p className="mt-7 text-sm font-bold text-[#467d68]">{language === 'th' ? 'รอผู้จัดเริ่มกิจกรรม' : 'Waiting for the host to start'}</p>}
         </div>
       </section>
@@ -238,13 +249,13 @@ export default function Home() {
   );
 
   if (screen === 'opened') {
-    const received = isHost ? [] : [cards[2], cards[7], cards[4]];
+    const received = receivedCards.map((entry) => ({ ...entry, card: cards.find((card) => card.id === entry.cardId) ?? cards[0] }));
     return (
       <main className="min-h-screen bg-background text-foreground"><Header />
         <section className="mx-auto max-w-5xl px-4 py-8 sm:px-8 sm:py-12">
           <div className="text-center"><span className="mx-auto grid size-16 place-items-center rounded-full border-2 border-[#5d4638] bg-[#ffe19a] shadow-[4px_5px_0_#5d4638]"><Gift className="size-7" /></span><h1 className="mt-5 text-3xl font-bold sm:text-4xl">{t.openTitle}</h1><p className="mt-2 text-muted-foreground">{t.openHelp}</p></div>
           <div className="mt-8 grid gap-5 sm:grid-cols-2">
-            {received.map((card, index) => <article key={card.id} className={`${card.tone} rounded-[26px_20px_29px_18px] border-2 border-[#5d4638] p-5 shadow-[4px_5px_0_#decdb7]`}><p className="text-base font-bold leading-relaxed">{card.th}</p><p className="mt-2 text-sm leading-relaxed text-[#6d5a4d]">{card.en}</p><p className="mt-5 border-t border-[#5d4638]/20 pt-3 text-xs font-bold text-muted-foreground">{index === 1 ? t.anonymousFrom : `${t.from} ${participantNames[index] || 'Friend'}`}</p></article>)}
+            {received.map((entry) => <article key={entry.id} className={`${entry.card.tone} rounded-[26px_20px_29px_18px] border-2 border-[#5d4638] p-5 shadow-[4px_5px_0_#decdb7]`}><p className="text-base font-bold leading-relaxed">{entry.card.th}</p><p className="mt-2 text-sm leading-relaxed text-[#6d5a4d]">{entry.card.en}</p><p className="mt-5 border-t border-[#5d4638]/20 pt-3 text-xs font-bold text-muted-foreground">{entry.anonymous ? `${t.from} ${t.anonymousFrom}` : `${t.from} ${entry.senderName}`}</p></article>)}
             {received.length === 0 && systemGiftAdded && <article className="rounded-[26px_20px_29px_18px] border-2 border-[#5d4638] bg-[#d9eee3] p-5 shadow-[4px_5px_0_#88bda7]"><Sparkles className="size-5 text-primary" /><p className="mt-4 text-base font-bold leading-relaxed">คุณมีคุณค่า และการมีคุณอยู่ตรงนี้มีความหมายเสมอ</p><p className="mt-2 text-sm leading-relaxed text-[#536c61]">You matter, and your presence makes a difference.</p><p className="mt-5 border-t border-[#5d4638]/20 pt-3 text-xs font-bold text-muted-foreground">{t.from} {t.anonymousFrom}</p></article>}
           </div>
           <div className="mt-8 text-center"><Button variant="outline" onClick={goHome} className="h-11 rounded-xl border-2 px-6 font-bold">{t.restart}</Button></div>

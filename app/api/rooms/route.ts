@@ -21,13 +21,18 @@ export async function POST(request: Request) {
   const body = await request.json() as Record<string, unknown>;
   if (body.action === 'create') {
     const name = String(body.name ?? '').trim().slice(0, 80);
-    if (!name) return json({ error: 'room_name_required' }, 400);
+    const adminName = String(body.adminName ?? '').trim().slice(0, 60);
+    if (!name || !adminName) return json({ error: 'room_and_admin_name_required' }, 400);
     const adminToken = crypto.randomUUID();
     for (let attempt = 0; attempt < 12; attempt += 1) {
       const code = String(Math.floor(100000 + Math.random() * 900000));
       try {
-        await env.DB.prepare('INSERT INTO rooms (code, name, admin_token, status, created_at) VALUES (?, ?, ?, ?, ?)').bind(code, name, adminToken, 'waiting', Date.now()).run();
-        return json({ code, name, status: 'waiting', adminToken, participants: [] }, 201);
+        const participant = { id: crypto.randomUUID(), name: adminName };
+        await env.DB.batch([
+          env.DB.prepare('INSERT INTO rooms (code, name, admin_token, status, created_at) VALUES (?, ?, ?, ?, ?)').bind(code, name, adminToken, 'waiting', Date.now()),
+          env.DB.prepare('INSERT INTO participants (id, room_code, name, joined_at) VALUES (?, ?, ?, ?)').bind(participant.id, code, participant.name, Date.now()),
+        ]);
+        return json({ code, name, status: 'waiting', adminToken, participants: [participant] }, 201);
       } catch (error) {
         if (attempt === 11) throw error;
       }
