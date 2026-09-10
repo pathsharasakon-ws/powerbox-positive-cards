@@ -61,34 +61,35 @@ export default function Home() {
 
   return (
     <main className="min-h-screen overflow-hidden bg-background text-foreground">
-      <header className="border-b border-[#eadfd2] bg-[#fffaf2]/90 backdrop-blur">
+      <header className="border-b-2 border-dashed border-[#6b4d3a]/30 bg-[#fff9ed]/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-8">
           <div className="flex items-center gap-3">
-            <span className="grid size-10 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-[0_6px_18px_rgba(232,101,76,.25)]"><Heart className="size-5 fill-current" /></span>
-            <div><div className="font-heading text-lg font-extrabold leading-none tracking-[-.03em]">PowerBox</div><div className="mt-1 text-[11px] text-muted-foreground">{t.subtitle}</div></div>
+            <span className="grid size-11 -rotate-3 place-items-center rounded-[45%_55%_48%_52%] border-2 border-[#5d4638] bg-primary text-primary-foreground shadow-[3px_4px_0_#f3c86b]"><Heart className="size-5 fill-current" /></span>
+            <div><div className="font-heading text-xl font-black leading-none tracking-[-.04em]">PowerBox <span className="text-primary">♡</span></div><div className="mt-1 text-[11px] font-semibold text-muted-foreground">{t.subtitle}</div></div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="hidden items-center gap-2 rounded-full border border-[#eadfd2] bg-white px-3 py-2 text-xs font-semibold sm:flex"><Users className="size-4 text-[#6a9f82]" /> {t.participants}</div>
-            <button className="rounded-full border border-[#eadfd2] bg-white px-3 py-2 text-xs font-bold transition hover:border-primary" onClick={() => setLanguage(language === 'th' ? 'en' : 'th')} aria-label="Switch language">{language === 'th' ? 'TH · EN' : 'EN · TH'}</button>
+            <div className="hidden items-center gap-2 rounded-full border-2 border-[#5d4638] bg-[#d9eee3] px-3 py-2 text-xs font-bold shadow-[2px_3px_0_#5d4638] sm:flex"><Users className="size-4 text-[#467d68]" /> {t.participants}</div>
+            <button className="rounded-full border-2 border-[#5d4638] bg-[#ffe19a] px-3 py-2 text-xs font-black shadow-[2px_3px_0_#5d4638] transition hover:-translate-y-0.5" onClick={() => setLanguage(language === 'th' ? 'en' : 'th')} aria-label="Switch language">{language === 'th' ? 'TH · EN' : 'EN · TH'}</button>
           </div>
         </div>
       </header>
 
       <section className="mx-auto max-w-6xl px-4 py-6 sm:px-8 sm:py-9">
-        <div className="mb-6 grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
-          <div>
-            <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[.16em] text-[#6a9f82]"><Sparkles className="size-4" /> {t.room} · BLOOM-24</div>
-            <h1 className="font-heading text-3xl font-extrabold tracking-[-.04em] sm:text-4xl">{t.hello}</h1>
-            <p className="mt-2 text-sm text-muted-foreground sm:text-base">{t.prompt}</p>
+        <div className="hero-paper relative mb-6 min-h-48 overflow-hidden rounded-[30px_24px_32px_22px] border-2 border-[#5d4638] bg-[#fff6df] shadow-[5px_6px_0_#efb9aa]">
+          <img src="/powerbox-friends.png" alt="Friends exchanging a positive card" className="absolute inset-0 h-full w-full object-cover object-center sm:object-[60%_52%]" />
+          <div className="relative z-10 flex min-h-48 max-w-[54%] flex-col justify-center p-5 sm:p-8">
+            <div className="mb-2 flex items-center gap-2 text-[10px] font-black uppercase tracking-[.14em] text-[#467d68] sm:text-xs"><Sparkles className="size-4" /> {t.room} · BLOOM-24</div>
+            <h1 className="font-heading text-2xl font-black tracking-[-.04em] sm:text-4xl">{t.hello}</h1>
+            <p className="mt-2 hidden text-sm font-semibold text-muted-foreground sm:block sm:text-base">{t.prompt}</p>
           </div>
-          <div className="flex items-center justify-between gap-5 rounded-2xl border border-[#eadfd2] bg-white px-5 py-3 shadow-sm">
+          <div className="absolute bottom-3 left-4 z-10 flex items-center justify-between gap-3 rounded-2xl border-2 border-[#5d4638] bg-white/95 px-4 py-2 shadow-[3px_4px_0_#5d4638] sm:bottom-5 sm:left-auto sm:right-5">
             <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground"><Clock3 className="size-4 text-primary" /> {t.time}</div>
             <span className="font-heading text-2xl font-extrabold tabular-nums text-primary">{timeDisplay}</span>
           </div>
         </div>
 
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
-          <div className="rounded-[28px] border border-[#eadfd2] bg-white p-5 shadow-[0_18px_60px_rgba(102,75,46,.08)] sm:p-7">
+          <div className="rounded-[30px_24px_28px_22px] border-2 border-[#5d4638] bg-white p-5 shadow-[5px_6px_0_#f1c86f] sm:p-7">
             <div className="mb-7 flex items-center gap-4">
               <Progress value={sent * 10} className="flex-1 [&_[data-slot=progress-track]]:h-2 [&_[data-slot=progress-track]]:bg-[#f3e9dc] [&_[data-slot=progress-indicator]]:bg-primary" />
               <span className="min-w-24 text-right text-sm font-bold">{t.progress} {sent}/10</span>
@@ -96,31 +97,31 @@ export default function Home() {
             <section>
               <h2 className="mb-3 text-sm font-extrabold">{t.selectPerson}</h2>
               <div className="flex gap-3 overflow-x-auto pb-2">
-                {people.map((item) => <button key={item.name} onClick={() => setPerson(item)} className={`flex min-w-20 flex-col items-center gap-2 rounded-2xl border p-3 transition ${person.name === item.name ? 'border-primary bg-[#fff8f0] shadow-sm' : 'border-transparent hover:bg-muted'}`}><span className={`grid size-11 place-items-center rounded-full ${item.color} text-sm font-extrabold`}>{item.initials}</span><span className="text-xs font-bold">{item.name}</span></button>)}
+                {people.map((item) => <button key={item.name} onClick={() => setPerson(item)} className={`flex min-w-20 flex-col items-center gap-2 rounded-[20px_16px_22px_15px] border-2 p-3 transition ${person.name === item.name ? 'border-[#5d4638] bg-[#fff3dd] shadow-[3px_3px_0_#efb9aa]' : 'border-transparent hover:bg-muted'}`}><span className={`grid size-11 place-items-center rounded-[48%_52%_45%_55%] border-2 border-[#5d4638] ${item.color} text-sm font-black`}>{item.initials}</span><span className="text-xs font-black">{item.name}</span></button>)}
                 <button className="flex min-w-20 flex-col items-center gap-2 rounded-2xl p-3 text-muted-foreground hover:bg-muted"><span className="grid size-11 place-items-center rounded-full border border-dashed border-[#cbbdaf] bg-white"><ChevronDown className="size-4" /></span><span className="text-xs font-bold">+ 43</span></button>
               </div>
             </section>
             <section className="mt-6">
               <div className="mb-3 flex items-center justify-between"><h2 className="text-sm font-extrabold">{t.selectCard}</h2><span className="text-xs text-muted-foreground">{t.recipient}: <strong className="text-foreground">{person.name}</strong></span></div>
               <div className="grid max-h-[390px] gap-3 overflow-y-auto pr-1 sm:grid-cols-3">
-                {cards.filter((card) => remainingCards.includes(card.id)).map((card) => <button key={card.id} onClick={() => setSelectedCard(card.id)} className={`relative min-h-40 rounded-[22px] border-2 p-5 text-left transition hover:-translate-y-1 ${card.tone} ${selectedCard === card.id ? 'border-primary shadow-[0_10px_24px_rgba(232,101,76,.15)]' : 'border-transparent'}`}>{selectedCard === card.id && <span className="absolute right-3 top-3 grid size-5 place-items-center rounded-full bg-primary text-white"><Check className="size-3" /></span>}<span className="text-2xl">{card.emoji}</span><p className="mt-5 text-sm font-bold leading-relaxed">{card[language]}</p></button>)}
+                {cards.filter((card) => remainingCards.includes(card.id)).map((card) => <button key={card.id} onClick={() => setSelectedCard(card.id)} className={`relative min-h-40 rounded-[24px_19px_27px_18px] border-2 border-[#5d4638] p-5 text-left transition hover:-translate-y-1 ${card.tone} ${selectedCard === card.id ? 'rotate-[-1deg] shadow-[4px_5px_0_#e96b50]' : 'shadow-[2px_3px_0_#decdb7]'}`}>{selectedCard === card.id && <span className="absolute right-3 top-3 grid size-6 place-items-center rounded-full border-2 border-[#5d4638] bg-primary text-white"><Check className="size-3" /></span>}<span className="text-2xl">{card.emoji}</span><p className="mt-5 text-sm font-black leading-relaxed">{card[language]}</p></button>)}
               </div>
             </section>
             <div className="mt-6 flex flex-col gap-4 border-t border-[#efe6db] pt-5 sm:flex-row sm:items-center sm:justify-between">
               <label className="flex cursor-pointer items-center gap-3"><Switch checked={anonymous} onCheckedChange={setAnonymous} /><span><span className="block text-sm font-bold">{t.anonymous}</span><span className="block text-xs text-muted-foreground">{t.anonymousHelp}</span></span></label>
-              <Button onClick={sendCard} disabled={sent >= 10} size="lg" className="h-12 rounded-xl px-7 text-sm font-extrabold shadow-[0_8px_20px_rgba(232,101,76,.24)]">{justSent ? <Check /> : <Send />} {justSent ? t.sent : t.send}</Button>
+              <Button onClick={sendCard} disabled={sent >= 10} size="lg" className="h-12 rounded-[18px_14px_20px_13px] border-2 border-[#5d4638] px-7 text-sm font-black shadow-[4px_5px_0_#5d4638] hover:-translate-y-0.5">{justSent ? <Check /> : <Send />} {justSent ? t.sent : t.send}</Button>
             </div>
           </div>
 
-          <aside className="rounded-[28px] bg-[#213e36] p-6 text-white shadow-[0_18px_60px_rgba(33,62,54,.18)]">
+          <aside className="rounded-[26px_32px_24px_29px] border-2 border-[#5d4638] bg-[#88bda7] p-6 text-[#35291f] shadow-[5px_6px_0_#5d4638]">
             <div className="flex items-start justify-between"><div><p className="text-xs font-bold uppercase tracking-[.14em] text-[#afd0c0]">{t.inbox}</p><p className="mt-2 font-heading text-xl font-extrabold">{t.inboxCount}</p></div><Gift className="size-6 text-[#ffd58f]" /></div>
             <div className="relative mx-auto my-9 h-44 max-w-56">
-              <div className="absolute left-1/2 top-0 h-32 w-40 -translate-x-1/2 rotate-[-5deg] rounded-2xl bg-[#f7c7bc] p-4 text-[#49352e] shadow-xl"><Heart className="size-5 fill-current" /></div>
-              <div className="absolute left-1/2 top-3 h-32 w-40 -translate-x-1/2 rotate-[6deg] rounded-2xl bg-[#f5d797] p-4 text-[#49352e] shadow-xl"><Sparkles className="size-5" /></div>
-              <div className="absolute bottom-0 left-1/2 grid h-28 w-52 -translate-x-1/2 place-items-center rounded-[18px] bg-[#e8694d] shadow-2xl"><LockKeyhole className="size-7" /></div>
+              <div className="absolute left-1/2 top-0 h-32 w-40 -translate-x-1/2 rotate-[-5deg] rounded-[20px_15px_24px_17px] border-2 border-[#5d4638] bg-[#f7c7bc] p-4 text-[#49352e] shadow-[3px_4px_0_#5d4638]"><Heart className="size-5 fill-current" /></div>
+              <div className="absolute left-1/2 top-3 h-32 w-40 -translate-x-1/2 rotate-[6deg] rounded-[22px_17px_20px_14px] border-2 border-[#5d4638] bg-[#f5d797] p-4 text-[#49352e] shadow-[3px_4px_0_#5d4638]"><Sparkles className="size-5" /></div>
+              <div className="absolute bottom-0 left-1/2 grid h-28 w-52 -translate-x-1/2 place-items-center rounded-[22px_16px_25px_18px] border-2 border-[#5d4638] bg-[#e8694d] text-white shadow-[4px_5px_0_#5d4638]"><LockKeyhole className="size-7" /></div>
             </div>
-            <div className="rounded-2xl bg-white/10 p-4 text-center"><p className="text-sm font-bold">{t.locked}</p><p className="mt-1 text-xs text-[#afd0c0]">{timeDisplay}</p></div>
-            <div className="mt-4 flex gap-3 rounded-2xl border border-[#527266] bg-[#2b4a41] p-4"><Sparkles className="mt-0.5 size-4 shrink-0 text-[#ffd58f]" /><p className="text-xs leading-relaxed text-[#dcebe4]">{t.appGift}</p></div>
+            <div className="rounded-[20px_16px_22px_15px] border-2 border-[#5d4638] bg-[#fff9ed] p-4 text-center shadow-[3px_3px_0_#5d4638]"><p className="text-sm font-black">{t.locked}</p><p className="mt-1 text-xs font-bold text-[#467d68]">{timeDisplay}</p></div>
+            <div className="mt-4 flex gap-3 rounded-[18px_22px_16px_20px] border-2 border-[#5d4638] bg-[#ffe19a] p-4"><Sparkles className="mt-0.5 size-4 shrink-0 text-[#e8694d]" /><p className="text-xs font-bold leading-relaxed">{t.appGift}</p></div>
           </aside>
         </div>
       </section>
