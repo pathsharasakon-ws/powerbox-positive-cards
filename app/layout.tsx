@@ -1,13 +1,5 @@
 import type { Metadata } from 'next';
-import { Google_Sans } from 'next/font/google';
 import './globals.css';
-
-const googleSans = Google_Sans({
-  variable: '--font-google-sans',
-  subsets: ['thai', 'latin'],
-  weight: 'variable',
-  display: 'swap',
-});
 
 export const metadata: Metadata = {
   title: 'PowerBox — กล่องพลังใจ',
@@ -21,11 +13,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="th">
-      <body
-        className={`${googleSans.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body>{children}</body>
     </html>
   );
 }
