@@ -129,29 +129,37 @@ export default function Home() {
     if (!AudioContextClass) return;
     const context = new AudioContextClass();
     const master = context.createGain();
-    master.gain.value = 0.035;
+    master.gain.value = 0.12;
     master.connect(context.destination);
     audioContextRef.current = context;
-    const chords = [[261.63, 329.63, 392], [220, 261.63, 329.63], [174.61, 220, 261.63], [196, 246.94, 293.66]];
-    let chordIndex = 0;
-    const playChord = () => {
-      const now = context.currentTime;
-      chords[chordIndex % chords.length].forEach((frequency, noteIndex) => {
+    const phrases = [
+      [261.63, 329.63, 392, 523.25, 392, 329.63, 293.66, 329.63],
+      [349.23, 440, 523.25, 698.46, 523.25, 440, 392, 440],
+      [392, 493.88, 587.33, 783.99, 587.33, 493.88, 440, 493.88],
+      [261.63, 392, 523.25, 659.25, 523.25, 392, 329.63, 392],
+    ];
+    let phraseIndex = 0;
+    const playPianoNote = (frequency: number, startAt: number) => {
+      [1, 2, 3].forEach((harmonic) => {
         const oscillator = context.createOscillator();
         const gain = context.createGain();
-        oscillator.type = 'sine';
-        oscillator.frequency.value = frequency / 2;
-        gain.gain.setValueAtTime(0.0001, now);
-        gain.gain.exponentialRampToValueAtTime(0.22 / (noteIndex + 1), now + 1.2);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 5.8);
+        oscillator.type = harmonic === 1 ? 'triangle' : 'sine';
+        oscillator.frequency.value = frequency * harmonic;
+        gain.gain.setValueAtTime(0.0001, startAt);
+        gain.gain.exponentialRampToValueAtTime(0.1 / (harmonic * harmonic), startAt + 0.025);
+        gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 2.4);
         oscillator.connect(gain).connect(master);
-        oscillator.start(now);
-        oscillator.stop(now + 6);
+        oscillator.start(startAt);
+        oscillator.stop(startAt + 2.5);
       });
-      chordIndex += 1;
     };
-    playChord();
-    musicIntervalRef.current = window.setInterval(playChord, 6000);
+    const playPhrase = () => {
+      const now = context.currentTime;
+      phrases[phraseIndex % phrases.length].forEach((frequency, noteIndex) => playPianoNote(frequency, now + noteIndex * 0.72));
+      phraseIndex += 1;
+    };
+    playPhrase();
+    musicIntervalRef.current = window.setInterval(playPhrase, 6000);
   }
 
   function toggleMusic(enabled: boolean) {
