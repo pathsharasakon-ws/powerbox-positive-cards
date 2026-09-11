@@ -249,7 +249,7 @@ function initials(name: string) {
 }
 
 export default function Home() {
-  const [language, setLanguage] = useState<Language>('th');
+  const [language, setLanguage] = useState<Language>('en');
   const [screen, setScreen] = useState<Screen>('home');
   const [isHost, setIsHost] = useState(false);
   const [roomName, setRoomName] = useState('Bloom Together');
