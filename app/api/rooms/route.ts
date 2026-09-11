@@ -109,6 +109,11 @@ export async function PATCH(request: Request) {
       };
     }).filter((card) => card.th && card.en);
     if (deck.length === 0) return json({ error: 'deck_required' }, 400);
+    const thaiMessages = deck.map((card) => card.th.toLocaleLowerCase());
+    const englishMessages = deck.map((card) => card.en.toLocaleLowerCase());
+    if (new Set(thaiMessages).size !== deck.length || new Set(englishMessages).size !== deck.length) {
+      return json({ error: 'duplicate_card_message' }, 409);
+    }
     await env.DB.prepare('UPDATE rooms SET deck_json = ? WHERE code = ?').bind(JSON.stringify(deck), code).run();
   } else if (body.action === 'remove_participant') {
     const participantName = normalizeName(body.name);

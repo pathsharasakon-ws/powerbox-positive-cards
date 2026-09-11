@@ -125,8 +125,8 @@ const defaultCards: Card[] = [
     id: 12,
     imageIndex: 12,
     tone: 'bg-[#e5eee8]',
-    th: 'วันนี้คุณเก่งมากแล้วนะ ขอให้ภูมิใจในทุกก้าวเล็ก ๆ ที่ตัวเองทำได้สำเร็จ',
-    en: 'You did wonderfully today. Be proud of every small step you accomplished.',
+    th: 'ขอให้คุณเชื่อมั่นในคุณค่าของตัวเอง เพราะความตั้งใจและตัวตนของคุณสร้างความหมายดี ๆ ให้กับคนรอบข้างเสมอ',
+    en: 'Keep believing in your worth—your dedication and presence always bring something meaningful to the people around you.',
   },
 ];
 
@@ -430,6 +430,22 @@ export default function Home() {
 
   async function saveCardDraft() {
     if (!cardDraft.th.trim() || !cardDraft.en.trim()) return;
+    const normalizedThai = cardDraft.th.trim().toLocaleLowerCase();
+    const normalizedEnglish = cardDraft.en.trim().toLocaleLowerCase();
+    const isDuplicate = cards.some(
+      (card) =>
+        card.id !== editingCardId &&
+        (card.th.trim().toLocaleLowerCase() === normalizedThai ||
+          card.en.trim().toLocaleLowerCase() === normalizedEnglish),
+    );
+    if (isDuplicate) {
+      window.alert(
+        language === 'th'
+          ? 'ข้อความนี้ซ้ำกับการ์ดที่มีอยู่ กรุณาเขียนข้อความใหม่'
+          : 'This message duplicates an existing card. Please write a new one.',
+      );
+      return;
+    }
     const nextId =
       editingCardId ?? Math.max(0, ...cards.map((card) => card.id)) + 1;
     const nextCard = {
