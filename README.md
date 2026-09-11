@@ -7,6 +7,12 @@ PowerBox is a bilingual group activity where participants send illustrated encou
 
 PowerBox คือกิจกรรมกลุ่มสองภาษา ซึ่งเปิดโอกาสให้สมาชิกส่งการ์ดคำชื่นชมและกำลังใจให้กัน ก่อนเปิดกล่องเพื่ออ่านข้อความที่ได้รับพร้อมกัน รองรับห้องเรียน เวิร์กช็อป ทีม และชุมชนได้สูงสุด 100 คน
 
+<p align="center">
+  <img src="./public/powerbox-preview.jpg" alt="PowerBox bilingual home screen" width="900" />
+</p>
+
+<p align="center"><em>A warm, illustrated experience for sharing encouragement in every group.</em></p>
+
 ## Live app
 
 [Open PowerBox](https://powerbox-positive-cards.pathsharasakon.chatgpt.site/)
