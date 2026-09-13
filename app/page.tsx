@@ -936,13 +936,13 @@ export default function Home() {
               )}
             </div>
             {isHost && (
-              <section className="mx-auto mt-6 max-w-2xl rounded-[24px_20px_26px_18px] border-2 border-[#5d4638] bg-[#fffaf0] p-5 text-left shadow-[3px_4px_0_#f1c86f]">
+              <section className="mx-auto mt-6 max-w-6xl rounded-[28px_22px_30px_20px] border-2 border-[#5d4638] bg-[#fffaf0] p-5 text-left shadow-[4px_5px_0_#f1c86f] sm:p-7">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <h2 className="font-bold">
+                    <h2 className="text-xl font-bold sm:text-2xl">
                       {language === 'th' ? 'จัดการการ์ด' : 'Manage cards'}
                     </h2>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="mt-1 text-sm text-muted-foreground">
                       {cards.length}{' '}
                       {language === 'th'
                         ? 'ใบ · เฉพาะ Admin เท่านั้น'
@@ -953,7 +953,7 @@ export default function Home() {
                     <Button
                       variant="outline"
                       onClick={() => setShowCardManager((value) => !value)}
-                      className="h-9 rounded-xl border-2 px-3 text-xs font-bold"
+                      className="h-11 rounded-xl border-2 px-4 text-sm font-bold"
                     >
                       {showCardManager ? <X /> : <Pencil />}
                       {showCardManager
@@ -967,7 +967,7 @@ export default function Home() {
                     {cards.length < 24 && (
                       <Button
                         onClick={beginAddCard}
-                        className="h-9 rounded-xl border-2 border-[#5d4638] px-3 text-xs font-bold"
+                        className="h-11 rounded-xl border-2 border-[#5d4638] px-4 text-sm font-bold"
                       >
                         <Plus />
                         {language === 'th' ? 'เพิ่มการ์ด' : 'Add card'}
@@ -976,39 +976,52 @@ export default function Home() {
                   </div>
                 </div>
                 {showCardManager && (
-                  <div className="mt-5 space-y-5">
-                    <div className="grid max-h-72 gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
+                  <div className="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(420px,7fr)]">
+                    <div>
+                      <div className="mb-3 flex items-end justify-between gap-3">
+                        <div>
+                          <h3 className="text-lg font-bold">
+                            {language === 'th' ? 'การ์ดทั้งหมด' : 'All cards'}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            {language === 'th'
+                              ? 'เลือกการ์ดเพื่อดูและแก้ไขรายละเอียด'
+                              : 'Select a card to review and edit its details'}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="grid max-h-[760px] gap-3 overflow-y-auto pr-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
                       {cards.map((card) => (
                         <article
                           key={card.id}
-                          className={`positive-card relative overflow-hidden rounded-2xl border-2 border-[#5d4638]/40 p-3 ${card.tone}`}
+                          className={`positive-card relative min-h-44 overflow-hidden rounded-2xl border-2 p-4 transition ${editingCardId === card.id ? 'border-primary shadow-[3px_3px_0_#5d4638]' : 'border-[#5d4638]/40'} ${card.tone}`}
                         >
-                          <div className="relative z-10 flex gap-3">
+                          <div className="relative z-10 flex gap-4">
                             <div
-                              className="size-16 shrink-0 bg-no-repeat"
+                              className="size-24 shrink-0 bg-no-repeat sm:size-28"
                               style={cardImageStyle(card.imageIndex)}
                             />
                             <div className="min-w-0 flex-1">
-                              <p className="line-clamp-2 text-xs font-bold">
+                              <p className="line-clamp-3 text-sm font-bold leading-relaxed">
                                 {card.th}
                               </p>
-                              <p className="mt-1 line-clamp-1 text-[10px] text-muted-foreground">
+                              <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-muted-foreground">
                                 {card.en}
                               </p>
-                              <div className="mt-2 flex gap-1">
+                              <div className="mt-3 flex flex-wrap gap-2">
                                 <button
                                   onClick={() => beginEditCard(card)}
-                                  className="rounded-lg border bg-white px-2 py-1 text-[10px] font-bold"
+                                  className="min-h-9 rounded-lg border border-[#5d4638]/30 bg-white px-3 py-2 text-xs font-bold transition hover:border-primary hover:bg-[#fffaf0]"
                                 >
-                                  <Pencil className="mr-1 inline size-3" />
+                                  <Pencil className="mr-1 inline size-3.5" />
                                   {language === 'th' ? 'แก้ไข' : 'Edit'}
                                 </button>
                                 <button
                                   onClick={() => deleteCard(card.id)}
                                   disabled={cards.length <= 1}
-                                  className="rounded-lg border bg-white px-2 py-1 text-[10px] font-bold text-destructive disabled:opacity-40"
+                                  className="min-h-9 rounded-lg border border-[#5d4638]/30 bg-white px-3 py-2 text-xs font-bold text-destructive transition hover:bg-[#fde8e4] disabled:opacity-40"
                                 >
-                                  <Trash2 className="mr-1 inline size-3" />
+                                  <Trash2 className="mr-1 inline size-3.5" />
                                   {language === 'th' ? 'ลบ' : 'Delete'}
                                 </button>
                               </div>
@@ -1016,9 +1029,10 @@ export default function Home() {
                           </div>
                         </article>
                       ))}
+                      </div>
                     </div>
-                    <div className="rounded-2xl border-2 border-dashed border-[#5d4638]/35 bg-white p-4">
-                      <h3 className="text-sm font-bold">
+                    <div className="rounded-2xl border-2 border-[#5d4638]/35 bg-white p-5 shadow-sm lg:sticky lg:top-5 sm:p-6">
+                      <h3 className="text-xl font-bold">
                         {editingCardId === null
                           ? language === 'th'
                             ? 'สร้างการ์ดใหม่'
@@ -1027,8 +1041,29 @@ export default function Home() {
                             ? 'แก้ไขการ์ด'
                             : 'Edit card'}
                       </h3>
-                      <div className="mt-3 grid gap-3">
-                        <label className="text-xs font-bold">
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {language === 'th'
+                          ? 'แก้ข้อความ รูปประกอบ และสี พร้อมดูตัวอย่างก่อนบันทึก'
+                          : 'Edit the messages, illustration, and color with a live preview'}
+                      </p>
+                      <div className={`positive-card relative mt-5 min-h-56 overflow-hidden rounded-2xl border-2 border-[#5d4638] p-5 ${cardDraft.tone}`}>
+                        <div className="relative z-10 flex min-h-44 items-center gap-5">
+                          <div
+                            className="size-32 shrink-0 bg-no-repeat sm:size-40"
+                            style={cardImageStyle(cardDraft.imageIndex)}
+                          />
+                          <div className="min-w-0">
+                            <p className="text-base font-bold leading-relaxed sm:text-lg">
+                              {cardDraft.th || (language === 'th' ? 'ตัวอย่างข้อความภาษาไทย' : 'Thai message preview')}
+                            </p>
+                            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                              {cardDraft.en || (language === 'th' ? 'ตัวอย่างข้อความภาษาอังกฤษ' : 'English message preview')}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-5 grid gap-4">
+                        <label className="text-sm font-bold sm:text-base">
                           {language === 'th' ? 'ข้อความภาษาไทย' : 'Thai message'}
                           <Textarea
                             value={cardDraft.th}
@@ -1039,10 +1074,10 @@ export default function Home() {
                                 th: event.target.value,
                               })
                             }
-                            className="mt-1 min-h-20 rounded-xl bg-[#fffaf0]"
+                            className="mt-2 min-h-32 rounded-xl bg-[#fffaf0] p-4 text-base leading-relaxed"
                           />
                         </label>
-                        <label className="text-xs font-bold">
+                        <label className="text-sm font-bold sm:text-base">
                           {language === 'th'
                             ? 'ข้อความภาษาอังกฤษ'
                             : 'English message'}
@@ -1055,17 +1090,17 @@ export default function Home() {
                                 en: event.target.value,
                               })
                             }
-                            className="mt-1 min-h-20 rounded-xl bg-[#fffaf0]"
+                            className="mt-2 min-h-32 rounded-xl bg-[#fffaf0] p-4 text-base leading-relaxed"
                           />
                         </label>
                       </div>
-                      <div className="mt-4">
-                        <p className="text-xs font-bold">
+                      <div className="mt-6">
+                        <p className="text-sm font-bold sm:text-base">
                           {language === 'th'
                             ? 'เลือกรูปบนการ์ด'
                             : 'Choose card image'}
                         </p>
-                        <div className="mt-2 grid grid-cols-6 gap-2 sm:grid-cols-12">
+                        <div className="mt-3 grid grid-cols-4 gap-3 sm:grid-cols-6">
                           {Array.from(
                             { length: 12 },
                             (_, index) => index + 1,
@@ -1076,19 +1111,19 @@ export default function Home() {
                                 setCardDraft({ ...cardDraft, imageIndex })
                               }
                               aria-pressed={cardDraft.imageIndex === imageIndex}
-                              className={`aspect-square rounded-xl border-2 bg-[#fffaf0] bg-no-repeat p-1 ${cardDraft.imageIndex === imageIndex ? 'border-primary shadow-[2px_2px_0_#5d4638]' : 'border-[#5d4638]/20'}`}
+                              className={`aspect-square rounded-xl border-2 bg-[#fffaf0] bg-no-repeat p-1 transition hover:scale-[1.03] ${cardDraft.imageIndex === imageIndex ? 'border-primary shadow-[3px_3px_0_#5d4638]' : 'border-[#5d4638]/20'}`}
                               style={cardImageStyle(imageIndex)}
                             />
                           ))}
                         </div>
                       </div>
-                      <div className="mt-4">
-                        <p className="text-xs font-bold">
+                      <div className="mt-6">
+                        <p className="text-sm font-bold sm:text-base">
                           {language === 'th'
                             ? 'เลือกสีการ์ด'
                             : 'Choose card color'}
                         </p>
-                        <div className="mt-2 flex flex-wrap gap-2">
+                        <div className="mt-3 flex flex-wrap gap-3">
                           {cardTones.map((tone) => (
                             <button
                               key={tone}
@@ -1096,16 +1131,16 @@ export default function Home() {
                                 setCardDraft({ ...cardDraft, tone })
                               }
                               aria-pressed={cardDraft.tone === tone}
-                              className={`size-8 rounded-full border-2 ${tone} ${cardDraft.tone === tone ? 'border-primary shadow-[2px_2px_0_#5d4638]' : 'border-[#5d4638]/25'}`}
+                              className={`size-11 rounded-full border-2 transition hover:scale-105 ${tone} ${cardDraft.tone === tone ? 'border-primary shadow-[3px_3px_0_#5d4638]' : 'border-[#5d4638]/25'}`}
                             />
                           ))}
                         </div>
                       </div>
-                      <div className="mt-4 flex justify-end gap-2">
+                      <div className="mt-7 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
                         <Button
                           variant="outline"
                           onClick={beginAddCard}
-                          className="h-10 rounded-xl border-2 text-xs font-bold"
+                          className="h-12 rounded-xl border-2 px-5 text-sm font-bold"
                         >
                           <X />
                           {language === 'th' ? 'ล้างข้อมูล' : 'Clear'}
@@ -1115,7 +1150,7 @@ export default function Home() {
                           disabled={
                             !cardDraft.th.trim() || !cardDraft.en.trim()
                           }
-                          className="h-10 rounded-xl border-2 border-[#5d4638] text-xs font-bold"
+                          className="h-12 rounded-xl border-2 border-[#5d4638] px-6 text-sm font-bold shadow-[2px_3px_0_#5d4638]"
                         >
                           <Save />
                           {language === 'th' ? 'บันทึกการ์ด' : 'Save card'}
