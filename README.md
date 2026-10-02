@@ -77,10 +77,6 @@ npm run format       # Format the code
 npm run db:generate  # Generate Drizzle migrations
 ```
 
-## Privacy
-
-This repository is currently private. Do not commit secrets, access tokens, personal participant information, or local environment files.
-
 ---
 
 Made with care for kinder classrooms, teams, and communities.
